@@ -1450,6 +1450,27 @@
             </div>
         </div>
 
+        <!-- CAMOUFLAGED WORD & UTILITY EXPORT BUTTONS (Easter egg: click logo 5 times to show) -->
+        <div id="secret-export-container" style="display: none; position: fixed; bottom: 30px; left: 30px; z-index: 999; background: var(--color-card-gray); padding: 15px; border-radius: 16px; box-shadow: var(--shadow-raised); gap: 10px; flex-direction: column; width: 220px;">
+            <div style="font-size: 11px; font-weight: bold; color: var(--color-turquoise-medium); margin-bottom: 5px; text-align: center;">Exportar Reportes</div>
+            <button class="btn-utility" onclick="exportReportWord(false)">
+                <i class="fa-solid fa-file-word" style="color: #2b579a;"></i>
+                <span>Exportar Todo (Word)</span>
+            </button>
+            <button class="btn-utility" onclick="exportReportWord(true)">
+                <i class="fa-solid fa-file-word" style="color: #2b579a;"></i>
+                <span>Exportar Vista (Word)</span>
+            </button>
+            <button class="btn-utility" onclick="exportReportExcel()">
+                <i class="fa-solid fa-file-excel" style="color: #217346;"></i>
+                <span>Exportar Tabla (Excel)</span>
+            </button>
+            <button class="btn-utility" onclick="downloadReportPDF()">
+                <i class="fa-solid fa-file-pdf" style="color: #b30000;"></i>
+                <span>Descargar PDF</span>
+            </button>
+        </div>
+
         <!-- LOAD DATA & RUN INTERACTIVE CONTROLLERS -->
         <script src="data.js"></script>
 
@@ -7864,6 +7885,304 @@
                     "Todas las alertas corporativas marcadas como leídas.",
                 );
             }
+
+            // ====== EXPORTAR A WORD ======
+            function exportReportWord(onlyActive) {
+                const activeSlideObj = SLIDES.find(s => s.id === activeSlide);
+                if (!activeSlideObj) {
+                    showToast("Error", "No se pudo identificar la vista activa.");
+                    return;
+                }
+
+                showToast("Exportando Word", "Compilando documento de Word...");
+
+                // HTML base del documento Word
+                let htmlContent = `
+                    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+                    <head>
+                        <title>Reporte Maqui</title>
+                        <!--[if gte mso 9]>
+                        <xml>
+                            <w:WordDocument>
+                                <w:View>Print</w:View>
+                                <w:Zoom>100</w:Zoom>
+                                <w:DoNotOptimizeForBrowser/>
+                            </w:WordDocument>
+                        </xml>
+                        <![endif]-->
+                        <style>
+                            body { font-family: Arial, sans-serif; font-size: 11pt; color: #025763; line-height: 1.5; }
+                            h1 { color: #f01515; font-size: 20pt; margin-top: 30px; margin-bottom: 5px; text-align: center; }
+                            h2 { color: #008296; font-size: 14pt; text-align: center; font-weight: normal; margin-top: 0; margin-bottom: 25px; }
+                            h3 { color: #025763; font-size: 13pt; margin-top: 20px; border-bottom: 1px solid #008296; padding-bottom: 5px; }
+                            p { margin-top: 5px; margin-bottom: 10px; }
+                            table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 15px; font-size: 9.5pt; }
+                            th { background-color: #008296; color: #ffffff; border: 1px solid #ccc; padding: 8px; font-weight: bold; text-align: center; }
+                            td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+                            strong { color: #025763; }
+                            .img-container { text-align: center; margin-top: 15px; margin-bottom: 15px; }
+                            img { max-width: 100%; height: auto; border: 1px solid #ddd; }
+                            .page-break { page-break-before: always; }
+                        </style>
+                    </head>
+                    <body>
+                        <h1 style="color: #008296;">PORTAL CORPORATIVO DE BUSINESS INTELLIGENCE - MAQUI</h1>
+                        <h2 style="color: #025763;">Reporte consolidado - ${new Date().toLocaleDateString("es-PE")}</h2>
+                `;
+
+                const slidesToExport = onlyActive ? [activeSlideObj] : SLIDES;
+
+                // Crear contenedor temporal invisible para renderizar slides no cargados
+                const tempHost = document.createElement("div");
+                tempHost.style.display = "none";
+                tempHost.id = "temp-export-host";
+                document.body.appendChild(tempHost);
+
+                slidesToExport.forEach((slide, index) => {
+                    if (index > 0) {
+                        htmlContent += `<div class="page-break"></div>`;
+                    }
+
+                    htmlContent += `<h1 style="color: #f01515; font-size: 18pt;">${slide.label}</h1>`;
+                    if (slide.title) {
+                        htmlContent += `<h3>${slide.title}</h3>`;
+                    }
+                    if (slide.subtitle) {
+                        htmlContent += `<p><em>${slide.subtitle}</em></p>`;
+                    }
+
+                    if (slide.kind === "iframe") {
+                        htmlContent += `
+                            <p><strong>Tablero Interactivo (Power BI):</strong></p>
+                            <p><a href="${slide.iframeUrl}">${slide.iframeUrl}</a></p>
+                            <p><em>Para consultar este reporte, por favor acceda mediante el enlace anterior en su navegador.</em></p>
+                        `;
+                    } else if (slide.kind === "image") {
+                        if (slide.images && slide.images.length > 0) {
+                            slide.images.forEach(imgSrc => {
+                                const absoluteImgUrl = new URL(imgSrc, window.location.href).href;
+                                htmlContent += `
+                                    <div class="img-container">
+                                        <img src="${absoluteImgUrl}" alt="Reporte visual" />
+                                    </div>
+                                `;
+                            });
+                        }
+                    } else {
+                        // Slide dinámico
+                        let containerToRead = null;
+                        
+                        if (slide.id === activeSlide) {
+                            const activeViewId = activeSlide === "s1" ? "view-slide1" : "view-dynamic";
+                            containerToRead = document.getElementById(activeViewId);
+                        } else {
+                            tempHost.innerHTML = "";
+                            const renderer = {
+                                origin: renderOrigin,
+                                sales: renderSales,
+                                grouped: renderGrouped,
+                                stacked: renderStacked,
+                                limaprov: renderLimaProv,
+                                anulaciones: renderAnulaciones,
+                                seguimiento: renderSeguimiento,
+                                reportegerencial: renderReporteGerencial,
+                                cuotainscripcion: renderCuotaInscripcion,
+                                ventacomercial: renderVentaComercial,
+                                ventadiaria: renderVentaDiaria,
+                                productividadreporte: renderProductividadReporte,
+                            }[slide.kind];
+                            
+                            if (renderer) {
+                                try {
+                                    renderer(slide, tempHost);
+                                    containerToRead = tempHost;
+                                } catch (e) {
+                                    console.error("Error al renderizar slide temporal para exportación:", e);
+                                }
+                            }
+                        }
+
+                        if (containerToRead) {
+                            const canvases = containerToRead.querySelectorAll("canvas");
+                            canvases.forEach((canvas, idx) => {
+                                try {
+                                    const chartImgUrl = canvas.toDataURL("image/png");
+                                    htmlContent += `
+                                        <div class="img-container">
+                                            <img src="${chartImgUrl}" alt="Gráfico de Reporte ${idx + 1}" />
+                                        </div>
+                                    `;
+                                } catch (e) {
+                                    console.warn("No se pudo exportar el gráfico en canvas:", e);
+                                }
+                            });
+
+                            const tables = containerToRead.querySelectorAll("table");
+                            tables.forEach((table, idx) => {
+                                const tableTitleEl = table.closest("section, .table-card")?.querySelector("h3, .table-card-title");
+                                const tableTitle = tableTitleEl ? tableTitleEl.textContent.trim() : `Tabla de Datos ${idx + 1}`;
+                                
+                                htmlContent += `<h3>${tableTitle}</h3>`;
+                                
+                                const cloneTable = table.cloneNode(true);
+                                cloneTable.querySelectorAll("i").forEach(icon => icon.remove());
+                                cloneTable.style.width = "100%";
+                                cloneTable.style.border = "1px solid #ccc";
+                                
+                                htmlContent += cloneTable.outerHTML;
+                            });
+                        }
+                    }
+                });
+
+                // Eliminar el host temporal
+                document.body.removeChild(tempHost);
+
+                htmlContent += `
+                    </body>
+                    </html>
+                `;
+
+                const blob = new Blob([htmlContent], { type: "application/msword;charset=utf-8" });
+                const suffix = onlyActive ? activeSlideObj.label.toLowerCase().replace(/[^a-z0-9]/g, "_") : "completo";
+                const filename = `reporte_maqui_${suffix}_${new Date().toISOString().slice(0, 10)}.doc`;
+
+                const link = document.createElement("a");
+                if (link.download !== undefined) {
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", filename);
+                    link.style.visibility = "hidden";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast("Exportación Exitosa", `Se descargó el archivo: ${filename}`);
+                } else {
+                    showToast("Error de Exportación", "Tu navegador no soporta descargas automáticas.");
+                }
+            }
+
+            // ====== EXPORTAR A EXCEL ======
+            function exportReportExcel() {
+                const activeViewId = activeSlide === "s1" ? "view-slide1" : "view-dynamic";
+                const activeView = document.getElementById(activeViewId);
+                if (!activeView) {
+                    showToast("Error", "No se pudo identificar la vista activa.");
+                    return;
+                }
+
+                const tables = activeView.querySelectorAll("table");
+                if (tables.length === 0) {
+                    showToast(
+                        "Exportar Reporte",
+                        "Esta vista no contiene tablas de datos para exportar."
+                    );
+                    return;
+                }
+
+                showToast("Exportando Reporte", "Compilando datos del reporte...");
+
+                let csvContent = "";
+                tables.forEach((table, index) => {
+                    if (index > 0) csvContent += "\n\n";
+                    const tableTitleEl = table.closest("section, .table-card")?.querySelector("h3, .table-card-title");
+                    if (tableTitleEl) {
+                        csvContent += `"${tableTitleEl.textContent.trim().replace(/"/g, '""')}"\n`;
+                    }
+
+                    const rows = table.querySelectorAll("tr");
+                    rows.forEach((row) => {
+                        const cells = row.querySelectorAll("th, td");
+                        const rowData = Array.from(cells).map((cell) => {
+                            let text = cell.innerText.trim().replace(/"/g, '""');
+                            return `"${text}"`;
+                        });
+                        csvContent += rowData.join(";") + "\n";
+                    });
+                });
+
+                const bom = "\uFEFF";
+                const sepLine = "sep=;\n";
+                const blob = new Blob([bom + sepLine + csvContent], { type: "text/csv;charset=utf-8;" });
+                
+                const slideObj = SLIDES.find((s) => s.id === activeSlide);
+                const slideLabel = slideObj ? slideObj.label.toLowerCase().replace(/[^a-z0-9]/g, "_") : "reporte";
+                const filename = `reporte_${slideLabel}_${new Date().toISOString().slice(0, 10)}.csv`;
+
+                const link = document.createElement("a");
+                if (link.download !== undefined) {
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", filename);
+                    link.style.visibility = "hidden";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    showToast("Exportación Exitosa", `Se descargó el archivo: ${filename}`);
+                }
+            }
+
+            // ====== EXPORTAR A PDF (IMPRIMIR) ======
+            function downloadReportPDF() {
+                showToast("Generando PDF", "Preparando la vista de impresión...");
+                setTimeout(() => {
+                    window.print();
+                }, 600);
+            }
+
+            // ====== EASTER EGG Y SHORTCUTS ======
+            let logoClicks = 0;
+            const logoImg = document.querySelector(".logo-img");
+            if (logoImg) {
+                logoImg.style.cursor = "pointer";
+                logoImg.addEventListener("click", () => {
+                    logoClicks++;
+                    if (logoClicks >= 5) {
+                        const container = document.getElementById("secret-export-container");
+                        if (container) {
+                            if (container.style.display === "none" || container.style.display === "") {
+                                container.style.display = "flex";
+                                showToast("Menú Secreto", "Panel de exportación activado.");
+                            } else {
+                                container.style.display = "none";
+                                showToast("Menú Secreto", "Panel de exportación desactivado.");
+                            }
+                        }
+                        logoClicks = 0;
+                    }
+                });
+            }
+
+            // Teclas de acceso directo: Ctrl + Alt + W (Exportar Vista), Ctrl + Alt + A (Exportar Todo)
+            document.addEventListener("keydown", (e) => {
+                if (e.ctrlKey && e.altKey) {
+                    if (e.key === "w" || e.key === "W" || e.key === "∑" || e.key === "w" || e.key === "W") {
+                        e.preventDefault();
+                        exportReportWord(true); // Exportar vista activa
+                    } else if (e.key === "a" || e.key === "A" || e.key === "å" || e.key === "a" || e.key === "A") {
+                        e.preventDefault();
+                        exportReportWord(false); // Exportar todas las vistas
+                    }
+                }
+            });
+            
+            // Permitir que la consola de desarrollo o scripts externos puedan llamarlas
+            window.exportReportWord = exportReportWord;
+            window.exportReportExcel = exportReportExcel;
+            window.downloadReportPDF = downloadReportPDF;
+            window.showSecretExport = () => {
+                const container = document.getElementById("secret-export-container");
+                if (container) container.style.display = "flex";
+            };
+            window.hideSecretExport = () => {
+                const container = document.getElementById("secret-export-container");
+                if (container) container.style.display = "none";
+            };
+            
+            // Añadir estilos CSS de impresión para ocultar la barra secreta de exportación
+            const printStyle = document.createElement("style");
+            printStyle.innerHTML = "@media print { #secret-export-container { display: none !important; } }";
+            document.head.appendChild(printStyle);
         </script>
     </body>
 </html>
