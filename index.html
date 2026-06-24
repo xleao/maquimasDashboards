@@ -25,8 +25,8 @@
                 --color-logo-red: #f01515;
                 --color-turquoise-medium: #008296;
                 --color-turquoise-dark: #025763;
-                --color-bg-gray: #d5d5d5; /* Fondo Plomo (Gris Medio) */
-                --color-card-gray: #dbdbdb; /* Tarjetas en Tono Plomo */
+                --color-bg-gray: #f0f0f0; /* Plomo muy claro para botones */
+                --color-card-gray: #f7f7f7; /* Plomo muy claro para tarjetas */
 
                 /* Sombras suaves (blanco atenuado para evitar el "resplandor") */
                 --shadow-light: rgba(255, 255, 255, 0.6);
@@ -56,7 +56,7 @@
             }
 
             body {
-                background-color: #d3e9e3;
+                background-color: #ffffff;
                 font-family: "Inter", sans-serif;
                 color: var(--color-turquoise-dark);
                 display: flex;
@@ -67,7 +67,7 @@
             /* NAV / SIDEBAR */
             .sidebar {
                 width: 280px;
-                background-color: #ebf6f2;
+                background-color: #ffffff;
                 box-shadow:
                     8px 0 24px var(--shadow-dark),
                     -8px 0 24px var(--shadow-light);
@@ -99,7 +99,7 @@
             }
 
             .logo-img {
-                height: 38px;
+                height: 52px;
                 width: auto;
                 max-width: 100%;
                 object-fit: contain;
@@ -210,6 +210,7 @@
                 gap: 35px;
                 box-sizing: border-box;
                 max-width: calc(100% - 280px);
+                min-width: 0;
                 min-height: 100vh;
                 transition:
                     margin-left var(--transition-speed) ease,
@@ -559,6 +560,7 @@
                 flex-direction: column;
                 gap: 25px;
                 position: relative;
+                min-width: 0;
             }
 
             .chart-card-header {
@@ -584,6 +586,8 @@
                 position: relative;
                 width: 100%;
                 height: 340px;
+                min-width: 0;
+                overflow: hidden;
             }
 
             /* BUTTONS */
@@ -926,7 +930,7 @@
             /* ===== NAV CON 26 ÍTEMS (scroll) ===== */
             .nav-list {
                 gap: 9px;
-                max-height: calc(100vh - 300px);
+                max-height: calc(100vh - 150px);
                 overflow-y: auto;
                 overflow-x: hidden;
                 padding: 4px 6px 4px 2px;
@@ -1206,68 +1210,6 @@
                     align-items: center;
                 }
             }
-
-            /* ==========================================================================
-               ESTILOS PARA IMPRESIÓN / DESCARGA PDF
-               ========================================================================== */
-            @media print {
-                /* Forzar la impresión de colores de fondo, gráficos y estilos premium */
-                * {
-                    -webkit-print-color-adjust: exact !important;
-                    print-color-adjust: exact !important;
-                    color-adjust: exact !important;
-                }
-
-                /* Ocultar barra lateral, pie de página del sidebar, filtros interactivos y notificaciones */
-                .sidebar,
-                .sidebar-footer,
-                #slide1-header-filters,
-                .toast-notification,
-                #toast-notify,
-                .btn-utility {
-                    display: none !important;
-                }
-
-                /* Ajustar el diseño para impresión completa sin barras laterales */
-                body {
-                    background: #ffffff !important;
-                    color: #025763 !important;
-                    display: block !important;
-                    min-height: auto !important;
-                }
-
-                .main-content {
-                    margin-left: 0 !important;
-                    max-width: 100% !important;
-                    padding: 0 !important;
-                    gap: 20px !important;
-                }
-
-                /* Evitar cortes extraños de tarjetas y tablas en las páginas impresas */
-                .metric-card,
-                .chart-card,
-                .table-card {
-                    box-shadow: none !important;
-                    border: 1px solid #c0d3ce !important;
-                    background: #ebf6f2 !important;
-                    page-break-inside: avoid !important;
-                    break-inside: avoid !important;
-                }
-
-                canvas {
-                    max-height: 350px !important;
-                    max-width: 100% !important;
-                }
-
-                table {
-                    page-break-inside: auto !important;
-                }
-
-                tr {
-                    page-break-inside: avoid !important;
-                    break-inside: avoid !important;
-                }
-            }
         </style>
     </head>
     <body>
@@ -1291,23 +1233,6 @@
                         <!-- Botones generados dinámicamente desde SLIDES -->
                     </ul>
                 </nav>
-            </div>
-
-            <div class="sidebar-footer">
-                <button
-                    class="btn-utility"
-                    onclick="exportReportExcel()"
-                >
-                    <i class="fa-solid fa-file-excel"></i>
-                    <span>Exportar Reporte</span>
-                </button>
-                <button
-                    class="btn-utility"
-                    onclick="downloadReportPDF()"
-                >
-                    <i class="fa-solid fa-file-pdf"></i>
-                    <span>Descargar PDF</span>
-                </button>
             </div>
         </aside>
 
@@ -1724,16 +1649,21 @@
             const SLIDES = [
                 {
                     id: "s1",
-                    label: "Ventas Ene-Mar 2026",
+                    label: "Ventas / Directivos",
                     icon: "fa-chart-column",
-                    kind: "slide1",
+                    kind: "iframe",
+                    iframeUrl: "https://app.powerbi.com/view?r=eyJrIjoiYmVjMTQwOTktZTM3MS00NTI0LWEwMzctNmZlZWMwNzFkN2JmIiwidCI6IjM1NDU5OGE1LTQwMmYtNDM1MS05M2IxLTNmNWE5MzJlMzg1MiJ9",
+                    title: "Ventas / Directivos",
+                    subtitle: "Tablero Power BI"
                 },
                 {
                     id: "s2",
-                    label: "Ventas por Origen",
+                    label: "Ventas / Seguimiento",
                     icon: "fa-circle-nodes",
-                    kind: "origin",
-                    data: "slide2",
+                    kind: "iframe",
+                    iframeUrl: "https://app.powerbi.com/view?r=eyJrIjoiYzllNThiMjctNjE3NS00MmYwLTg5M2ItMjEwNzAyY2RlZTYyIiwidCI6IjM1NDU5OGE1LTQwMmYtNDM1MS05M2IxLTNmNWE5MzJlMzg1MiJ9",
+                    title: "Ventas / Seguimiento",
+                    subtitle: "Tablero Power BI"
                 },
                 {
                     id: "s3",
@@ -1827,7 +1757,6 @@
                     title: "Variables de Seguimiento y Control",
                     subtitle:
                         "Comparativo de Venta Diaria: Gerencia / Subgerencia / Supervisor",
-                    hidden: true,
                 },
                 {
                     id: "s14",
@@ -1838,7 +1767,6 @@
                     title: "Variables de Seguimiento y Control",
                     subtitle:
                         "Productividad por antigüedad: Gerencia/Subgerencia/Supervisión",
-                    hidden: true,
                 },
                 {
                     id: "s15",
@@ -1849,7 +1777,6 @@
                     subtitle:
                         "Venta por Producto: Gerencia/Subgerencia/Supervisor",
                     images: ["assets/s15_1.png"],
-                    hidden: true,
                 },
                 {
                     id: "s16",
@@ -1859,7 +1786,6 @@
                     title: "Cobranza General Maquisistema",
                     subtitle: "Tablero Power BI — Recaudación",
                     images: ["assets/s16_1.jpg"],
-                    hidden: true,
                 },
                 {
                     id: "s17",
@@ -1869,7 +1795,6 @@
                     title: "Contact Center — Cobranzas M0–M1",
                     subtitle: "Tablero Power BI",
                     images: ["assets/s17_1.jpg"],
-                    hidden: true,
                 },
                 {
                     id: "s18",
@@ -1879,7 +1804,6 @@
                     title: "Contact Center — Bitácoras Inbound",
                     subtitle: "Tablero Power BI",
                     images: ["assets/s18_1.jpg"],
-                    hidden: true,
                 },
                 {
                     id: "s19",
@@ -1889,7 +1813,6 @@
                     title: "ADG — Asambleas Inaugurales",
                     subtitle: "Tablero Power BI",
                     images: ["assets/s19_1.jpg"],
-                    hidden: true,
                 },
                 {
                     id: "s20",
@@ -1899,7 +1822,6 @@
                     title: "ADG — Reactivaciones",
                     subtitle: "Tablero Power BI",
                     images: ["assets/s20_1.jpg"],
-                    hidden: true,
                 },
                 {
                     id: "s21",
@@ -1909,7 +1831,6 @@
                     title: "Vehículos — Facturación General",
                     subtitle: "Tablero Power BI",
                     images: ["assets/s21_1.jpg"],
-                    hidden: true,
                 },
                 {
                     id: "s22",
@@ -1919,7 +1840,6 @@
                     title: "Vehículos — Entregas",
                     subtitle: "Tablero Power BI",
                     images: ["assets/s22_1.jpg"],
-                    hidden: true,
                 },
                 {
                     id: "s23",
@@ -1929,7 +1849,6 @@
                     title: "Vehículos — Indicador de Cartera",
                     subtitle: "Tablero Power BI",
                     images: ["assets/s23_1.jpg"],
-                    hidden: true,
                 },
                 {
                     id: "s24",
@@ -1939,7 +1858,6 @@
                     title: "Vendedores sin Venta por Ciudad",
                     subtitle: "Resumen por ciudad",
                     images: ["assets/s24_1.png"],
-                    hidden: true,
                 },
                 {
                     id: "s25",
@@ -1949,7 +1867,6 @@
                     title: "Total Dotación por Zonas",
                     subtitle: "Resumen por ciudad",
                     images: ["assets/s25_1.png"],
-                    hidden: true,
                 },
                 {
                     id: "s26",
@@ -1959,7 +1876,6 @@
                     title: "Total Maquimas Colombia",
                     subtitle: "Ventas · Dotación · Productividad",
                     images: ["assets/s26_1.png"],
-                    hidden: true,
                 },
             ];
 
@@ -2156,19 +2072,18 @@
 
             // ====== NAVBAR (generado desde SLIDES) ======
             function buildNav() {
-                document.getElementById("nav-list").innerHTML = SLIDES.filter(
-                    (s) => !s.hidden,
-                )
-                    .map(
-                        (s) => `
-        <li class="nav-item">
+                document.getElementById("nav-list").innerHTML = SLIDES.map(
+                    (s) => {
+                        const isHidden = parseInt(s.id.substring(1)) >= 13;
+                        return `
+        <li class="nav-item"${isHidden ? ' style="display: none;"' : ''}>
           <button class="nav-btn${s.id === "s1" ? " active" : ""}" id="btn-${s.id}" onclick="selectSlide('${s.id}')">
             <i class="fa-solid ${s.icon}"></i>
             <span>${s.label}</span>
           </button>
-        </li>`,
-                    )
-                    .join("");
+        </li>`;
+                    }
+                ).join("");
             }
 
             // ====== ROUTER ======
@@ -3685,8 +3600,11 @@
                 updateYearOptions(activeSlide);
                 updatePeriodOptions(activeSlide);
 
-                const isSlide1 = activeSlide === "s1";
-                const isSlide2 = activeSlide === "s2";
+                const currentSlide = SLIDES.find((s) => s.id === activeSlide);
+                const isIframe = currentSlide && currentSlide.kind === "iframe";
+
+                const isSlide1 = activeSlide === "s1" && !isIframe;
+                const isSlide2 = activeSlide === "s2" && !isIframe;
                 const isSlide3 = activeSlide === "s3";
                 const isSlide4 = activeSlide === "s4";
                 const isSlide5 = activeSlide === "s5";
@@ -3965,6 +3883,15 @@
       </section>`;
             }
 
+            // ---- IFRAME POWER BI ----
+            function renderIframe(slide, host) {
+                host.innerHTML = `
+                    <section class="chart-card" style="padding: 0; overflow: hidden; height: calc(100vh - 180px); min-height: 500px;">
+                        <iframe title="${slide.label}" width="100%" height="100%" src="${slide.iframeUrl}" frameborder="0" allowFullScreen="true" style="border: none;"></iframe>
+                    </section>
+                `;
+            }
+
             // ====== RENDER DINÁMICO ======
             function renderDynamic(slide) {
                 document.getElementById("dashboard-title").textContent =
@@ -3974,7 +3901,7 @@
                     "Portal Corporativo de Business Intelligence";
                 const host = document.getElementById("view-dynamic");
                 document.getElementById("metrics-container").style.display =
-                    slide.kind === "image" ? "none" : "grid";
+                    (slide.kind === "image" || slide.kind === "iframe") ? "none" : "grid";
                 host.innerHTML = "";
                 (
                     ({
@@ -3991,6 +3918,7 @@
                         ventacomercial: renderVentaComercial,
                         ventadiaria: renderVentaDiaria,
                         productividadreporte: renderProductividadReporte,
+                        iframe: renderIframe,
                     })[slide.kind] || (() => {})
                 )(slide, host);
             }
@@ -7875,6 +7803,10 @@
                     ].forEach((c) => {
                         if (c) c.resize();
                     });
+                    // Redimensionar también los gráficos dinámicos de otras pestañas
+                    Object.values(dynCharts).forEach((c) => {
+                        if (c) c.resize();
+                    });
                 }, 320);
             }
 
@@ -7931,89 +7863,6 @@
                     "Bandeja de Entrada limpia",
                     "Todas las alertas corporativas marcadas como leídas.",
                 );
-            }
-
-            // ====== EXPORTAR Y DESCARGAR REPORTES ======
-
-            function exportReportExcel() {
-                const activeViewId = activeSlide === "s1" ? "view-slide1" : "view-dynamic";
-                const activeView = document.getElementById(activeViewId);
-                if (!activeView) {
-                    showToast("Error", "No se pudo identificar la vista activa.");
-                    return;
-                }
-
-                // Buscar todas las tablas visibles o renderizadas en la vista actual
-                const tables = activeView.querySelectorAll("table");
-                
-                if (tables.length === 0) {
-                    showToast(
-                        "Exportar Reporte",
-                        "Esta vista no contiene tablas de datos para exportar. Puede descargar el PDF."
-                    );
-                    return;
-                }
-
-                showToast("Exportando Reporte", "Compilando datos del reporte...");
-
-                let csvContent = "";
-                
-                tables.forEach((table, index) => {
-                    if (index > 0) {
-                        csvContent += "\n\n"; // Separador entre múltiples tablas
-                    }
-
-                    // Agregar título de la sección de la tabla si está disponible
-                    const tableTitleEl = table.closest("section, .table-card")?.querySelector("h3, .table-card-title");
-                    if (tableTitleEl) {
-                        csvContent += `"${tableTitleEl.textContent.trim().replace(/"/g, '""')}"\n`;
-                    }
-
-                    const rows = table.querySelectorAll("tr");
-                    rows.forEach((row) => {
-                        const cells = row.querySelectorAll("th, td");
-                        const rowData = Array.from(cells).map((cell) => {
-                            let text = cell.innerText.trim();
-                            // Escapar comillas dobles para compatibilidad de CSV
-                            text = text.replace(/"/g, '""');
-                            return `"${text}"`;
-                        });
-                        csvContent += rowData.join(";") + "\n"; // Semicolon es ideal para Excel en Español
-                    });
-                });
-
-                // Crear y descargar el archivo CSV configurando UTF-8 BOM para soporte de acentos en Excel
-                const bom = "\uFEFF";
-                const sepLine = "sep=;\n"; // Indica explícitamente a Excel usar punto y coma
-                const blob = new Blob([bom + sepLine + csvContent], { type: "text/csv;charset=utf-8;" });
-                
-                const slideObj = SLIDES.find((s) => s.id === activeSlide);
-                const slideLabel = slideObj ? slideObj.label.toLowerCase().replace(/[^a-z0-9]/g, "_") : "reporte";
-                const filename = `reporte_${slideLabel}_${new Date().toISOString().slice(0, 10)}.csv`;
-
-                const link = document.createElement("a");
-                if (link.download !== undefined) {
-                    const url = URL.createObjectURL(blob);
-                    link.setAttribute("href", url);
-                    link.setAttribute("download", filename);
-                    link.style.visibility = "hidden";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    
-                    showToast("Exportación Exitosa", `Se descargó el archivo: ${filename}`);
-                } else {
-                    showToast("Error de Exportación", "Tu navegador no soporta descargas automáticas.");
-                }
-            }
-
-            function downloadReportPDF() {
-                showToast("Generando PDF", "Preparando la vista de impresión del dashboard...");
-                
-                // Esperar a que el toast sea visible y llamar al diálogo de impresión del sistema
-                setTimeout(() => {
-                    window.print();
-                }, 600);
             }
         </script>
     </body>
