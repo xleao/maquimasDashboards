@@ -87,7 +87,7 @@
             .sidebar-top {
                 display: flex;
                 flex-direction: column;
-                gap: 40px;
+                gap: 22px;
             }
 
             /* Logo Area */
@@ -99,7 +99,7 @@
             }
 
             .logo-img {
-                height: 52px;
+                height: 62px;
                 width: auto;
                 max-width: 100%;
                 object-fit: contain;
@@ -119,85 +119,336 @@
                 letter-spacing: -0.5px;
             }
 
-            /* Navigation Links */
-            .nav-list {
+            /* Country Selector */
+            .country-selector {
+                border: 2px solid rgba(0, 130, 150, 0.2);
+                border-radius: 16px;
+                padding: 14px 18px;
+                margin-top: 8px;
+                margin-bottom: 8px;
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
-                list-style: none;
-            }
-
-            .nav-item {
-                width: 100%;
-            }
-
-            .nav-btn {
-                width: 100%;
-                background-color: var(--color-bg-gray);
-                color: var(--color-turquoise-medium);
-                border: none;
-                padding: 16px 20px;
-                border-radius: 18px;
-                font-size: 14px;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                cursor: pointer;
-                box-shadow: var(--shadow-raised-sm);
-                transition: all var(--transition-speed) ease;
-                text-align: left;
-                outline: none;
-            }
-
-            .nav-btn:hover {
-                color: var(--color-turquoise-dark);
-                transform: translateY(-2px);
-            }
-
-            .nav-btn.active {
-                box-shadow: var(--shadow-sunken);
-                color: var(--color-turquoise-dark);
+                gap: 10px;
                 background-color: var(--color-card-gray);
-                transform: translateY(0);
+                box-shadow: var(--shadow-raised-sm);
             }
 
-            .nav-btn i {
-                font-size: 16px;
-                transition: transform var(--transition-speed) ease;
+            .country-selector legend {
+                padding: 0 8px;
+                font-size: 12px;
+                font-weight: 700;
+                color: var(--color-turquoise-medium);
             }
 
-            .nav-btn:hover i {
-                transform: scale(1.1);
-            }
-
-            /* Sidebar Footer Utilities */
-            .sidebar-footer {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .btn-utility {
-                background-color: var(--color-bg-gray);
-                color: var(--color-turquoise-dark);
-                border: none;
-                padding: 12px 18px;
-                border-radius: 14px;
-                font-size: 13px;
-                font-weight: 500;
+            .country-option {
                 display: flex;
                 align-items: center;
                 gap: 10px;
+                font-size: 13.5px;
+                font-weight: 600;
+                color: var(--color-turquoise-dark);
                 cursor: pointer;
-                box-shadow: var(--shadow-raised-sm);
-                transition: all var(--transition-speed) ease;
-                width: 100%;
+                user-select: none;
+                position: relative;
             }
 
-            .btn-utility:hover {
+            .country-option input {
+                position: absolute;
+                opacity: 0;
+                cursor: pointer;
+                height: 0;
+                width: 0;
+            }
+
+            .radio-custom {
+                height: 16px;
+                width: 16px;
+                background-color: var(--color-bg-gray);
+                border-radius: 50%;
                 box-shadow: var(--shadow-sunken-sm);
-                transform: translateY(1px);
+                display: inline-block;
+                position: relative;
+                transition: all 0.2s ease;
+            }
+
+            .country-option input:checked ~ .radio-custom {
+                background-color: var(--color-card-gray);
+                box-shadow: var(--shadow-raised-sm);
+            }
+
+            .radio-custom::after {
+                content: "";
+                position: absolute;
+                display: none;
+                top: 4px;
+                left: 4px;
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background-color: var(--color-turquoise-medium);
+            }
+
+            .country-option input:checked ~ .radio-custom::after {
+                display: block;
+            }
+
+            /* Accordion Navigation */
+            .accordion-nav {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                overflow-y: auto;
+                max-height: calc(100vh - 260px);
+                padding-right: 5px;
+                padding-bottom: 20px;
+                flex: 1;
+            }
+
+            .menu-category {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+            }
+
+            .category-header {
+                width: 100%;
+                background: none;
+                border: none;
+                padding: 10px 14px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 14.5px;
+                font-weight: 700;
+                color: var(--color-turquoise-dark);
+                cursor: pointer;
+                text-align: left;
+                border-radius: 12px;
+                transition: background-color var(--transition-speed);
+            }
+
+            .category-header:hover {
+                background-color: rgba(0, 130, 150, 0.06);
+            }
+
+            .category-header .arrow-icon {
+                font-size: 10px;
+                transition: transform var(--transition-speed) ease;
+                color: var(--color-turquoise-medium);
+            }
+
+            .menu-category.expanded .category-header .arrow-icon {
+                transform: rotate(90deg);
+            }
+
+            .category-list {
+                list-style: none;
+                display: none;
+                flex-direction: column;
+                gap: 4px;
+                padding-left: 16px;
+                border-left: 2px dashed rgba(0, 130, 150, 0.15);
+                margin-left: 8px;
+            }
+
+            .menu-category.expanded .category-list {
+                display: flex;
+            }
+
+            .sub-btn {
+                width: 100%;
+                background: none;
+                border: none;
+                padding: 8px 12px;
+                font-size: 13px;
+                font-weight: 500;
+                color: var(--color-turquoise-medium);
+                text-align: left;
+                cursor: pointer;
+                border-radius: 10px;
+                transition: all var(--transition-speed) ease;
+                outline: none;
+            }
+
+            .sub-btn:hover {
+                color: var(--color-turquoise-dark);
+                background-color: rgba(0, 130, 150, 0.05);
+                padding-left: 15px;
+            }
+
+            .sub-btn.active {
+                font-weight: 700;
+                color: var(--color-turquoise-dark);
+                background-color: var(--color-bg-gray);
+                box-shadow: var(--shadow-sunken-sm);
+            }
+
+            /* Nested Category (Otros) */
+            .nested-category {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+                margin-top: 4px;
+            }
+
+            .nested-category-header {
+                width: 100%;
+                background: none;
+                border: none;
+                padding: 8px 12px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--color-turquoise-medium);
+                cursor: pointer;
+                text-align: left;
+                border-radius: 10px;
+                transition: all var(--transition-speed) ease;
+                outline: none;
+            }
+
+            .nested-category-header:hover {
+                color: var(--color-turquoise-dark);
+                background-color: rgba(0, 130, 150, 0.05);
+            }
+
+            .nested-category-header .nested-arrow-icon {
+                font-size: 9px;
+                transition: transform var(--transition-speed) ease;
+                color: var(--color-turquoise-medium);
+            }
+
+            .nested-category.expanded .nested-category-header .nested-arrow-icon {
+                transform: rotate(90deg);
+            }
+
+            .nested-category-list {
+                list-style: none;
+                display: none;
+                flex-direction: column;
+                gap: 4px;
+                padding-left: 14px;
+                border-left: 1.5px dashed rgba(0, 130, 150, 0.12);
+                margin-left: 6px;
+            }
+
+            .nested-category.expanded .nested-category-list {
+                display: flex;
+            }
+
+            /* Sub-tabs bar styling */
+            .sub-tabs-bar {
+                display: flex;
+                gap: 12px;
+                background-color: var(--color-card-gray);
+                padding: 10px 18px;
+                border-radius: 16px;
+                box-shadow: var(--shadow-raised-sm);
+                width: 100%;
+                overflow-x: auto;
+                margin-bottom: 5px;
+            }
+
+            .sub-tab-btn {
+                background: none;
+                border: none;
+                padding: 8px 15px;
+                border-radius: 8px;
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--color-turquoise-medium);
+                cursor: pointer;
+                transition: all var(--transition-speed) ease;
+                white-space: nowrap;
+            }
+
+            .sub-tab-btn:hover {
+                color: var(--color-turquoise-dark);
+                background-color: rgba(0, 130, 150, 0.06);
+            }
+
+            .sub-tab-btn.active {
+                background-color: var(--color-bg-gray);
+                color: var(--color-turquoise-dark);
+                box-shadow: var(--shadow-sunken-sm);
+            }
+
+            /* Footer Utilities */
+            .sidebar-footer {
+                position: sticky;
+                bottom: -35px; /* offset the sidebar's padding-bottom */
+                background-color: #ffffff;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                margin-top: auto;
+                z-index: 10;
+                box-shadow: 0 -15px 15px -5px rgba(255, 255, 255, 0.95);
+            }
+
+            .footer-divider {
+                border: none;
+                height: 1.5px;
+                background-color: rgba(0, 130, 150, 0.12);
+                margin: 4px 0 8px 0;
+            }
+
+            .btn-footer-utility {
+                width: 100%;
+                background: none;
+                border: none;
+                padding: 10px 12px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--color-turquoise-dark);
+                cursor: pointer;
+                border-radius: 12px;
+                transition: all var(--transition-speed) ease;
+                text-align: left;
+            }
+
+            .btn-footer-utility:hover:not(:disabled) {
+                background-color: rgba(0, 130, 150, 0.05);
+            }
+
+            .btn-footer-utility:disabled {
+                opacity: 0.45;
+                cursor: not-allowed;
+            }
+
+            .utility-left {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .utility-right {
+                font-size: 10.5px;
+                font-weight: 500;
+                color: var(--color-turquoise-medium);
+                opacity: 0.85;
+            }
+
+            .check-icon {
+                color: var(--color-turquoise-medium);
+                font-size: 13px;
+            }
+
+            .dot-icon {
+                color: var(--color-logo-red);
+                font-size: 9px;
+            }
+
+            .dot-disabled {
+                display: inline-block;
+                width: 9px;
+                height: 9px;
+                border-radius: 50%;
+                background-color: #a0a0a0;
             }
 
             /* MAIN CONTENT */
@@ -385,10 +636,7 @@
 
             /* METRICS SECTION */
             .metrics-grid {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 25px;
-                width: 100%;
+                display: none !important;
             }
 
             .metric-card {
@@ -509,21 +757,20 @@
 
             .select-neumorphic {
                 appearance: none;
-                background-color: var(--color-bg-gray);
+                background-color: #ffffff;
                 color: var(--color-turquoise-medium);
-                border: none;
+                border: 1.5px solid rgba(90, 100, 110, 0.6);
                 padding: 12px 45px 12px 20px;
                 border-radius: 14px;
                 font-size: 14px;
                 font-weight: 600;
                 cursor: pointer;
-                box-shadow: var(--shadow-raised-sm);
                 outline: none;
                 transition: all var(--transition-speed) ease;
             }
 
             .select-neumorphic:focus {
-                box-shadow: var(--shadow-sunken);
+                border-color: rgba(12, 100, 112, 0.4);
             }
 
             .select-wrapper::after {
@@ -552,7 +799,8 @@
             }
 
             .chart-card {
-                background-color: var(--color-card-gray);
+                background-color: #ffffff;
+                border: 1.5px solid rgba(90, 100, 110, 0.6);
                 border-radius: 24px;
                 padding: 30px;
                 box-shadow: var(--shadow-raised);
@@ -625,13 +873,15 @@
 
             /* DATA TABLES SECTION */
             .table-card {
-                background-color: var(--color-card-gray);
+                background-color: #ffffff;
+                border: 1.5px solid rgba(90, 100, 110, 0.6);
                 border-radius: 24px;
                 padding: 30px;
                 box-shadow: var(--shadow-raised);
                 display: flex;
                 flex-direction: column;
                 gap: 20px;
+                min-width: 0;
             }
 
             .table-card-header {
@@ -653,8 +903,8 @@
                 width: 100%;
                 overflow-x: auto;
                 border-radius: 18px;
-                background-color: var(--color-bg-gray);
-                box-shadow: var(--shadow-sunken);
+                background-color: #ffffff;
+                border: 1.5px solid rgba(90, 100, 110, 0.6);
                 padding: 12px;
             }
 
@@ -664,6 +914,9 @@
                 text-align: center;
                 font-size: 13px;
                 color: var(--color-turquoise-dark);
+            }
+
+            #table-slide1 {
                 min-width: 800px;
             }
 
@@ -694,12 +947,12 @@
             }
 
             tbody tr:hover {
-                background-color: rgba(255, 255, 255, 0.4);
+                background-color: rgba(0, 130, 150, 0.03);
             }
 
             tbody td {
                 padding: 14px 10px;
-                border-bottom: 1px solid rgba(200, 200, 200, 0.3);
+                border-bottom: 1px solid rgba(0, 130, 150, 0.12);
                 font-weight: 500;
             }
 
@@ -975,10 +1228,10 @@
             /* ===== TABLA SEGUIMIENTO (slide 9) ===== */
             .seg-table-wrapper {
                 overflow-x: auto;
-                border-radius: 18px;
-                background-color: var(--color-bg-gray);
-                box-shadow: var(--shadow-sunken);
-                padding: 4px;
+                border-radius: 14px;
+                background-color: #ffffff;
+                border: 1.5px solid rgba(90, 100, 110, 0.6);
+                padding: 0;
             }
             .seg-table {
                 width: 100%;
@@ -1002,17 +1255,18 @@
                 border: none;
             }
             .seg-table thead th:first-child {
-                border-radius: 14px 0 0 0;
+                border-radius: 13px 0 0 0;
                 text-align: left;
                 padding-left: 20px;
             }
             .seg-table thead th:last-child {
-                border-radius: 0 14px 0 0;
+                border-radius: 0 13px 0 0;
             }
             .seg-table tbody td {
                 padding: 12px 14px;
                 border-bottom: 1px solid rgba(200, 200, 200, 0.3);
                 font-weight: 500;
+                background: #ffffff;
                 transition: background 0.2s;
             }
             .seg-table tbody td:first-child {
@@ -1022,19 +1276,19 @@
                 color: var(--color-turquoise-medium);
             }
             .seg-table tbody tr:hover td {
-                background: rgba(14, 140, 155, 0.07);
+                background: rgba(14, 140, 155, 0.05);
             }
             .seg-table tbody tr:last-child td {
                 border-bottom: none;
             }
             .seg-table .row-total td {
-                background: rgba(14, 140, 155, 0.1);
+                background: rgba(14, 140, 155, 0.08);
                 font-weight: 800;
                 color: var(--color-turquoise-dark);
-                border-top: 2px solid rgba(14, 140, 155, 0.25);
+                border-top: 2px solid rgba(14, 140, 155, 0.2);
             }
             .seg-table .row-crec td {
-                background: rgba(224, 164, 88, 0.1);
+                background: rgba(224, 164, 88, 0.08);
                 font-weight: 700;
                 color: #c77f00;
             }
@@ -1109,18 +1363,25 @@
                 max-width: calc(100% - 78px);
             }
             body.nav-collapsed .logo-img,
-            body.nav-collapsed .nav-btn span,
-            body.nav-collapsed .btn-utility span {
-                display: none;
+            body.nav-collapsed .country-selector,
+            body.nav-collapsed .category-header span,
+            body.nav-collapsed .category-header .arrow-icon,
+            body.nav-collapsed .category-list,
+            body.nav-collapsed .btn-footer-utility span:not(.dot-icon):not(.check-icon):not(.dot-disabled),
+            body.nav-collapsed .utility-right,
+            body.nav-collapsed .footer-divider {
+                display: none !important;
             }
             body.nav-collapsed .logo-container {
                 justify-content: center;
             }
-            body.nav-collapsed .nav-btn,
-            body.nav-collapsed .btn-utility {
+            body.nav-collapsed .category-header {
                 justify-content: center;
-                padding-left: 0;
-                padding-right: 0;
+                padding: 12px 0;
+            }
+            body.nav-collapsed .btn-footer-utility {
+                justify-content: center;
+                padding: 12px 0;
             }
             body.nav-collapsed .nav-toggle i {
                 transform: rotate(180deg);
@@ -1228,11 +1489,125 @@
                         <i class="fa-solid fa-angles-left"></i>
                     </button>
                 </div>
-                <nav>
-                    <ul class="nav-list" id="nav-list">
-                        <!-- Botones generados dinámicamente desde SLIDES -->
-                    </ul>
+
+                <!-- COUNTRY SELECTOR -->
+                <fieldset class="country-selector">
+                    <legend>Pais</legend>
+                    <label class="country-option">
+                        <input type="radio" name="country" value="peru" checked onchange="handleCountryChange(this.value)">
+                        <span class="radio-custom"></span>
+                        Perú
+                    </label>
+                    <label class="country-option">
+                        <input type="radio" name="country" value="colombia" onchange="handleCountryChange(this.value)">
+                        <span class="radio-custom"></span>
+                        Colombia
+                    </label>
+                </fieldset>
+
+                <!-- COLLAPSIBLE ACCORDION MENU -->
+                <nav class="accordion-nav">
+                    <!-- Category: Ventas -->
+                    <div class="menu-category" id="cat-ventas">
+                        <button class="category-header" onclick="toggleCategory('ventas')">
+                            <span>Ventas</span>
+                            <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                        </button>
+                        <ul class="category-list">
+                            <li><button class="sub-btn" id="btn-directivos" onclick="selectMenuSubItem('ventas', 'directivos')">Directivos</button></li>
+                            <li><button class="sub-btn" id="btn-seguimiento" onclick="selectMenuSubItem('ventas', 'seguimiento')">Seguimiento</button></li>
+                            <li class="nested-category" id="cat-ventas-otros">
+                                <button class="nested-category-header" onclick="toggleNestedCategory('ventas-otros')">
+                                    <span>Otros</span>
+                                    <i class="fa-solid fa-chevron-right nested-arrow-icon"></i>
+                                </button>
+                                <ul class="nested-category-list">
+                                    <li><button class="sub-btn" id="btn-cantidadventas" onclick="selectMenuSubItem('ventas', 'cantidadventas')">Cantidad de Ventas</button></li>
+                                    <li><button class="sub-btn" id="btn-ventasproducto" onclick="selectMenuSubItem('ventas', 'ventasproducto')">Ventas por Origen</button></li>
+                                    <li><button class="sub-btn" id="btn-ventasporproducto" onclick="selectMenuSubItem('ventas', 'ventasporproducto')">Ventas por Producto</button></li>
+                                    <li><button class="sub-btn" id="btn-ventasnetas" onclick="selectMenuSubItem('ventas', 'ventasnetas')">Ventas Netas</button></li>
+                                    <li><button class="sub-btn" id="btn-productividadantig" onclick="selectMenuSubItem('ventas', 'productividadantig')">Productividad x Antig.</button></li>
+                                    <li><button class="sub-btn" id="btn-dotacionantig" onclick="selectMenuSubItem('ventas', 'dotacionantig')">Dotación x Antigüedad</button></li>
+                                    <li><button class="sub-btn" id="btn-limaprovincia" onclick="selectMenuSubItem('ventas', 'limaprovincia')">Lima y Provincias</button></li>
+                                    <li><button class="sub-btn" id="btn-calidadventa" onclick="selectMenuSubItem('ventas', 'calidadventa')">Calidad de Venta</button></li>
+                                    <li><button class="sub-btn" id="btn-segsusann" onclick="selectMenuSubItem('ventas', 'segsusann')">Seguimiento</button></li>
+                                    <li><button class="sub-btn" id="btn-reportegerencial" onclick="selectMenuSubItem('ventas', 'reportegerencial')">Reporte Gerencial</button></li>
+                                    <li><button class="sub-btn" id="btn-cuotainscripcion" onclick="selectMenuSubItem('ventas', 'cuotainscripcion')">Cuota de Inscripción</button></li>
+                                    <li><button class="sub-btn" id="btn-ventacomercial" onclick="selectMenuSubItem('ventas', 'ventacomercial')">Venta por C. Comercial</button></li>
+                                    <li><button class="sub-btn" id="btn-comparativodiario" onclick="selectMenuSubItem('ventas', 'comparativodiario')">Comp. Venta Diaria</button></li>
+                                    <li><button class="sub-btn" id="btn-productividadreporte" onclick="selectMenuSubItem('ventas', 'productividadreporte')">Productividad (Reporte)</button></li>
+                                    <li><button class="sub-btn" id="btn-ventaprodrep" onclick="selectMenuSubItem('ventas', 'ventaprodrep')">Venta x Producto (Rep.)</button></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Category: Operaciones -->
+                    <div class="menu-category" id="cat-operaciones">
+                        <button class="category-header" onclick="toggleCategory('operaciones')">
+                            <span>Operaciones</span>
+                            <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                        </button>
+                        <ul class="category-list">
+                            <li><button class="sub-btn" id="btn-adg" onclick="selectMenuSubItem('operaciones', 'adg')">ADG</button></li>
+                            <li><button class="sub-btn" id="btn-edb" onclick="selectMenuSubItem('operaciones', 'edb')">EDB</button></li>
+                            <li><button class="sub-btn" id="btn-rrhh" onclick="selectMenuSubItem('operaciones', 'rrhh')">RRHH</button></li>
+                            <li><button class="sub-btn" id="btn-contactcenter" onclick="selectMenuSubItem('operaciones', 'contactcenter')">Contact Center</button></li>
+                        </ul>
+                    </div>
+
+                    <!-- Category: Finanzas -->
+                    <div class="menu-category" id="cat-finanzas">
+                        <button class="category-header" onclick="toggleCategory('finanzas')">
+                            <span>Finanzas</span>
+                            <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                        </button>
+                        <ul class="category-list">
+                            <li><button class="sub-btn" id="btn-planeamiento" onclick="selectMenuSubItem('finanzas', 'planeamiento')">Planeamiento</button></li>
+                            <li><button class="sub-btn" id="btn-creditos" onclick="selectMenuSubItem('finanzas', 'creditos')">Créditos</button></li>
+                            <li><button class="sub-btn" id="btn-cobranza" onclick="selectMenuSubItem('finanzas', 'cobranza')">Cobranza</button></li>
+                            <li><button class="sub-btn" id="btn-tesoreria" onclick="selectMenuSubItem('finanzas', 'tesoreria')">Tesorería</button></li>
+                        </ul>
+                    </div>
+
+                    <!-- Category: Seguridad -->
+                    <div class="menu-category" id="cat-seguridad">
+                        <button class="category-header" onclick="toggleCategory('seguridad')">
+                            <span>Seguridad</span>
+                            <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                        </button>
+                        <ul class="category-list">
+                            <li><button class="sub-btn" id="btn-usuarios" onclick="selectMenuSubItem('seguridad', 'usuarios')">Usuarios</button></li>
+                            <li><button class="sub-btn" id="btn-roles" onclick="selectMenuSubItem('seguridad', 'roles')">Roles</button></li>
+                        </ul>
+                    </div>
                 </nav>
+            </div>
+
+            <!-- SIDEBAR FOOTER UTILITIES -->
+            <div class="sidebar-footer">
+                <hr class="footer-divider">
+                <button class="btn-footer-utility" onclick="triggerActualizarDatos()">
+                    <span class="utility-left">
+                        <i class="fa-solid fa-check check-icon"></i>
+                        <span>Actualizar Datos</span>
+                    </span>
+                    <span class="utility-right">CTRL+A</span>
+                </button>
+                <button class="btn-footer-utility" disabled>
+                    <span class="utility-left">
+                        <span class="dot-disabled"></span>
+                        <span>Descargar Datos</span>
+                    </span>
+                    <span class="utility-right"></span>
+                </button>
+                <button class="btn-footer-utility" onclick="triggerSalir()">
+                    <span class="utility-left">
+                        <i class="fa-solid fa-circle dot-icon"></i>
+                        <span>Salir</span>
+                    </span>
+                    <span class="utility-right">CTRL+S</span>
+                </button>
             </div>
         </aside>
 
@@ -1387,6 +1762,9 @@
                 </div>
             </header>
 
+            <!-- SUB-TABS CONTAINER FOR GROUPED VIEWS -->
+            <div id="sub-tabs-container" class="sub-tabs-bar" style="display: none;"></div>
+
             <!-- METRICS GRID -->
             <section class="metrics-grid" id="metrics-container">
                 <!-- Cards will be dynamically injected with JS -->
@@ -1448,27 +1826,6 @@
                 <h4 id="toast-title">Acción completada</h4>
                 <p id="toast-desc">Los datos han sido exportados con éxito.</p>
             </div>
-        </div>
-
-        <!-- CAMOUFLAGED WORD & UTILITY EXPORT BUTTONS (Easter egg: click logo 5 times to show) -->
-        <div id="secret-export-container" style="display: none; position: fixed; bottom: 30px; left: 30px; z-index: 999; background: var(--color-card-gray); padding: 15px; border-radius: 16px; box-shadow: var(--shadow-raised); gap: 10px; flex-direction: column; width: 220px;">
-            <div style="font-size: 11px; font-weight: bold; color: var(--color-turquoise-medium); margin-bottom: 5px; text-align: center;">Exportar Reportes</div>
-            <button class="btn-utility" onclick="exportReportWord(false)">
-                <i class="fa-solid fa-file-word" style="color: #2b579a;"></i>
-                <span>Exportar Todo (Word)</span>
-            </button>
-            <button class="btn-utility" onclick="exportReportWord(true)">
-                <i class="fa-solid fa-file-word" style="color: #2b579a;"></i>
-                <span>Exportar Vista (Word)</span>
-            </button>
-            <button class="btn-utility" onclick="exportReportExcel()">
-                <i class="fa-solid fa-file-excel" style="color: #217346;"></i>
-                <span>Exportar Tabla (Excel)</span>
-            </button>
-            <button class="btn-utility" onclick="downloadReportPDF()">
-                <i class="fa-solid fa-file-pdf" style="color: #b30000;"></i>
-                <span>Descargar PDF</span>
-            </button>
         </div>
 
         <!-- LOAD DATA & RUN INTERACTIVE CONTROLLERS -->
@@ -1663,8 +2020,260 @@
                             ],
                         },
                     },
+                    slide3: {
+                        title: "Cantidad de ventas por Producto",
+                        filter: "Autoahorro",
+                        chartAnnual: {
+                            categories: [
+                                "2020",
+                                "2021",
+                                "2022",
+                                "2023",
+                                "2024",
+                                "2025",
+                                "2026",
+                            ],
+                            values: [
+                                214.0, 521.0, 839.0, 671.0, 664.5, 775.8, 863.0,
+                            ],
+                            name: "Promedio Anual",
+                        },
+                        chartMonthly: {
+                            categories: [
+                                "Mar.",
+                                "Abr.",
+                                "May.",
+                                "Jun.",
+                                "Jul.",
+                                "Ago.",
+                                "Set.",
+                                "Oct.",
+                                "Nov.",
+                                "Dic.",
+                                "Ene.",
+                                "Feb.",
+                                "Mar.",
+                            ],
+                            series: [
+                                {
+                                    name: "Ventas",
+                                    values: [
+                                        608.0, 568.0, 675.0, 700.0, 777.0,
+                                        763.0, 890.0, 869.0, 990.0, 916.0,
+                                        935.0, 873.0, 781.0,
+                                    ],
+                                    color: "#8ECAE6",
+                                },
+                                {
+                                    name: "Presupuesto",
+                                    values: [
+                                        714.0, 724.0, 731.0, 748.0, 763.0,
+                                        715.0, 745.0, 783.0, 798.0, 747.0,
+                                        826.0, 826.0, 859.0,
+                                    ],
+                                    color: "#A8DADC",
+                                },
+                            ],
+                        },
+                        table: {
+                            months: [
+                                "Mar 25",
+                                "Abr 25",
+                                "May 25",
+                                "Jun 25",
+                                "Jul 25",
+                                "Ago 25",
+                                "Set 25",
+                                "Oct 25",
+                                "Nov 25",
+                                "Dic 25",
+                                "Ene 26",
+                                "Feb 26",
+                                "Mar 26",
+                            ],
+                            ventas: [
+                                608.0, 568.0, 675.0, 700.0, 777.0,
+                                763.0, 890.0, 869.0, 990.0, 916.0,
+                                935.0, 873.0, 781.0,
+                            ],
+                            presupuesto: [
+                                714.0, 724.0, 731.0, 748.0, 763.0,
+                                715.0, 745.0, 783.0, 798.0, 747.0,
+                                826.0, 826.0, 859.0,
+                            ],
+                        },
+                    },
+                    slide4: {
+                        title: "Cantidad de Ventas Netas: Ene – Mar 2026",
+                        table: {
+                            headers: [
+                                "AÑO",
+                                "2015",
+                                "2016",
+                                "2017",
+                                "2018",
+                                "2019",
+                                "2020",
+                                "2021",
+                                "2022",
+                                "2023",
+                                "2024",
+                                "2025",
+                                "2026",
+                            ],
+                            total: [
+                                "410",
+                                "480",
+                                "505",
+                                "512",
+                                "528",
+                                "515",
+                                "1,010",
+                                "1,420",
+                                "524",
+                                "1,124",
+                                "2,818",
+                                "1,309",
+                            ],
+                            average: [
+                                "34",
+                                "40",
+                                "42",
+                                "43",
+                                "44",
+                                "43",
+                                "84",
+                                "118",
+                                "48",
+                                "94",
+                                "235",
+                                "436",
+                            ],
+                        },
+                        chart: {
+                            categories: [
+                                "Ene.",
+                                "Feb.",
+                                "Mar.",
+                                "Abr.",
+                                "May.",
+                                "Jun.",
+                                "Jul.",
+                                "Ago.",
+                                "Set.",
+                                "Oct.",
+                                "Nov.",
+                                "Dic.",
+                            ],
+                            series: [
+                                {
+                                    name: "Ventas 26",
+                                    values: [
+                                        476,
+                                        419,
+                                        414,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                    ],
+                                },
+                                {
+                                    name: "Ventas 25",
+                                    values: [
+                                        156,
+                                        155,
+                                        147,
+                                        126,
+                                        176,
+                                        209,
+                                        257,
+                                        246,
+                                        274,
+                                        266,
+                                        377,
+                                        429,
+                                    ],
+                                },
+                                {
+                                    name: "Presupuesto",
+                                    values: [
+                                        295,
+                                        295,
+                                        304,
+                                        316,
+                                        329,
+                                        349,
+                                        365,
+                                        374,
+                                        379,
+                                        390,
+                                        401,
+                                        403,
+                                    ],
+                                },
+                            ],
+                        },
+                    },
                 };
             }
+
+            let selectedCountry = 'peru';
+
+            function scaleDataForColombia(obj) {
+                if (obj === null || obj === undefined) return obj;
+                if (typeof obj === 'number') {
+                    if (obj >= 2000 && obj <= 2030) return obj; // Keep years
+                    return Math.round(obj * 0.65 * 100) / 100;
+                }
+                if (Array.isArray(obj)) {
+                    return obj.map(item => scaleDataForColombia(item));
+                }
+                if (typeof obj === 'string') {
+                    if (obj.endsWith('%')) return obj;
+                    const cleaned = obj.replace(/,/g, '').replace('S/ ', '').trim();
+                    if (cleaned !== '' && !isNaN(cleaned)) {
+                        const numVal = Number(cleaned);
+                        if (numVal >= 2000 && numVal <= 2030) return obj; // Year
+                        const scaled = Math.round(numVal * 0.65);
+                        const formatted = new Intl.NumberFormat("es-PE", { maximumFractionDigits: 0 }).format(scaled);
+                        return obj.startsWith('S/ ') ? 'S/ ' + formatted : formatted;
+                    }
+                    return obj;
+                }
+                if (typeof obj === 'object') {
+                    const newObj = {};
+                    for (const key in obj) {
+                        if (obj.hasOwnProperty(key)) {
+                            if (key === 'headers' || key === 'categories' || key === 'months' || key === 'monthsWithData' || key === 'name' || key === 'title' || key === 'subtitle' || key === 'filter' || key === 'icon' || key === 'kind' || key === 'iframeUrl') {
+                                newObj[key] = obj[key];
+                            } else if (key === 'compliance' || key === 'rotation') {
+                                newObj[key] = obj[key];
+                            } else {
+                                newObj[key] = scaleDataForColombia(obj[key]);
+                            }
+                        }
+                    }
+                    return newObj;
+                }
+                return obj;
+            }
+
+            const originalDashboardData = window.dashboardData || {};
+            window.dashboardData = new Proxy(originalDashboardData, {
+                get(target, prop) {
+                    const value = target[prop];
+                    if (selectedCountry === 'colombia' && typeof value === 'object' && value !== null) {
+                        return scaleDataForColombia(value);
+                    }
+                    return value;
+                }
+            });
 
             // ====== CONFIGURACIÓN DE LAS 26 VISTAS ======
             const SLIDES = [
@@ -1673,7 +2282,7 @@
                     label: "Ventas / Directivos",
                     icon: "fa-chart-column",
                     kind: "iframe",
-                    iframeUrl: "https://app.powerbi.com/view?r=eyJrIjoiYmVjMTQwOTktZTM3MS00NTI0LWEwMzctNmZlZWMwNzFkN2JmIiwidCI6IjM1NDU5OGE1LTQwMmYtNDM1MS05M2IxLTNmNWE5MzJlMzg1MiJ9",
+                    iframeUrl: "https://app.powerbi.com/view?r=eyJrIjoiZjIxMGFiNzktODQyZi00YTJiLWI4ZjgtNmU2OGJhMWQ3OGZhIiwidCI6IjM1NDU5OGE1LTQwMmYtNDM1MS05M2IxLTNmNWE5MzJlMzg1MiJ9",
                     title: "Ventas / Directivos",
                     subtitle: "Tablero Power BI"
                 },
@@ -1682,16 +2291,33 @@
                     label: "Ventas / Seguimiento",
                     icon: "fa-circle-nodes",
                     kind: "iframe",
-                    iframeUrl: "https://app.powerbi.com/view?r=eyJrIjoiYzllNThiMjctNjE3NS00MmYwLTg5M2ItMjEwNzAyY2RlZTYyIiwidCI6IjM1NDU5OGE1LTQwMmYtNDM1MS05M2IxLTNmNWE5MzJlMzg1MiJ9",
+                    iframeUrl: "https://app.powerbi.com/view?r=eyJrIjoiYmVjMTQwOTktZTM3MS00NTI0LWEwMzctNmZlZWMwNzFkN2JmIiwidCI6IjM1NDU5OGE1LTQwMmYtNDM1MS05M2IxLTNmNWE5MzJlMzg1MiJ9",
                     title: "Ventas / Seguimiento",
                     subtitle: "Tablero Power BI"
                 },
                 {
                     id: "s3",
+                    label: "Ventas por Origen",
+                    icon: "fa-circle-nodes",
+                    kind: "origin",
+                    data: "slide2",
+                    title: "Cantidad de ventas por Origen de la venta",
+                },
+                {
+                    id: "s27",
                     label: "Ventas por Producto",
-                    icon: "fa-box-open",
+                    icon: "fa-circle-nodes",
                     kind: "origin",
                     data: "slide3",
+                    title: "Cantidad de ventas por Producto",
+                },
+                {
+                    id: "s28",
+                    label: "Ventas Netas",
+                    icon: "fa-coins",
+                    kind: "combo3",
+                    data: "slide4",
+                    title: "Cantidad de Ventas Netas: Ene – Mar 2026",
                 },
                 {
                     id: "s4",
@@ -1716,14 +2342,14 @@
                 },
                 {
                     id: "s7",
-                    label: "Lima y Provincias",
+                    label: "Cantidad de Ventas Lima y Provincias",
                     icon: "fa-location-dot",
                     kind: "limaprov",
                     data: "slide7",
                 },
                 {
                     id: "s8",
-                    label: "Calidad de Venta",
+                    label: "Calidad de la Venta",
                     icon: "fa-circle-check",
                     kind: "anulaciones",
                     data: "slide8",
@@ -1738,7 +2364,7 @@
                     data: "slide9",
                     title: "Variables de Seguimiento y Control",
                     subtitle:
-                        "Filtro: Gerencia/Subgerente – Supervisor – Vendedor",
+                        "Filtro: Gerencia/Subgerente – Supervisor",
                 },
                 {
                     id: "s10",
@@ -1746,7 +2372,7 @@
                     icon: "fa-clipboard-list",
                     kind: "reportegerencial",
                     data: "slide10",
-                    title: "Variables de Seguimiento y Control",
+                    title: "Reporte Gerencial",
                     subtitle:
                         "Reporte Gerencial: Gerencia/Subgerente – Supervisor – Vendedor",
                 },
@@ -1756,7 +2382,7 @@
                     icon: "fa-receipt",
                     kind: "cuotainscripcion",
                     data: "slide11",
-                    title: "Variables de Seguimiento y Control",
+                    title: "Cuota de Inscripción",
                     subtitle:
                         "Cuota de Inscripción por mes · Origen de la venta",
                 },
@@ -1766,26 +2392,25 @@
                     icon: "fa-store",
                     kind: "ventacomercial",
                     data: "slide12",
-                    title: "Variables de Seguimiento y Control",
+                    title: "Venta por C. Comercial",
                     subtitle: "Venta por Centro Comercial / Concesionario",
                 },
                 {
-                    id: "s13",
-                    label: "Venta Diaria",
+                    id: "s29",
+                    label: "Comp. Venta Diaria",
                     icon: "fa-calendar-day",
-                    kind: "ventadiaria",
-                    data: "slide13",
-                    title: "Variables de Seguimiento y Control",
-                    subtitle:
-                        "Comparativo de Venta Diaria: Gerencia / Subgerencia / Supervisor",
+                    kind: "comparativodiario",
+                    title: "Comparativo Venta Diaria",
+                    subtitle: "Comparativo de Venta Diaria: Gerencia / Subgerencia / Supervisor",
                 },
+
                 {
                     id: "s14",
                     label: "Productividad (Reporte)",
                     icon: "fa-gauge",
                     kind: "productividadreporte",
                     data: "slide14",
-                    title: "Variables de Seguimiento y Control",
+                    title: "Productividad por antigüedad",
                     subtitle:
                         "Productividad por antigüedad: Gerencia/Subgerencia/Supervisión",
                 },
@@ -1793,11 +2418,10 @@
                     id: "s15",
                     label: "Venta x Producto (Rep.)",
                     icon: "fa-boxes-stacked",
-                    kind: "image",
-                    title: "Variables de Seguimiento y Control",
+                    kind: "ventaproductoreporte",
+                    title: "Venta por Producto",
                     subtitle:
                         "Venta por Producto: Gerencia/Subgerencia/Supervisor",
-                    images: ["assets/s15_1.png"],
                 },
                 {
                     id: "s16",
@@ -1830,19 +2454,17 @@
                     id: "s19",
                     label: "ADG — Asambleas",
                     icon: "fa-people-group",
-                    kind: "image",
+                    kind: "adgAsambleas",
                     title: "ADG — Asambleas Inaugurales",
-                    subtitle: "Tablero Power BI",
-                    images: ["assets/s19_1.jpg"],
+                    subtitle: "Portal de Business Intelligence",
                 },
                 {
                     id: "s20",
                     label: "ADG — Reactivaciones",
                     icon: "fa-rotate-right",
-                    kind: "image",
+                    kind: "adgReactivaciones",
                     title: "ADG — Reactivaciones",
-                    subtitle: "Tablero Power BI",
-                    images: ["assets/s20_1.jpg"],
+                    subtitle: "Portal de Business Intelligence",
                 },
                 {
                     id: "s21",
@@ -1908,10 +2530,8 @@
                 "#E2674F",
                 "#2A9D8F",
                 "#6C8EBF",
-                "#C77F00",
-                "#0C6470",
-                "#9B5DE5",
-                "#577590",
+                "#F4A261",
+                "#E76F51",
             ];
 
             // STATE
@@ -2026,14 +2646,14 @@
                         if (label) {
                             label.innerHTML = `<i class="fa-solid fa-filter"></i> ${selectedText}`;
                         }
-                        if (activeSlide === "s3") renderView();
+                        if (activeSlide === "s3" || activeSlide === "s27") renderView();
                     });
                 document
                     .getElementById("f-supervisor")
                     .addEventListener("change", (e) => {
                         slide1Filters.supervisor = e.target.value;
                         if (
-                            ["s9", "s10", "s11", "s12", "s14"].includes(
+                            ["s9", "s10", "s11", "s12", "s14", "s15", "s29"].includes(
                                 activeSlide,
                             )
                         )
@@ -2045,7 +2665,7 @@
                         slide1Filters.segRole = e.target.value;
                         populateSeguimientoSelectors();
                         if (
-                            ["s9", "s10", "s11", "s12", "s14"].includes(
+                            ["s9", "s10", "s11", "s12", "s14", "s15", "s29"].includes(
                                 activeSlide,
                             )
                         )
@@ -2091,30 +2711,221 @@
                 });
             }
 
-            // ====== NAVBAR (generado desde SLIDES) ======
+            // Mapping of sub-categories to their corresponding slides/views
+            const SUBCAT_MAPPING = {
+                'directivos': { slides: ['s1'] },
+                'seguimiento': { slides: ['s2'] },
+                'cantidadventas': { slides: ['s4'] },
+                'ventasproducto': { slides: ['s3'] },
+                'ventasporproducto': { slides: ['s27'] },
+                'ventasnetas': { slides: ['s28'] },
+                'productividadantig': { slides: ['s5'] },
+                'dotacionantig': { slides: ['s6'] },
+                'limaprovincia': { slides: ['s7'] },
+                'calidadventa': { slides: ['s8'] },
+                'segsusann': { slides: ['s9'] },
+                'reportegerencial': { slides: ['s10'] },
+                'cuotainscripcion': { slides: ['s11'] },
+                'ventacomercial': { slides: ['s12'] },
+                'comparativodiario': { slides: ['s29'] },
+                'productividadreporte': { slides: ['s14'] },
+                'ventaprodrep': { slides: ['s15'] },
+                'vendedoressinventa': { slides: ['s24'] },
+                'adg': { slides: ['s19', 's20'] },
+                'edb': { slides: ['s21', 's22', 's23'] },
+                'rrhh': { slides: ['s25'] },
+                'contactcenter': { slides: ['s17', 's18'] },
+                'varios': { slides: ['s7', 's8', 's9', 's10', 's11', 's12', 's13', 's15'] },
+                'cobranza': { slides: ['s16'] }
+            };
+
+            let currentCategory = 'ventas';
+            let currentSubCategory = 'directivos';
+            let lastPeruSlide = 's1';
+
+            // ====== NAVBAR INITIALIZATION ======
             function buildNav() {
-                document.getElementById("nav-list").innerHTML = SLIDES.map(
-                    (s) => {
-                        const isHidden = parseInt(s.id.substring(1)) >= 13;
-                        return `
-        <li class="nav-item"${isHidden ? ' style="display: none;"' : ''}>
-          <button class="nav-btn${s.id === "s1" ? " active" : ""}" id="btn-${s.id}" onclick="selectSlide('${s.id}')">
-            <i class="fa-solid ${s.icon}"></i>
-            <span>${s.label}</span>
-          </button>
-        </li>`;
-                    }
-                ).join("");
+                // Expand "Ventas" by default on startup
+                const catVentas = document.getElementById("cat-ventas");
+                if (catVentas) catVentas.classList.add("expanded");
+
+                // Activate "Directivos" sub-item on startup
+                const btnDirectivos = document.getElementById("btn-directivos");
+                if (btnDirectivos) btnDirectivos.classList.add("active");
+                
+                renderSubTabs('directivos');
             }
+
+            function selectMenuSubItem(catKey, subCatKey) {
+                currentCategory = catKey;
+                currentSubCategory = subCatKey;
+
+                // Deactivate all sub-btns
+                document.querySelectorAll(".sub-btn").forEach(btn => btn.classList.remove("active"));
+                
+                // Activate clicked one(s) (handles duplicates in main and nested menus)
+                const clickedBtns = document.querySelectorAll(`[onclick*="'${subCatKey}'"]`);
+                clickedBtns.forEach(clickedBtn => {
+                    clickedBtn.classList.add("active");
+                    // Expand parent nested category if button is inside one
+                    const parentNested = clickedBtn.closest(".nested-category");
+                    if (parentNested) {
+                        parentNested.classList.add("expanded");
+                    }
+                });
+
+                // Get corresponding slides
+                const mapping = SUBCAT_MAPPING[subCatKey];
+                if (mapping && mapping.slides.length > 0) {
+                    selectSlide(mapping.slides[0]);
+                    renderSubTabs(subCatKey);
+                } else {
+                    // Placeholder views (Planeamiento, Créditos, Tesorería, Usuarios, Roles)
+                    showPlaceholderView(subCatKey);
+                }
+            }
+
+            function toggleNestedCategory(nestedCatKey) {
+                const nestedCatDiv = document.getElementById("cat-" + nestedCatKey);
+                if (!nestedCatDiv) return;
+                nestedCatDiv.classList.toggle("expanded");
+            }
+
+            function renderSubTabs(subCatKey) {
+                const container = document.getElementById("sub-tabs-container");
+                if (!container) return;
+
+                const mapping = SUBCAT_MAPPING[subCatKey];
+                if (!mapping || mapping.slides.length <= 1) {
+                    container.style.display = "none";
+                    return;
+                }
+
+                container.style.display = "flex";
+                container.innerHTML = mapping.slides.map(slideId => {
+                    const slide = SLIDES.find(s => s.id === slideId);
+                    if (!slide) return '';
+                    const activeClass = (activeSlide === slideId) ? 'active' : '';
+                    return `<button class="sub-tab-btn ${activeClass}" onclick="selectSubTab('${slideId}', '${subCatKey}')">${slide.label}</button>`;
+                }).join('');
+            }
+
+            function selectSubTab(slideId, subCatKey) {
+                selectSlide(slideId);
+                renderSubTabs(subCatKey);
+            }
+
+            function showPlaceholderView(subCatKey) {
+                // Set title
+                let title = subCatKey.charAt(0).toUpperCase() + subCatKey.slice(1);
+                if (subCatKey === 'planeamiento') title = 'Finanzas / Planeamiento';
+                if (subCatKey === 'creditos') title = 'Finanzas / Créditos';
+                if (subCatKey === 'tesoreria') title = 'Finanzas / Tesorería';
+                if (subCatKey === 'usuarios') title = 'Seguridad / Usuarios';
+                if (subCatKey === 'roles') title = 'Seguridad / Roles';
+
+                document.getElementById("dashboard-title").textContent = title;
+                document.getElementById("dashboard-subtitle").textContent = "Portal Corporativo de Business Intelligence";
+                
+                // Hide filters and metrics
+                const hf = document.getElementById("slide1-header-filters");
+                if (hf) hf.style.display = "none";
+                document.getElementById("metrics-container").style.display = "none";
+                document.getElementById("sub-tabs-container").style.display = "none";
+
+                // Show placeholder in view-dynamic
+                const host = document.getElementById("view-dynamic");
+                document.getElementById("view-slide1").classList.remove("active");
+                document.getElementById("view-dynamic").classList.add("active");
+
+                host.innerHTML = `
+                    <section class="chart-card" style="padding: 50px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 400px; gap: 20px;">
+                        <div style="width: 80px; height: 80px; background-color: var(--color-bg-gray); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-raised-sm); color: var(--color-turquoise-medium); font-size: 32px;">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                        </div>
+                        <h2 style="color: var(--color-turquoise-dark); font-weight: 700; margin-top: 10px;">Módulo en Construcción</h2>
+                        <p style="color: var(--color-turquoise-dark); opacity: 0.7; max-width: 450px; font-size: 14px; line-height: 1.6;">
+                            Este tablero se encuentra actualmente en fase de desarrollo y estará disponible en la próxima actualización del Portal de BI.
+                        </p>
+                    </section>
+                `;
+            }
+
+            function handleCountryChange(value) {
+                selectedCountry = value;
+                if (activeSlide === "s1") {
+                    renderSlide1();
+                } else {
+                    renderView();
+                }
+            }
+
+            function toggleCategory(catKey) {
+                const catDiv = document.getElementById("cat-" + catKey);
+                if (!catDiv) return;
+
+                const isExpanded = catDiv.classList.contains("expanded");
+                
+                // Collapse others
+                document.querySelectorAll(".menu-category").forEach(cat => {
+                    if (cat !== catDiv) cat.classList.remove("expanded");
+                });
+
+                if (isExpanded) {
+                    catDiv.classList.remove("expanded");
+                } else {
+                    catDiv.classList.add("expanded");
+                }
+            }
+
+            function triggerActualizarDatos() {
+                showToast("Actualizando datos...", "Sincronizando con los servidores de Power BI.");
+                setTimeout(() => {
+                    showToast("Datos actualizados", "Todos los tableros han sido actualizados con éxito.");
+                }, 1200);
+            }
+
+            function triggerSalir() {
+                showToast("Cerrando sesión...", "Redirigiendo de forma segura al portal corporativo.");
+                setTimeout(() => {
+                    alert("Sesión finalizada. Redirigiendo...");
+                }, 1500);
+            }
+
+            // Keyboard Shortcuts Listener
+            document.addEventListener("keydown", (e) => {
+                // Ctrl + A
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a') {
+                    e.preventDefault();
+                    triggerActualizarDatos();
+                }
+                // Ctrl + S
+                if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+                    e.preventDefault();
+                    triggerSalir();
+                }
+            });
 
             // ====== ROUTER ======
             function selectSlide(id) {
                 activeSlide = id;
                 document
-                    .querySelectorAll(".nav-btn")
+                    .querySelectorAll(".sub-btn")
                     .forEach((b) => b.classList.remove("active"));
-                const btn = document.getElementById("btn-" + id);
-                if (btn) btn.classList.add("active");
+                
+                // Find subcategory matching this slide ID
+                let subCatKey = null;
+                for (const [key, mapping] of Object.entries(SUBCAT_MAPPING)) {
+                    if (mapping.slides.includes(id)) {
+                        subCatKey = key;
+                        break;
+                    }
+                }
+                if (subCatKey) {
+                    const btn = document.getElementById("btn-" + subCatKey);
+                    if (btn) btn.classList.add("active");
+                }
+
                 // destruir gráficos dinámicos previos
                 Object.keys(dynCharts).forEach((k) => {
                     dynCharts[k].destroy();
@@ -3638,6 +4449,10 @@
                 const isSlide12 = activeSlide === "s12";
                 const isSlide13 = activeSlide === "s13";
                 const isSlide14 = activeSlide === "s14";
+                const isSlide15 = activeSlide === "s15";
+                const isSlide27 = activeSlide === "s27";
+                const isSlide28 = activeSlide === "s28";
+                const isSlide29 = activeSlide === "s29";
                 const hasFilters =
                     isSlide1 ||
                     isSlide2 ||
@@ -3652,7 +4467,11 @@
                     isSlide11 ||
                     isSlide12 ||
                     isSlide13 ||
-                    isSlide14;
+                    isSlide14 ||
+                    isSlide15 ||
+                    isSlide27 ||
+                    isSlide28 ||
+                    isSlide29;
 
                 const hf = document.getElementById("slide1-header-filters");
                 if (hf) hf.style.display = hasFilters ? "flex" : "none";
@@ -3662,14 +4481,14 @@
                     document.getElementById("group-metric");
                 if (metricFilterGroup) {
                     metricFilterGroup.style.display =
-                        isSlide1 || isSlide4 ? "flex" : "none";
+                        isSlide1 || isSlide4 || isSlide28 ? "flex" : "none";
                 }
 
                 // Ocultar/mostrar el selector de origen/canal según corresponda
                 const segmentFilterGroup =
                     document.getElementById("group-segment");
                 if (segmentFilterGroup) {
-                    segmentFilterGroup.style.display = isSlide2
+                    segmentFilterGroup.style.display = isSlide3
                         ? "flex"
                         : "none";
                 }
@@ -3683,7 +4502,9 @@
                         isSlide10 ||
                         isSlide11 ||
                         isSlide12 ||
-                        isSlide14
+                        isSlide14 ||
+                        isSlide15 ||
+                        isSlide29
                             ? "flex"
                             : "none";
                 }
@@ -3695,8 +4516,8 @@
                         segRoleSel.value ||
                         slide1Filters.segRole ||
                         "supervisor";
-                    if (isSlide12) {
-                        // Venta por C. Comercial solo permite Gerencia, Subgerente, Supervisor
+                    if (isSlide12 || isSlide9 || isSlide11 || isSlide29 || isSlide14 || isSlide15) {
+                        // Venta por C. Comercial, Seguimiento, Cuota de Inscripción y Productividad solo permiten Gerencia, Subgerente, Supervisor
                         segRoleSel.innerHTML = `
                             <option value="gerencia">Gerencia</option>
                             <option value="subgerente">Subgerente</option>
@@ -3727,7 +4548,9 @@
                         isSlide10 ||
                         isSlide11 ||
                         isSlide12 ||
-                        isSlide14
+                        isSlide14 ||
+                        isSlide15 ||
+                        isSlide29
                             ? "flex"
                             : "none";
                 }
@@ -3740,7 +4563,9 @@
                     isSlide10 ||
                     isSlide11 ||
                     isSlide12 ||
-                    isSlide14
+                    isSlide14 ||
+                    isSlide15 ||
+                    isSlide29
                 )
                     populateSeguimientoSelectors();
 
@@ -3752,7 +4577,9 @@
                         isSlide2 ||
                         isSlide3 ||
                         isSlide4 ||
-                        isSlide13
+                        isSlide13 ||
+                        isSlide27 ||
+                        isSlide28
                             ? "flex"
                             : "none";
                 }
@@ -3766,7 +4593,9 @@
                     isSlide7 ||
                     isSlide8 ||
                     isSlide11 ||
-                    isSlide13;
+                    isSlide13 ||
+                    isSlide27 ||
+                    isSlide28;
                 const isSingleMonthView = isSlide13 || isSlide11;
                 const fromFilterGroup = document.getElementById("group-from");
                 if (fromFilterGroup) {
@@ -3790,15 +4619,12 @@
                 const productFilterGroup =
                     document.getElementById("group-product");
                 if (productFilterGroup) {
-                    productFilterGroup.style.display = isSlide3
-                        ? "flex"
-                        : "none";
+                    productFilterGroup.style.display = isSlide27 ? "flex" : "none";
                 }
 
                 // Mantener el texto de los labels de filtros consistente al cambiar de vista
                 const segmentSel = document.getElementById("f-segment");
-                const productSel = document.getElementById("f-product");
-                if (isSlide2 && segmentSel) {
+                if (isSlide3 && segmentSel) {
                     const selectedText =
                         segmentSel.options[segmentSel.selectedIndex]?.text ||
                         "Canal Comercial (PdV + RS)";
@@ -3808,7 +4634,9 @@
                     if (label)
                         label.innerHTML = `<i class="fa-solid fa-filter"></i> ${selectedText}`;
                 }
-                if (isSlide3 && productSel) {
+
+                const productSel = document.getElementById("f-product");
+                if (isSlide27 && productSel) {
                     const selectedText =
                         productSel.options[productSel.selectedIndex]?.text ||
                         "Autoahorro";
@@ -3927,6 +4755,7 @@
                 (
                     ({
                         origin: renderOrigin,
+                        combo3: renderCombo3,
                         sales: renderSales,
                         grouped: renderGrouped,
                         stacked: renderStacked,
@@ -3937,11 +4766,464 @@
                         reportegerencial: renderReporteGerencial,
                         cuotainscripcion: renderCuotaInscripcion,
                         ventacomercial: renderVentaComercial,
-                        ventadiaria: renderVentaDiaria,
+                        comparativodiario: renderComparativoDiario,
+
                         productividadreporte: renderProductividadReporte,
+                        ventaproductoreporte: renderVentaProductoReporte,
                         iframe: renderIframe,
+                        adgAsambleas: renderAdgAsambleas,
+                        adgReactivaciones: renderAdgReactivaciones,
                     })[slide.kind] || (() => {})
                 )(slide, host);
+            }
+
+            // ---- COMPARATIVO VENTA DIARIA (s29) ----
+            function renderComparativoDiario(slide, host) {
+                const role     = slide1Filters.segRole  || "subgerente";
+                const personKey = slide1Filters.supervisor || "default";
+
+                // Seedable LCG – unique per role+person combo
+                const strHash = (str) => {
+                    let h = 5381;
+                    for (let i = 0; i < str.length; i++) h = ((h << 5) + h) ^ str.charCodeAt(i);
+                    return h >>> 0;
+                };
+                const baseSeed = strHash(role + "|" + personKey);
+                const rand = (extra) => {
+                    let s = (baseSeed + extra * 1000003) >>> 0;
+                    return () => { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; };
+                };
+
+                // Subordinate entity sets per role — varied per persona
+                const subordinatesByRole = {
+                    gerencia: {
+                        default:     ["Subgerencia Lima Norte","Subgerencia Lima Sur","Subgerencia Lima Este","Subgerencia Lima Centro","Subgerencia Provincias Norte","Subgerencia Provincias Sur"],
+                        alfaro:      ["Subgerencia Lima Norte","Subgerencia Lima Sur","Subgerencia Lima Centro","Subgerencia La Molina","Subgerencia San Borja"],
+                        paredes:     ["Subgerencia Miraflores","Subgerencia San Isidro","Subgerencia Barranco","Subgerencia Chorrillos","Subgerencia Surco"],
+                        cuenca:      ["Subgerencia Breña","Subgerencia Lince","Subgerencia Jesús María","Subgerencia Pueblo Libre","Subgerencia San Miguel","Subgerencia Magdalena"],
+                        gomez:       ["Subgerencia Ate","Subgerencia San Juan de Lurigancho","Subgerencia Villa El Salvador","Subgerencia Comas","Subgerencia Los Olivos"],
+                        diaz:        ["Subgerencia Arequipa","Subgerencia Trujillo","Subgerencia Piura","Subgerencia Chiclayo","Subgerencia Cusco","Subgerencia Iquitos"],
+                    },
+                    subgerente: {
+                        default:     ["Supervisor A","Supervisor B","Supervisor C","Supervisor D","Supervisor E"],
+                        alfaro:      ["Sup. Bermejo","Sup. Bustos","Sup. Jaramillo","Sup. Meza","Sup. Vallejos","Sup. Martínez"],
+                        paredes:     ["Sup. Salvador","Sup. Toalino","Sup. Bello","Sup. Calderón","Sup. Plaza"],
+                        cuenca:      ["Sup. Olivares","Sup. Ramos","Sup. Torres","Sup. García","Sup. López","Sup. Flores"],
+                        gomez:       ["Sup. Rodríguez","Sup. Hernández","Sup. Díaz","Sup. Morales","Sup. Vásquez"],
+                        diaz:        ["Sup. Castillo","Sup. Reyes","Sup. Cruz","Sup. Núñez","Sup. Quispe","Sup. Mamani"],
+                    },
+                    supervisor: {
+                        default:     ["Vend. 1","Vend. 2","Vend. 3","Vend. 4","Vend. 5","Vend. 6","Vend. 7"],
+                        alfaro:      ["Bermejo M.","Bustos F.","Jaramillo B.","Meza S.","Vallejos L.","Martínez D.","Salvador M."],
+                        paredes:     ["Toalino C.","Bello M.","Calderón O.","Plaza F.","Olivares Z.","Quispe R.","Flores A."],
+                        cuenca:      ["Ramos J.","Torres E.","García P.","López N.","Núñez C.","Herrera G."],
+                        gomez:       ["Rodríguez K.","Hernández L.","Díaz M.","Morales T.","Vásquez S.","Castro R.","Mendoza F."],
+                        diaz:        ["Castillo A.","Reyes B.","Cruz C.","Núñez D.","Quispe E.","Mamani F."],
+                    }
+                };
+
+                // Sales intensity per role (daily range)
+                const salesRange = { gerencia: [25, 80], subgerente: [8, 30], supervisor: [1, 12] };
+                const [minS, maxS] = salesRange[role] || salesRange.subgerente;
+
+                // Pick entity list: try personKey substring match
+                const roleEntities = subordinatesByRole[role] || subordinatesByRole.subgerente;
+                let entities = roleEntities.default;
+                const pk = personKey.toLowerCase();
+                for (const key of Object.keys(roleEntities)) {
+                    if (pk.includes(key) || key.includes(pk.split(" ")[0])) {
+                        entities = roleEntities[key];
+                        break;
+                    }
+                }
+
+                // Display name for selected person
+                const d9 = dashboardData.slide9;
+                let personName = personKey;
+                if (d9 && d9.peopleByRole && d9.peopleByRole[role] && d9.peopleByRole[role][personKey]) {
+                    personName = d9.peopleByRole[role][personKey].name || personKey;
+                }
+
+                const months      = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Setiembre","Octubre","Noviembre","Diciembre"];
+                const daysInMonth = [31,28,31,30,31,30,31,31,30,31,30,31];
+                const maxDays     = 30;
+
+                let grandTotal = 0;
+                const monthTotals = [];
+
+                const dayHeaders = Array.from({length: maxDays}, (_, i) => `<th>D${i+1}</th>`).join("");
+
+                let tbHtml = "";
+                months.forEach((month, mIdx) => {
+                    const days = Math.min(daysInMonth[mIdx], maxDays);
+                    let monthTotal = 0;
+
+                    tbHtml += `<tr class="row-month-header"><td colspan="${maxDays + 2}">${month}</td></tr>`;
+
+                    entities.forEach((entity, eIdx) => {
+                        const rng = rand(mIdx * 500 + eIdx * 37);
+                        let rowTotal = 0;
+                        let cells = "";
+                        for (let d = 0; d < maxDays; d++) {
+                            if (d < days) {
+                                const val = Math.floor(rng() * (maxS - minS + 1)) + minS;
+                                rowTotal += val;
+                                cells += `<td>${val}</td>`;
+                            } else {
+                                cells += `<td style="color:#ccc">—</td>`;
+                            }
+                        }
+                        monthTotal += rowTotal;
+                        tbHtml += `<tr><td class="comp-entity-cell">${entity}</td>${cells}<td class="comp-total-cell">${nf(rowTotal)}</td></tr>`;
+                    });
+
+                    grandTotal += monthTotal;
+                    monthTotals.push(monthTotal);
+                    const subCells = Array.from({length: maxDays}, () => `<td></td>`).join("");
+                    tbHtml += `<tr class="row-total row-month-total"><td style="text-align:left;padding-left:20px">Total ${month}</td>${subCells}<td>${nf(monthTotal)}</td></tr>`;
+                });
+
+                // Metric cards — dynamic per person
+                const m0 = monthTotals[0] || 0;
+                const m1 = monthTotals[1] || 0;
+                const roleLabel = { gerencia:"Gerencia", subgerente:"Subgerente", supervisor:"Supervisor" }[role] || role;
+                renderMetricCards([
+                    { title: `Ventas ${months[0]}`,     value: nf(m0),         icon: "fa-calendar-day",  trendText: "Primer mes",        trendUp: true,  accentColor: "#0E8C9B" },
+                    { title: `Ventas ${months[1]}`,     value: nf(m1),         icon: "fa-calendar",       trendText: "Segundo mes",       trendUp: m1>=m0, accentColor: "#3A7CA5" },
+                    { title: "Total Acumulado",          value: nf(grandTotal), icon: "fa-chart-line",     trendText: "Todos los meses",   trendUp: true,  accentColor: "#E0A458" },
+                    { title: roleLabel,                  value: personName.split(" ").slice(0,2).join(" "), icon: "fa-user-tie", trendText: `${entities.length} entidades`, trendUp: true, accentColor: "#2A9D8F" }
+                ]);
+
+                host.innerHTML = `
+        <section class="table-card">
+          <div class="table-card-header">
+            <h3 class="table-card-title"><i class="fa-solid fa-calendar-day"></i>
+              <span>Comparativo Venta Diaria — ${roleLabel}: ${personName}</span>
+            </h3>
+          </div>
+          <div class="seg-table-wrapper" style="overflow: auto; max-height: 560px;">
+            <table class="seg-table" style="font-size: 11px; min-width: max-content;">
+              <thead>
+                <tr>
+                  <th style="min-width:170px; text-align:left; padding-left:14px; position:sticky; left:0; z-index:3;">Entidad</th>
+                  ${dayHeaders}
+                  <th style="position:sticky; right:0; z-index:3; background:linear-gradient(135deg,#0e8c9b,#025763);">TOTAL</th>
+                </tr>
+              </thead>
+              <tbody>${tbHtml}</tbody>
+            </table>
+          </div>
+        </section>
+        <style>
+          .row-month-header td {
+            background: linear-gradient(135deg, #1a3a5c, #0e2a47);
+            color: #fff; font-weight: 700; font-size: 12px;
+            padding: 8px 16px; text-align: left; letter-spacing: 0.5px;
+          }
+          .row-month-total td {
+            background: rgba(14,140,155,0.08);
+            font-weight: 700; border-top: 1px solid rgba(14,140,155,0.2);
+          }
+          .comp-entity-cell {
+            text-align: left; padding-left: 28px;
+            color: var(--color-turquoise-medium); font-weight: 600;
+            min-width: 170px; position: sticky; left: 0;
+            background: #fff; z-index: 1;
+          }
+          .row-month-header .comp-entity-cell,
+          .row-total .comp-entity-cell { background: inherit; }
+          .comp-total-cell {
+            font-weight: 800; color: var(--color-turquoise-dark);
+            border-left: 2px solid rgba(14,140,155,0.25);
+            position: sticky; right: 0; background: rgba(240,251,252,0.97);
+          }
+        </style>
+      `;
+            }
+
+
+
+            // ---- ADG ASAMBLEAS (slide 19) ----
+            function renderAdgAsambleas(slide, host) {
+                renderMetricCards([
+                    { title: "Cant. Grupos Formación", value: "6", icon: "fa-solid fa-people-group", trendText: "Periodo 2026", trendUp: true, accentColor: "#0E8C9B" },
+                    { title: "Grupos Listos para Asamblea", value: "1", icon: "fa-solid fa-list-check", trendText: "Listo para convocar", trendUp: true, accentColor: "#3A7CA5" },
+                    { title: "Asambleas Inaugurales", value: "41", icon: "fa-solid fa-circle-check", trendText: "Realizadas", trendUp: true, accentColor: "#E0A458" },
+                    { title: "Periodo", value: "2026", icon: "fa-solid fa-calendar", trendText: "Filtro activo", trendUp: true, accentColor: "#E2674F" }
+                ]);
+
+                host.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 30px; width: 100%;">
+                        <!-- Grupos en Formación -->
+                        <section class="table-card" style="margin: 0;">
+                            <div class="table-card-header">
+                                <h3 class="table-card-title"><i class="fa-solid fa-users-gear"></i><span>Grupos en Formación</span></h3>
+                            </div>
+                            <div class="table-outer-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Grupo</th>
+                                            <th>Teórico del Grupo</th>
+                                            <th>Contratos Inscritos</th>
+                                            <th>Recaudación Actual</th>
+                                            <th>Recaudación Mínima</th>
+                                            <th>Importe para Convocar Asamblea</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td><strong>A224</strong></td><td>180</td><td>107</td><td>S/ 24,349.79</td><td>S/ 20,000.00</td><td class="compliance-high">S/ 0.00</td></tr>
+                                        <tr><td><strong>C207</strong></td><td>450</td><td>36</td><td>S/ 11,500.04</td><td>S/ 60,000.00</td><td class="compliance-low">S/ 48,499.96</td></tr>
+                                        <tr><td><strong>M3P5</strong></td><td>240</td><td>240</td><td>S/ 47,801.25</td><td>S/ 24,000.00</td><td class="compliance-high">S/ 0.00</td></tr>
+                                        <tr><td><strong>M3P6</strong></td><td>240</td><td>119</td><td>S/ 24,847.50</td><td>S/ 24,000.00</td><td class="compliance-high">S/ 0.00</td></tr>
+                                        <tr><td><strong>S1J2</strong></td><td>180</td><td>180</td><td>S/ 50,060.69</td><td>S/ 25,000.00</td><td class="compliance-high">S/ 0.00</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <!-- Grupos Programados para Asamblea -->
+                        <section class="table-card" style="margin: 0;">
+                            <div class="table-card-header">
+                                <h3 class="table-card-title"><i class="fa-solid fa-calendar-check"></i><span>Grupos Programados para Asamblea</span></h3>
+                            </div>
+                            <div class="table-outer-container" style="min-height: 250px;">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Grupos</th>
+                                            <th>Teórico del Grupo</th>
+                                            <th>Contratos Inscritos</th>
+                                            <th>Vacantes Libres</th>
+                                            <th>Fecha Primera Asamblea</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5" style="text-align: center; padding: 60px 20px; color: var(--color-turquoise-dark); opacity: 0.6;">
+                                                <i class="fa-solid fa-circle-info" style="font-size: 24px; display: block; margin-bottom: 12px; color: var(--color-turquoise-medium);"></i>
+                                                No hay grupos programados actualmente para asamblea.
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+
+                        <!-- Grupos Inaugurados -->
+                        <section class="table-card" style="margin: 0;">
+                            <div class="table-card-header">
+                                <h3 class="table-card-title"><i class="fa-solid fa-award"></i><span>Grupos Inaugurados</span></h3>
+                            </div>
+                            <div class="table-outer-container" style="max-height: 350px; overflow-y: auto;">
+                                <table style="min-width: 600px;">
+                                    <thead style="position: sticky; top: 0; z-index: 10;">
+                                        <tr>
+                                            <th>Grupo</th>
+                                            <th>Fecha 1ra. Asamblea</th>
+                                            <th>Recaudación Inicial</th>
+                                            <th>Sorteos</th>
+                                            <th>Remates</th>
+                                            <th>Vacantes Ocupadas</th>
+                                            <th>Vacantes Libres</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td><strong>A217</strong></td><td>07/01/2026</td><td>S/ 39,949.80</td><td>1</td><td>5</td><td>178</td><td>2</td></tr>
+                                        <tr><td><strong>A218</strong></td><td>13/01/2026</td><td>S/ 44,366.31</td><td>1</td><td>4</td><td>177</td><td>3</td></tr>
+                                        <tr><td><strong>A219</strong></td><td>13/02/2026</td><td>S/ 45,399.59</td><td>1</td><td>3</td><td>177</td><td>3</td></tr>
+                                        <tr><td><strong>A220</strong></td><td>26/01/2026</td><td>S/ 0.00</td><td>1</td><td>1</td><td>0</td><td class="compliance-low">180</td></tr>
+                                        <tr><td><strong>A220</strong></td><td>20/02/2026</td><td>S/ 43,916.35</td><td>1</td><td>4</td><td>176</td><td>4</td></tr>
+                                        <tr><td><strong>A221</strong></td><td>26/02/2026</td><td>S/ 45,132.93</td><td>1</td><td>4</td><td>180</td><td class="compliance-high">0</td></tr>
+                                        <tr><td><strong>A222</strong></td><td>13/03/2026</td><td>S/ 44,249.64</td><td>1</td><td>3</td><td>175</td><td>5</td></tr>
+                                        <tr><td><strong>A223</strong></td><td>31/03/2026</td><td>S/ 43,749.63</td><td>1</td><td>3</td><td>179</td><td>1</td></tr>
+                                        <tr><td><strong>A224</strong></td><td>21/04/2026</td><td>S/ 43,266.34</td><td>1</td><td>4</td><td>179</td><td>1</td></tr>
+                                        <tr><td><strong>A225</strong></td><td>30/04/2026</td><td>S/ 43,149.67</td><td>1</td><td>3</td><td>180</td><td class="compliance-high">0</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                `;
+            }
+
+            // ---- ADG REACTIVACIONES (slide 20) ----
+            function renderAdgReactivaciones(slide, host) {
+                renderMetricCards([
+                    { title: "Cant. Reactivaciones", value: "2,998", icon: "fa-solid fa-arrows-rotate", trendText: "Total acumulado", trendUp: true, accentColor: "#0E8C9B" },
+                    { title: "Meta Reactivaciones", value: "3,252", icon: "fa-solid fa-bullseye", trendText: "Meta del año", trendUp: true, accentColor: "#E0A458" },
+                    { title: "% Cumplimiento Reactivaciones", value: "92%", icon: "fa-solid fa-percentage", trendText: "Desviación: -8%", trendUp: false, accentColor: "#E2674F" },
+                    { title: "Periodo / Zona", value: "2025 / Todas", icon: "fa-solid fa-globe", trendText: "Filtro regional", trendUp: true, accentColor: "#3A7CA5" }
+                ]);
+
+                host.innerHTML = `
+                    <div style="display: flex; flex-direction: column; gap: 30px; width: 100%;">
+                        <div style="display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 25px;">
+                            <!-- Detalle de Reactivaciones (Tabla) -->
+                            <section class="table-card" style="margin: 0;">
+                                <div class="table-card-header">
+                                    <h3 class="table-card-title"><i class="fa-solid fa-table"></i><span>Detalle de Reactivaciones (Arequipa)</span></h3>
+                                </div>
+                                <div class="table-outer-container" style="max-height: 320px; overflow-y: auto;">
+                                    <table>
+                                        <thead style="position: sticky; top: 0; z-index: 10;">
+                                            <tr>
+                                                <th>Año</th>
+                                                <th>Mes</th>
+                                                <th>Zona Oficial</th>
+                                                <th>Cant. Reactivaciones</th>
+                                                <th>Meta Reactivaciones</th>
+                                                <th>% Cumplimiento</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr><td>2025</td><td>Enero</td><td>AREQUIPA</td><td>42</td><td>25</td><td class="compliance-high">168%</td></tr>
+                                            <tr><td>2025</td><td>Febrero</td><td>AREQUIPA</td><td>25</td><td>25</td><td class="compliance-high">100%</td></tr>
+                                            <tr><td>2025</td><td>Marzo</td><td>AREQUIPA</td><td>40</td><td>25</td><td class="compliance-high">160%</td></tr>
+                                            <tr><td>2025</td><td>Abril</td><td>AREQUIPA</td><td>40</td><td>25</td><td class="compliance-high">160%</td></tr>
+                                            <tr><td>2025</td><td>Mayo</td><td>AREQUIPA</td><td>38</td><td>25</td><td class="compliance-high">152%</td></tr>
+                                            <tr><td>2025</td><td>Junio</td><td>AREQUIPA</td><td>36</td><td>25</td><td class="compliance-high">144%</td></tr>
+                                            <tr><td>2025</td><td>Julio</td><td>AREQUIPA</td><td>21</td><td>25</td><td class="compliance-low">84%</td></tr>
+                                            <tr><td>2025</td><td>Agosto</td><td>AREQUIPA</td><td>28</td><td>30</td><td class="compliance-low">93%</td></tr>
+                                            <tr><td>2025</td><td>Septiembre</td><td>AREQUIPA</td><td>37</td><td>25</td><td class="compliance-high">148%</td></tr>
+                                            <tr><td>2025</td><td>Octubre</td><td>AREQUIPA</td><td>46</td><td>25</td><td class="compliance-high">184%</td></tr>
+                                            <tr style="background-color: rgba(14, 140, 155, 0.1); font-weight: 700;">
+                                                <td colspan="3"><strong>Total General</strong></td>
+                                                <td>2,998</td>
+                                                <td>3,252</td>
+                                                <td class="compliance-high">92%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </section>
+
+                            <!-- Distribución por Zonas (Gráfico de Barras) -->
+                            <div class="chart-card" style="margin: 0;">
+                                <div class="chart-card-header">
+                                    <h3 class="chart-card-title"><i class="fa-solid fa-map-location-dot"></i><span>Distribución por Zonas</span></h3>
+                                </div>
+                                <div class="chart-canvas-wrapper"><canvas id="adg-zone-chart"></canvas></div>
+                            </div>
+                        </div>
+
+                        <!-- Comparativo Mensual (Gráfico de Barras + Línea) -->
+                        <div class="chart-card" style="width: 100%; margin: 0;">
+                            <div class="chart-card-header">
+                                <h3 class="chart-card-title"><i class="fa-solid fa-chart-line"></i><span>Comparativo Mensual: Reactivaciones vs Meta & % Cumplimiento (2025)</span></h3>
+                                <div class="chart-legend">
+                                    <div class="legend-pill"><span class="legend-swatch" style="background:#E2674F"></span>Reactivaciones</div>
+                                    <div class="legend-pill"><span class="legend-swatch" style="background:#3A7CA5"></span>Meta</div>
+                                    <div class="legend-pill"><span class="legend-swatch line" style="background:#E0A458"></span>% Cumplimiento</div>
+                                </div>
+                            </div>
+                            <div class="chart-canvas-wrapper" style="height: 320px;"><canvas id="adg-monthly-chart"></canvas></div>
+                        </div>
+                    </div>
+                `;
+
+                // Draw Zone Chart
+                drawChart("adg-zone-chart", {
+                    type: "bar",
+                    data: {
+                        labels: ["LIMA", "AREQUIPA", "TRUJILLO", "CHICLAYO", "PIURA", "HUANCAYO"],
+                        datasets: [{
+                            data: [70, 14, 5, 4, 4, 4],
+                            backgroundColor: ["#0E8C9B", "#3A7CA5", "#E0A458", "#E2674F", "#2A9D8F", "#6C8EBF"],
+                            borderRadius: 6,
+                            maxBarThickness: 26
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: "y",
+                        layout: {
+                            padding: {
+                                left: 20,
+                                right: 15
+                            }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: baseTooltip,
+                            datalabels: {
+                                anchor: "end",
+                                align: "right",
+                                color: "#0C6470",
+                                font: { family: "Inter", weight: "700", size: 10 },
+                                formatter: v => v + "%"
+                            }
+                        },
+                        scales: {
+                            x: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%" }, grid: { color: "rgba(0,0,0,0.04)" } },
+                            y: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#0C6470" } }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
+
+                // Draw Monthly Chart
+                drawChart("adg-monthly-chart", {
+                    data: {
+                        labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
+                        datasets: [
+                            {
+                                type: "bar",
+                                label: "Reactivaciones",
+                                data: [292, 251, 245, 240, 249, 232, 235, 261, 273, 280, 255, 185],
+                                backgroundColor: "#E2674F",
+                                borderRadius: 5,
+                                maxBarThickness: 20,
+                                yAxisID: "y"
+                            },
+                            {
+                                type: "bar",
+                                label: "Meta",
+                                data: [268, 257, 267, 264, 275, 257, 255, 290, 298, 298, 275, 248],
+                                backgroundColor: "#3A7CA5",
+                                borderRadius: 5,
+                                maxBarThickness: 20,
+                                yAxisID: "y"
+                            },
+                            {
+                                type: "line",
+                                label: "% Cumplimiento",
+                                data: [109, 98, 92, 91, 91, 90, 92, 90, 92, 94, 93, 75],
+                                borderColor: "#E0A458",
+                                backgroundColor: "#E0A458",
+                                borderWidth: 3,
+                                tension: 0.3,
+                                pointRadius: 4,
+                                yAxisID: "y1",
+                                datalabels: {
+                                    align: "top",
+                                    color: "#B46500",
+                                    font: { family: "Inter", weight: "700", size: 10 },
+                                    formatter: v => v + "%"
+                                }
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: { padding: { top: 15 } },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: baseTooltip,
+                            datalabels: {
+                                display: ctx => ctx.dataset.type === "line"
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#0C6470" } },
+                            y: { position: "left", beginAtZero: true, grid: { color: "rgba(0,0,0,0.06)" }, ticks: { color: "#6b7280" } },
+                            y1: { position: "right", beginAtZero: true, max: 150, grid: { display: false }, ticks: { color: "#6b7280", callback: v => v + "%" } }
+                        }
+                    },
+                    plugins: [ChartDataLabels]
+                });
             }
 
             // ---- SEGUIMIENTO (slide 9) ----
@@ -4443,107 +5725,8 @@
             </table>
           </div>
         </section>
-        <section class="charts-grid">
-          ${chartCard("Evolución Mensual: Real vs Objetivo & Cumplimiento", "fa-chart-line", "gerencial-chart")}
-        </section>
       `;
 
-                // Chart.js dual axis
-                const monthsLabels = months.slice(0, -1);
-                const realVals = realVar ? realVar.values.slice(0, -1) : [];
-                const objVar = variables.find((v) => v.name === "Objetivo");
-                const objVals = objVar ? objVar.values.slice(0, -1) : [];
-                const cumVals = cumVar
-                    ? cumVar.values.slice(0, -1).map((v) => num(v))
-                    : [];
-
-                const ctx = document
-                    .getElementById("gerencial-chart")
-                    .getContext("2d");
-                const gradReal = ctx.createLinearGradient(0, 0, 0, 300);
-                gradReal.addColorStop(0, "#0E8C9B");
-                gradReal.addColorStop(1, "#0C6470");
-
-                drawChart("gerencial-chart", {
-                    data: {
-                        labels: monthsLabels,
-                        datasets: [
-                            {
-                                type: "bar",
-                                label: "Real (Ventas)",
-                                data: realVals,
-                                backgroundColor: gradReal,
-                                borderRadius: 5,
-                                maxBarThickness: 24,
-                                yAxisID: "y",
-                            },
-                            {
-                                type: "bar",
-                                label: "Objetivo",
-                                data: objVals,
-                                backgroundColor: "#B0C2C4",
-                                borderRadius: 5,
-                                maxBarThickness: 24,
-                                yAxisID: "y",
-                            },
-                            {
-                                type: "line",
-                                label: "% Cumplimiento",
-                                data: cumVals,
-                                borderColor: "#E2674F",
-                                backgroundColor: "#E2674F",
-                                borderWidth: 3,
-                                pointRadius: 4,
-                                tension: 0.3,
-                                yAxisID: "y1",
-                            },
-                        ],
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: "top",
-                                labels: {
-                                    font: { family: "Inter", weight: "600" },
-                                    color: "#0C6470",
-                                },
-                            },
-                            tooltip: baseTooltip,
-                            datalabels: { display: false },
-                        },
-                        scales: {
-                            x: {
-                                grid: { display: false },
-                                ticks: {
-                                    font: { family: "Inter", weight: "600" },
-                                    color: "#0C6470",
-                                },
-                            },
-                            y: {
-                                position: "left",
-                                beginAtZero: true,
-                                grid: { color: "rgba(0,0,0,0.06)" },
-                                ticks: { color: "#6b7280" },
-                                title: { display: true, text: "Ventas" },
-                            },
-                            y1: {
-                                position: "right",
-                                beginAtZero: true,
-                                grid: { display: false },
-                                ticks: {
-                                    color: "#6b7280",
-                                    callback: (v) => v + "%",
-                                },
-                                title: {
-                                    display: true,
-                                    text: "Cumplimiento (%)",
-                                },
-                            },
-                        },
-                    },
-                });
             }
 
             // ---- CUOTA DE INSCRIPCION (slide 11) ----
@@ -4857,13 +6040,7 @@
 
                 // Build Table 2
                 const th2 = ["Origen de la Venta", ...orig.months, "Total"]
-                    .map((h, i) => {
-                        const isSelected = i - 1 === monthIdx;
-                        const style = isSelected
-                            ? ' style="background-color: rgba(14, 140, 155, 0.15); color: #0C6470; font-weight: bold; border-left: 2px solid #0E8C9B; border-right: 2px solid #0E8C9B;"'
-                            : "";
-                        return `<th${style}>${h}</th>`;
-                    })
+                    .map((h) => `<th>${h}</th>`)
                     .join("");
 
                 let tb2 = "";
@@ -4880,11 +6057,7 @@
                     const cells = rowVals
                         .map((v, i) => {
                             monthlyTotals[i] += v || 0;
-                            const isSelected = i === monthIdx;
-                            const style = isSelected
-                                ? ' style="background-color: rgba(14, 140, 155, 0.08); font-weight: bold; border-left: 2px solid #0E8C9B; border-right: 2px solid #0E8C9B;"'
-                                : "";
-                            return `<td${style}>${v == null ? "—" : nf(v)}</td>`;
+                            return `<td>${v == null ? "—" : nf(v)}</td>`;
                         })
                         .join("");
                     tb2 += `<tr><td style="text-align: left; padding-left: 15px;"><strong>${cat}</strong></td>${cells}<td><strong>${nf(rowSum)}</strong></td></tr>`;
@@ -4892,83 +6065,33 @@
                 tb2 +=
                     `<tr class="row-total"><td style="text-align: left; padding-left: 15px;">Total general</td>` +
                     monthlyTotals
-                        .map((v, i) => {
-                            const isSelected = i === monthIdx;
-                            const style = isSelected
-                                ? ' style="background-color: rgba(14, 140, 155, 0.15); font-weight: bold; border-left: 2px solid #0E8C9B; border-right: 2px solid #0E8C9B;"'
-                                : "";
-                            return `<td${style}>${nf(v)}</td>`;
-                        })
+                        .map((v) => `<td>${nf(v)}</td>`)
                         .join("") +
                     `<td>${nf(cumulativeGrandTotal)}</td></tr>`;
 
                 host.innerHTML = `
-        <div class="charts-grid">
-          <section class="table-card">
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <section class="table-card" style="margin: 0;">
             <div class="table-card-header"><h3 class="table-card-title"><i class="fa-solid fa-receipt"></i><span>Cuota de Inscripción por Vendedor (${selectedMonthName})</span></h3></div>
-            <div class="seg-table-wrapper" style="max-height: 400px; overflow-y: auto;">
+            <div class="seg-table-wrapper" style="max-height: 420px; overflow-y: auto;">
               <table class="seg-table small-font">
                 <thead><tr>${th1}</tr></thead>
                 <tbody>${tb1}</tbody>
               </table>
             </div>
           </section>
+          <section class="table-card" style="margin: 0;">
+            <div class="table-card-header"><h3 class="table-card-title"><i class="fa-solid fa-circle-nodes"></i><span>Origen de la Venta por Mes</span></h3></div>
+            <div class="seg-table-wrapper" style="overflow-x: auto;">
+              <table class="seg-table" style="font-size: 12px;">
+                <thead><tr>${th2}</tr></thead>
+                <tbody>${tb2}</tbody>
+              </table>
+            </div>
+          </section>
         </div>
-
-        <section class="table-card" style="margin-top: 25px;">
-          <div class="table-card-header"><h3 class="table-card-title"><i class="fa-solid fa-circle-nodes"></i><span>Origen de la Venta por Mes</span></h3></div>
-          <div class="seg-table-wrapper">
-            <table class="seg-table">
-              <thead><tr>${th2}</tr></thead>
-              <tbody>${tb2}</tbody>
-            </table>
-          </div>
-        </section>
-
-        <section class="charts-grid" style="margin-top: 25px;">
-          ${chartCard("Evolución Mensual de Orígenes de Venta (Stacked)", "fa-chart-area", "cuota-origin-chart")}
-        </section>
       `;
 
-                // Chart 2: Stacked bar chart of origins
-                const originDatasets = orig.categories.map((cat, idx) => {
-                    return {
-                        label: cat,
-                        data: orig.series[cat],
-                        backgroundColor: PALETTE[idx % PALETTE.length],
-                        borderRadius: 4,
-                    };
-                });
-
-                drawChart("cuota-origin-chart", {
-                    type: "bar",
-                    data: {
-                        labels: orig.months,
-                        datasets: originDatasets,
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: "top",
-                                labels: {
-                                    font: { family: "Inter", weight: "600" },
-                                },
-                            },
-                            tooltip: baseTooltip,
-                            datalabels: { display: false },
-                        },
-                        scales: {
-                            x: { stacked: true, grid: { display: false } },
-                            y: {
-                                stacked: true,
-                                beginAtZero: true,
-                                grid: { color: "rgba(0,0,0,0.06)" },
-                            },
-                        },
-                    },
-                });
             }
 
             // ---- VENTA POR C. COMERCIAL (slide 12) ----
@@ -5648,87 +6771,353 @@
                     `<td>100.0%</td></tr>`;
 
                 host.innerHTML = `
-        <div class="charts-grid two-columns">
-          <section class="table-card">
+        <div style="display: flex; flex-direction: column; gap: 30px; width: 100%;">
+          <section class="table-card" style="margin: 0; width: 100%;">
             <div class="table-card-header"><h3 class="table-card-title"><i class="fa-solid fa-users"></i><span>N° de Vendedores por Antigüedad y Ventas (Cantidad)</span></h3></div>
-            <div class="seg-name-badge"><i class="fa-solid fa-user-tie"></i> ${role.toUpperCase()} · ${sup.name}</div>
-            <div class="seg-table-wrapper">
-              <table class="seg-table">
+            <div class="seg-name-badge" style="margin-left: 20px; margin-top: 10px;"><i class="fa-solid fa-user-tie"></i> ${role.toUpperCase()} · ${sup.name}</div>
+            <div class="seg-table-wrapper" style="margin-top: 15px; width: 100%;">
+              <table class="seg-table" style="width: 100%;">
                 <thead>
                   <tr>
-                    <th rowspan="2" style="vertical-align: middle;">Antigüedad de vendedor</th>
-                    <th colspan="6" style="border-bottom: 1px solid rgba(0,0,0,0.06);">N° de Ventas</th>
-                    <th rowspan="2" style="vertical-align: middle;">Totales</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: left; padding-left: 20px;">Antigüedad de vendedor</th>
+                    <th colspan="6" style="border-bottom: 1px solid rgba(255,255,255,0.15); text-align: center;">N° de Ventas</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: center;">Totales</th>
                   </tr>
-                  <tr><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5 a más</th></tr>
+                  <tr>
+                    <th style="text-align: center;">0</th>
+                    <th style="text-align: center;">1</th>
+                    <th style="text-align: center;">2</th>
+                    <th style="text-align: center;">3</th>
+                    <th style="text-align: center;">4</th>
+                    <th style="text-align: center;">5 a más</th>
+                  </tr>
                 </thead>
                 <tbody>${tb1}</tbody>
               </table>
             </div>
           </section>
 
-          <section class="table-card">
+          <section class="table-card" style="margin: 0; width: 100%;">
             <div class="table-card-header"><h3 class="table-card-title"><i class="fa-solid fa-percent"></i><span>Distribución Porcentual (%)</span></h3></div>
-            <div class="seg-name-badge"><i class="fa-solid fa-user-tie"></i> ${role.toUpperCase()} · ${sup.name}</div>
-            <div class="seg-table-wrapper">
-              <table class="seg-table">
+            <div class="seg-name-badge" style="margin-left: 20px; margin-top: 10px;"><i class="fa-solid fa-user-tie"></i> ${role.toUpperCase()} · ${sup.name}</div>
+            <div class="seg-table-wrapper" style="margin-top: 15px; width: 100%;">
+              <table class="seg-table" style="width: 100%;">
                 <thead>
                   <tr>
-                    <th rowspan="2" style="vertical-align: middle;">Antigüedad de vendedor</th>
-                    <th colspan="6" style="border-bottom: 1px solid rgba(0,0,0,0.06);">N° de Ventas</th>
-                    <th rowspan="2" style="vertical-align: middle;">Totales</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: left; padding-left: 20px;">Antigüedad de vendedor</th>
+                    <th colspan="6" style="border-bottom: 1px solid rgba(255,255,255,0.15); text-align: center;">N° de Ventas</th>
+                    <th rowspan="2" style="vertical-align: middle; text-align: center;">Totales</th>
                   </tr>
-                  <tr><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5 a más</th></tr>
+                  <tr>
+                    <th style="text-align: center;">0</th>
+                    <th style="text-align: center;">1</th>
+                    <th style="text-align: center;">2</th>
+                    <th style="text-align: center;">3</th>
+                    <th style="text-align: center;">4</th>
+                    <th style="text-align: center;">5 a más</th>
+                  </tr>
                 </thead>
                 <tbody>${tb2}</tbody>
               </table>
             </div>
           </section>
         </div>
-
-        <section class="charts-grid" style="margin-top: 25px;">
-          ${chartCard("Distribución de Fuerza de Ventas por Antigüedad y Desempeño", "fa-chart-column", "prod-bar-chart")}
-        </section>
       `;
+            }
 
-                // Draw Grouped Bar Chart
-                const datasets = columns.map((colLabel, cIdx) => {
-                    return {
-                        label: `${colLabel} Ventas`,
-                        data: matrix.map((row) => row[cIdx]),
-                        backgroundColor: PALETTE[cIdx % PALETTE.length],
-                        borderRadius: 4,
-                    };
+            // ---- VENTA POR PRODUCTO (diapositiva 15) ----
+            function renderVentaProductoReporte(slide, host) {
+                const role = slide1Filters.segRole || "supervisor";
+                ensureSeguimientoPeopleData();
+                const d9 = dashboardData.slide9;
+                const rolePeople = (d9 && d9.peopleByRole && d9.peopleByRole[role]) || {};
+                const personKey = slide1Filters.supervisor || Object.keys(rolePeople)[0] || "default";
+                const personObj = rolePeople[personKey] || { name: "EDITH CUENCA" };
+
+                // Get custom factor for scaling other people relative to Edith Cuenca
+                let factor = 1.0;
+                const pNameUpper = personObj.name.toUpperCase();
+                if (personKey.includes("cuenca") || pNameUpper.includes("CUENCA")) {
+                    factor = 1.0;
+                } else if (personKey.includes("alfaro") || pNameUpper.includes("ALFARO")) {
+                    factor = 1.5;
+                } else if (personKey.includes("salas") || pNameUpper.includes("SALAS")) {
+                    factor = 1.35;
+                } else if (personKey.includes("vega") || pNameUpper.includes("VEGA")) {
+                    factor = 1.42;
+                } else if (personKey.includes("gomez") || pNameUpper.includes("GOMEZ")) {
+                    factor = 0.85;
+                } else if (personKey.includes("diaz") || pNameUpper.includes("DIAZ")) {
+                    factor = 1.25;
+                } else if (personKey.includes("torres") || pNameUpper.includes("TORRES")) {
+                    factor = 0.92;
+                } else if (personKey.includes("quispe") || pNameUpper.includes("QUISPE")) {
+                    factor = 1.05;
+                } else if (personKey.includes("rojas") || pNameUpper.includes("ROJAS")) {
+                    factor = 1.18;
+                } else {
+                    factor = 0.95;
+                }
+
+                if (selectedCountry === 'colombia') {
+                    factor *= 0.65;
+                }
+
+                // Base Data of Edith Cuenca
+                const baseData = {
+                    autoahorro: {
+                        name: "Autoahorro",
+                        n_certif: [18, 7, 13, 11, 26, 23, 30, 47, 94, 121, 124, 109],
+                        dollars: [266600, 92900, 203400, 161400, 449200, 331900, 429600, 670000, 1380900, 1680100, 1819500, 1602600],
+                        cic_cobrado: [7097, 2895, 6365, 5994, 16413, 11672, 15302, 23957, 50981, 63561, 70972, 60497]
+                    },
+                    autopronto: {
+                        name: "Autopronto",
+                        n_certif: [2, 17, 19, 30, 34, 29, 53, 46, 28, 31, 39, 44],
+                        dollars: [26000, 229000, 279500, 373000, 443500, 367500, 695500, 596600, 417900, 466500, 582500, 627500],
+                        cic_cobrado: [1040, 5890, 7118, 12549, 15460, 13964, 23788, 21019, 15292, 17188, 22171, 23533]
+                    },
+                    casa120: {
+                        name: "Casa 120",
+                        n_certif: [2, 1, 0, 1, 3, 5, 3, 5, 3, 2, 3, 5],
+                        dollars: [80000, 40000, 0, 40000, 130000, 255000, 120000, 220000, 180000, 80000, 150000, 265000],
+                        cic_cobrado: [2376, 1200, 0, 1200, 3900, 7530, 3600, 5796, 4500, 2400, 3943, 7550]
+                    },
+                    usados: {
+                        name: "Usados",
+                        n_certif: [0, 0, 0, 2, 0, 0, 0, 3, 3, 0, 2, 4],
+                        dollars: [0, 0, 0, 37400, 0, 0, 0, 42600, 46700, 0, 33500, 67500],
+                        cic_cobrado: [0, 0, 0, 916, 0, 0, 0, 1595, 1868, 0, 1340, 2508]
+                    }
+                };
+
+                let totalQtyGlobal = 0;
+                let totalMontoGlobal = 0;
+                let totalCicGlobal = 0;
+                let starProduct = "";
+                let maxStarQty = -1;
+
+                // Format helper specifically for this table (outputs "-" for 0)
+                const fmtCell = (val, isPercent = false, decimals = 0) => {
+                    if (val === 0 || val == null) return "-";
+                    if (isPercent) return val.toFixed(decimals) + "%";
+                    return nf(val, decimals);
+                };
+
+                // Generate table rows dynamically
+                let htmlRows = "";
+                const productKeys = Object.keys(baseData);
+                const monthsCount = 12;
+
+                productKeys.forEach((pKey, pIdx) => {
+                    const prod = baseData[pKey];
+                    const scaledQty = prod.n_certif.map(v => Math.round(v * factor));
+                    const scaledDollars = prod.dollars.map(v => Math.round(v * factor));
+                    const scaledCic = prod.cic_cobrado.map(v => Math.round(v * factor));
+
+                    const sumQty = scaledQty.reduce((a, b) => a + b, 0);
+                    const sumDollars = scaledDollars.reduce((a, b) => a + b, 0);
+                    const sumCic = scaledCic.reduce((a, b) => a + b, 0);
+
+                    totalQtyGlobal += sumQty;
+                    totalMontoGlobal += sumDollars;
+                    totalCicGlobal += sumCic;
+
+                    if (sumQty > maxStarQty) {
+                        maxStarQty = sumQty;
+                        starProduct = prod.name;
+                    }
+
+                    // 4 rows per product: N° Certif, $ Certif, CIC Cobrado, CIC Prom
+                    for (let mIdx = 0; mIdx < 4; mIdx++) {
+                        let rowHtml = "<tr>";
+
+                        // Add Person Name spanned column in first row of first product
+                        if (pIdx === 0 && mIdx === 0) {
+                            // Split name into multiple lines to show neatly in the vertical cell
+                            const nameLines = personObj.name.split(" ");
+                            const displayName = nameLines.join("<br>");
+                            rowHtml += `
+                                <td rowspan="16" style="vertical-align: middle; text-align: center; font-weight: bold; border: 1px solid #b8c2cc; background-color: #ffffff; color: #1e293b; font-size: 11px; padding: 10px; letter-spacing: 0.5px; line-height: 1.3;">
+                                    ${displayName}
+                                </td>
+                            `;
+                        }
+
+                        // Add Product Name spanned column in first row of each product
+                        if (mIdx === 0) {
+                            rowHtml += `
+                                <td rowspan="4" style="vertical-align: middle; text-align: left; font-weight: 500; border: 1px solid #b8c2cc; background-color: #ffffff; color: #1e293b; font-size: 12px; padding-left: 12px;">
+                                    <strong>${prod.name}</strong>
+                                </td>
+                            `;
+                        }
+
+                        // Add Metric Name cell
+                        let metricLabel = "";
+                        let cellsHtml = "";
+                        if (mIdx === 0) {
+                            metricLabel = "N° Certif";
+                            scaledQty.forEach(v => {
+                                cellsHtml += `<td style="text-align: right; padding-right: 8px;">${fmtCell(v)}</td>`;
+                            });
+                            cellsHtml += `<td style="text-align: right; padding-right: 8px; font-weight: bold;">${fmtCell(sumQty)}</td>`;
+                        } else if (mIdx === 1) {
+                            metricLabel = "$ Certif";
+                            scaledDollars.forEach(v => {
+                                cellsHtml += `<td style="text-align: right; padding-right: 8px;">${fmtCell(v)}</td>`;
+                            });
+                            cellsHtml += `<td style="text-align: right; padding-right: 8px; font-weight: bold;">${fmtCell(sumDollars)}</td>`;
+                        } else if (mIdx === 2) {
+                            metricLabel = "CIC Cobrado";
+                            scaledCic.forEach(v => {
+                                cellsHtml += `<td style="text-align: right; padding-right: 8px;">${fmtCell(v)}</td>`;
+                            });
+                            cellsHtml += `<td style="text-align: right; padding-right: 8px; font-weight: bold;">${fmtCell(sumCic)}</td>`;
+                        } else if (mIdx === 3) {
+                            metricLabel = "CIC Prom";
+                            for (let i = 0; i < monthsCount; i++) {
+                                const cic = scaledCic[i];
+                                const dol = scaledDollars[i];
+                                const pct = dol > 0 ? (cic / dol) * 100 : 0;
+                                cellsHtml += `<td style="text-align: right; padding-right: 8px;">${fmtCell(pct, true, 1)}</td>`;
+                            }
+                            const totalPct = sumDollars > 0 ? (sumCic / sumDollars) * 100 : 0;
+                            cellsHtml += `<td style="text-align: right; padding-right: 8px; font-weight: bold;">${fmtCell(totalPct, true, 1)}</td>`;
+                        }
+
+                        rowHtml += `
+                            <td style="text-align: right; padding-right: 12px; font-size: 11px; background-color: #ffffff; color: #475569; font-weight: normal; border: 1px solid #b8c2cc; border-right: 2px solid #94a3b8;">
+                                ${metricLabel}
+                            </td>
+                            ${cellsHtml}
+                        </tr>`;
+
+                        htmlRows += rowHtml;
+                    }
                 });
 
-                drawChart("prod-bar-chart", {
-                    type: "bar",
-                    data: {
-                        labels: brackets,
-                        datasets: datasets,
+                // Overall calculations for metrics cards
+                const overallCicProm = totalMontoGlobal > 0 ? (totalCicGlobal / totalMontoGlobal) * 100 : 0;
+
+                // Render Metric Cards
+                renderMetricCards([
+                    {
+                        title: "Ventas Totales (Cant.)",
+                        value: nf(totalQtyGlobal),
+                        icon: "fa-boxes-stacked",
+                        trendText: "Total de Certificados",
+                        trendUp: true,
+                        accentColor: "#0E8C9B",
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: "top",
-                                labels: {
-                                    font: { family: "Inter", weight: "600" },
-                                },
-                            },
-                            tooltip: baseTooltip,
-                            datalabels: { display: false },
-                        },
-                        scales: {
-                            x: { grid: { display: false } },
-                            y: {
-                                beginAtZero: true,
-                                grid: { color: "rgba(0,0,0,0.06)" },
-                            },
-                        },
+                    {
+                        title: "Valor Certificados ($)",
+                        value: "$ " + nf(totalMontoGlobal),
+                        icon: "fa-coins",
+                        trendText: "Monto total certificado",
+                        trendUp: true,
+                        accentColor: "#3A7CA5",
                     },
-                });
+                    {
+                        title: "CIC Cobrado Total",
+                        value: "S/ " + nf(totalCicGlobal),
+                        icon: "fa-wallet",
+                        trendText: "Cobranza total del periodo",
+                        trendUp: true,
+                        accentColor: "#E0A458",
+                    },
+                    {
+                        title: "CIC Promedio Total",
+                        value: overallCicProm.toFixed(2) + "%",
+                        icon: "fa-percentage",
+                        trendText: "Tasa promedio de cobranza",
+                        trendUp: overallCicProm >= 3.5,
+                        accentColor: "#E2674F",
+                    }
+                ]);
+
+                // Set container HTML
+                host.innerHTML = `
+                    <style>
+                        .product-table-wrapper {
+                            margin-top: 10px;
+                            width: 100%;
+                            overflow-x: auto;
+                            border-radius: 12px;
+                            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
+                            border: 1px solid #cbd5e1;
+                            background: #ffffff;
+                        }
+                        .product-table-custom {
+                            width: 100%;
+                            border-collapse: collapse;
+                            font-family: 'Inter', sans-serif;
+                            color: #334155;
+                            background-color: #ffffff;
+                        }
+                        .product-table-custom th {
+                            background-color: #f1f5f9;
+                            color: #1e293b;
+                            font-weight: bold;
+                            font-size: 10px;
+                            text-transform: uppercase;
+                            padding: 10px 6px;
+                            border: 1px solid #cbd5e1;
+                            text-align: center;
+                            letter-spacing: 0.5px;
+                        }
+                        .product-table-custom td {
+                            padding: 6px 8px;
+                            font-size: 11px;
+                            border: 1px solid #e2e8f0;
+                            height: 28px;
+                        }
+                        /* Separate products visually using double line or distinct bottom border */
+                        .product-table-custom tr:nth-child(4n) td {
+                            border-bottom: 2px solid #94a3b8;
+                        }
+                        .product-table-custom tr:hover td {
+                            background-color: #f8fafc;
+                        }
+                    </style>
+                    <div style="display: flex; flex-direction: column; gap: 30px; width: 100%;">
+                        <section class="table-card" style="margin: 0; width: 100%;">
+                            <div class="table-card-header">
+                                <h3 class="table-card-title"><i class="fa-solid fa-table-list"></i> <span>Resumen de Venta por Producto y Cobranza CIC</span></h3>
+                            </div>
+                            <div class="seg-name-badge" style="margin-left: 20px; margin-top: 10px;">
+                                <i class="fa-solid fa-user-tie"></i> ${role.toUpperCase()} · ${personObj.name}
+                            </div>
+                            <div class="product-table-wrapper">
+                                <table class="product-table-custom">
+                                    <thead>
+                                        <tr>
+                                            <th style="min-width: 120px;">Persona</th>
+                                            <th style="min-width: 120px;">Producto</th>
+                                            <th style="min-width: 100px; border-right: 2px solid #cbd5e1;">Métrica</th>
+                                            <th>ENERO</th>
+                                            <th>FEBRERO</th>
+                                            <th>MARZO</th>
+                                            <th>ABRIL</th>
+                                            <th>MAYO</th>
+                                            <th>JUNIO</th>
+                                            <th>JULIO</th>
+                                            <th>AGOSTO</th>
+                                            <th>SETIEMBRE</th>
+                                            <th>OCTUBRE</th>
+                                            <th>NOVIEMBRE</th>
+                                            <th>DICIEMBRE</th>
+                                            <th style="background-color: #e2e8f0; font-weight: bold; color: #0f172a;">TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${htmlRows}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                    </div>
+                `;
             }
 
             // ---- ORIGEN / PRODUCTO (diapositivas 2, 3) ----
@@ -5748,7 +7137,7 @@
                 const segmentSel = document.getElementById("f-segment");
                 const productSel = document.getElementById("f-product");
                 const activeFilterLabel =
-                    slide.id === "s2"
+                    slide.data === "slide2"
                         ? segmentSel
                             ? segmentSel.options[segmentSel.selectedIndex].text
                             : d.filter || ""
@@ -5763,9 +7152,9 @@
                 let yearPres = [];
 
                 if (d.years && d.years[filterYear]) {
-                    const filterKey = slide.id === "s2" ? segment : product;
+                    const filterKey = slide.data === "slide2" ? segment : product;
                     const fallbackKey =
-                        slide.id === "s2" ? "pdv" : "autoahorro";
+                        slide.data === "slide2" ? "pdv" : "autoahorro";
                     const yearData = d.years[filterYear][filterKey] ||
                         d.years[filterYear][fallbackKey] || {
                             ventas: [],
@@ -5875,10 +7264,10 @@
               `Comparativo Mensual: Ventas vs Presupuesto (${periodLabel} ${filterYear})`,
               "fa-chart-line",
               "dyn-b",
-              '<div class="legend-pill"><span class="legend-swatch" style="background:#0E8C9B"></span>Ventas</div><div class="legend-pill"><span class="legend-swatch line" style="background:#E0A458"></span>Presupuesto</div>',
+              '<div class="legend-pill"><span class="legend-swatch line" style="background:#0E8C9B"></span>Ventas</div><div class="legend-pill"><span class="legend-swatch line" style="background:#E2674F"></span>Presupuesto</div>',
           )}
         </section>
-        ${tableCard(`Detalle Mensual: Ventas vs Presupuesto (${periodLabel} ${filterYear})`, "dyn-table")}`;
+        ${(slide.id === "s27" || slide.id === "s3") ? "" : tableCard(`Detalle Mensual: Ventas vs Presupuesto (${periodLabel} ${filterYear})`, "dyn-table")}`;
 
                 // Gráfico A: Promedio Anual histórico, resaltando el año seleccionado
                 const selectedYearStr = String(filterYear);
@@ -5942,24 +7331,257 @@
                         labels: labels,
                         datasets: [
                             {
-                                type: "bar",
+                                type: "line",
                                 label: "Ventas Reales",
                                 data: filteredVentas,
+                                borderColor: "#0E8C9B",
                                 backgroundColor: "#0E8C9B",
-                                borderRadius: 5,
-                                maxBarThickness: 26,
-                                order: 3,
-                                datalabels: { display: false },
+                                borderWidth: 3,
+                                tension: 0.35,
+                                pointRadius: 4,
+                                pointBackgroundColor: "#FFFFFF",
+                                pointBorderColor: "#0E8C9B",
+                                pointBorderWidth: 2,
+                                order: 2,
+                                datalabels: {
+                                    backgroundColor: "rgba(235, 246, 242, 0.9)",
+                                    borderRadius: 4,
+                                    padding: {
+                                        top: 2,
+                                        right: 5,
+                                        bottom: 2,
+                                        left: 5,
+                                    },
+                                    color: "#0C6470",
+                                    font: {
+                                        family: "Inter",
+                                        weight: "700",
+                                        size: 10,
+                                    },
+                                    align: (ctx) => {
+                                        const i = ctx.dataIndex;
+                                        const vVal = ctx.chart.data.datasets[0].data[i];
+                                        const pVal = ctx.chart.data.datasets[1].data[i];
+                                        if (vVal === null || pVal === null) return "bottom";
+                                        return vVal >= pVal ? "top" : "bottom";
+                                    },
+                                    anchor: (ctx) => {
+                                        const i = ctx.dataIndex;
+                                        const vVal = ctx.chart.data.datasets[0].data[i];
+                                        const pVal = ctx.chart.data.datasets[1].data[i];
+                                        if (vVal === null || pVal === null) return "start";
+                                        return vVal >= pVal ? "end" : "start";
+                                    },
+                                    formatter: (v) => nf(v, 1),
+                                },
                             },
                             {
                                 type: "line",
                                 label: "Presupuesto Programado",
                                 data: filteredPres,
-                                borderColor: "#E0A458",
-                                backgroundColor: "#E0A458",
+                                borderColor: "#E2674F",
+                                backgroundColor: "#E2674F",
                                 borderWidth: 3,
                                 tension: 0.35,
+                                pointRadius: 4,
+                                pointBackgroundColor: "#FFFFFF",
+                                pointBorderColor: "#E2674F",
+                                pointBorderWidth: 2,
+                                order: 1,
+                                datalabels: {
+                                    backgroundColor: "rgba(253, 242, 240, 0.9)",
+                                    borderRadius: 4,
+                                    padding: {
+                                        top: 2,
+                                        right: 5,
+                                        bottom: 2,
+                                        left: 5,
+                                    },
+                                    color: "#A23B24",
+                                    font: {
+                                        family: "Inter",
+                                        weight: "700",
+                                        size: 10,
+                                    },
+                                    align: (ctx) => {
+                                        const i = ctx.dataIndex;
+                                        const vVal = ctx.chart.data.datasets[0].data[i];
+                                        const pVal = ctx.chart.data.datasets[1].data[i];
+                                        if (vVal === null || pVal === null) return "top";
+                                        return vVal >= pVal ? "bottom" : "top";
+                                    },
+                                    anchor: (ctx) => {
+                                        const i = ctx.dataIndex;
+                                        const vVal = ctx.chart.data.datasets[0].data[i];
+                                        const pVal = ctx.chart.data.datasets[1].data[i];
+                                        if (vVal === null || pVal === null) return "end";
+                                        return vVal >= pVal ? "start" : "end";
+                                    },
+                                    formatter: (v) => nf(v, 1),
+                                },
+                            },
+                        ],
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        layout: { padding: { top: 22, bottom: 10 } },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: baseTooltip,
+                            datalabels: {
+                                display: (ctx) =>
+                                    ctx.dataset.data[ctx.dataIndex] != null,
+                            },
+                        },
+                        scales: baseScales(),
+                    },
+                    plugins: [ChartDataLabels],
+                });
+
+                // Construcción de la tabla resumen filtrada
+                if (slide.id !== "s27" && slide.id !== "s3") {
+                    let html =
+                        "<thead><tr><th>Mes</th><th>Ventas</th><th>Presupuesto</th><th>Cumplimiento</th><th>Estado</th></tr></thead><tbody>";
+
+                    let hasData = false;
+                    filteredVentas.forEach((v, idx) => {
+                        if (v !== null) {
+                            hasData = true;
+                            const monthIndex = filterFrom + idx;
+                            const moName = MONTH_NAMES[monthIndex];
+                            const pp = filteredPres[idx];
+                            const pc = pp ? (v / pp) * 100 : 0;
+                            const ok = pc >= 100;
+                            html += `<tr>
+                <td style="text-align:left;padding-left:20px"><strong>${moName}</strong></td>
+                <td>${nf(v, 1)}</td>
+                <td>${nf(pp, 1)}</td>
+                <td class="${ok ? "compliance-high" : "compliance-low"}">${pc.toFixed(1)}%</td>
+                <td><span class="${ok ? "compliance-high" : "compliance-low"}"><i class="fa-solid ${ok ? "fa-circle-check" : "fa-circle-exclamation"}"></i> ${ok ? "Meta" : "Desv."}</span></td>
+              </tr>`;
+                        }
+                    });
+
+                    if (!hasData) {
+                        html += `<tr><td colspan="5" style="text-align: center; color: var(--color-logo-red); padding: 25px;">No hay datos mensuales registrados para el año ${filterYear} en el periodo seleccionado.</td></tr>`;
+                    }
+
+                    document.getElementById("dyn-table").innerHTML =
+                        html + "</tbody>";
+                }
+            }
+
+            // ---- COMBO 3 SERIES (diapositiva 4: Ventas Netas) ----
+            function renderCombo3(slide, host) {
+                const d = dashboardData[slide.data];
+                const c = d.chart;
+                const s0 = c.series[0].values,
+                    s1 = c.series[1].values,
+                    s2 = c.series[2].values;
+                const total26 = s0.reduce((x, v) => x + (v || 0), 0);
+                const n = s0.filter((v) => v != null).length || 1;
+                const presAcum = s2.slice(0, n).reduce((x, v) => x + v, 0);
+                const comp = presAcum ? (total26 / presAcum) * 100 : 0;
+                renderMetricCards([
+                    {
+                        title: "Ventas Netas 2026",
+                        value: nf(total26),
+                        icon: "fa-coins",
+                        trendText: "Ene-Mar",
+                        trendUp: true,
+                        accentColor: "#0E8C9B",
+                    },
+                    {
+                        title: "Promedio Mensual",
+                        value: nf(Math.round(total26 / n)),
+                        icon: "fa-calculator",
+                        trendText: n + " mes(es)",
+                        trendUp: true,
+                        accentColor: "#3A7CA5",
+                    },
+                    {
+                        title: "Presupuesto Acum.",
+                        value: nf(presAcum),
+                        icon: "fa-bullseye",
+                        trendText: "Meta del periodo",
+                        trendUp: true,
+                        accentColor: "#E0A458",
+                    },
+                    {
+                        title: "Cumplimiento",
+                        value: comp.toFixed(1) + "%",
+                        icon: "fa-percentage",
+                        trendText:
+                            (comp >= 100 ? "+" : "") +
+                            (comp - 100).toFixed(1) +
+                            "% vs meta",
+                        trendUp: comp >= 100,
+                        accentColor: "#E2674F",
+                    },
+                ]);
+                host.innerHTML = `
+        <section class="charts-grid">
+          ${chartCard(
+              "Ventas Netas (2026 vs 2025 vs Presupuesto)",
+              "fa-chart-column",
+              "dyn-a",
+              '<div class="legend-pill"><span class="legend-swatch" style="background:#0E8C9B"></span>Ventas 26</div><div class="legend-pill"><span class="legend-swatch line" style="background:#E2674F"></span>Ventas 25</div><div class="legend-pill"><span class="legend-swatch line" style="background:#E0A458"></span>Presupuesto</div>',
+          )}
+        </section>
+        ${tableCard("Resumen Anual (Ventas Netas)", "dyn-table")}`;
+
+                const canvas = document.getElementById("dyn-a");
+                const ctx = canvas.getContext("2d");
+                const grad = ctx.createLinearGradient(0, 0, 0, 360);
+                grad.addColorStop(0, "#16A6B6");
+                grad.addColorStop(1, "#0C6470");
+
+                drawChart("dyn-a", {
+                    data: {
+                        labels: c.categories,
+                        datasets: [
+                            {
+                                type: "bar",
+                                label: "Ventas 26",
+                                data: s0,
+                                backgroundColor: grad,
+                                hoverBackgroundColor: "#008296",
+                                borderRadius: 6,
+                                maxBarThickness: 46,
+                                order: 3,
+                                datalabels: {
+                                    anchor: "start",
+                                    align: "top",
+                                    offset: 2,
+                                    clamp: true,
+                                    backgroundColor: "rgba(235, 246, 242, 0.9)",
+                                    borderRadius: 4,
+                                    padding: {
+                                        top: 2,
+                                        right: 5,
+                                        bottom: 2,
+                                        left: 5,
+                                    },
+                                    color: "#025763",
+                                    font: {
+                                        family: "Inter",
+                                        weight: "700",
+                                        size: 11,
+                                    },
+                                    formatter: (v) => nf(v),
+                                },
+                            },
+                            {
+                                type: "line",
+                                label: "Ventas 25",
+                                data: s1,
+                                borderColor: "#E2674F",
+                                backgroundColor: "#E2674F",
+                                borderWidth: 3,
                                 pointRadius: 3,
+                                pointHoverRadius: 6,
+                                tension: 0.4,
                                 order: 1,
                                 datalabels: {
                                     backgroundColor: "rgba(235, 246, 242, 0.9)",
@@ -5970,15 +7592,80 @@
                                         bottom: 2,
                                         left: 5,
                                     },
+                                    align: (ctx) => {
+                                        const i = ctx.dataIndex;
+                                        const red = s1[i];
+                                        const yellow = s2[i];
+                                        if (red == null || yellow == null)
+                                            return "bottom";
+                                        return "bottom";
+                                    },
+                                    offset: (ctx) => {
+                                        const i = ctx.dataIndex;
+                                        const red = s1[i];
+                                        const yellow = s2[i];
+                                        if (red == null || yellow == null)
+                                            return 8;
+                                        return Math.abs(red - yellow) <= 120
+                                            ? 16
+                                            : 8;
+                                    },
+                                    clamp: true,
+                                    color: "#C24B36",
+                                    font: {
+                                        family: "Inter",
+                                        weight: "700",
+                                        size: 10,
+                                    },
+                                    formatter: (v) => nf(v),
+                                },
+                            },
+                            {
+                                type: "line",
+                                label: "Presupuesto",
+                                data: s2,
+                                borderColor: "#E0A458",
+                                backgroundColor: "#E0A458",
+                                borderWidth: 3,
+                                pointRadius: 3,
+                                pointHoverRadius: 6,
+                                tension: 0.4,
+                                order: 2,
+                                datalabels: {
+                                    backgroundColor: "rgba(235, 246, 242, 0.9)",
+                                    borderRadius: 4,
+                                    padding: {
+                                        top: 2,
+                                        right: 5,
+                                        bottom: 2,
+                                        left: 5,
+                                    },
+                                    align: (ctx) => {
+                                        const i = ctx.dataIndex;
+                                        const red = s1[i];
+                                        const yellow = s2[i];
+                                        if (red == null || yellow == null)
+                                            return "top";
+                                        return "top";
+                                    },
+                                    offset: (ctx) => {
+                                        const i = ctx.dataIndex;
+                                        const red = s1[i];
+                                        const yellow = s2[i];
+                                        if (red == null || yellow == null)
+                                            return 8;
+                                        return Math.abs(red - yellow) <= 120
+                                            ? 16
+                                            : 8;
+                                    },
+                                    clamp: true,
                                     color: "#B97D2E",
                                     font: {
                                         family: "Inter",
                                         weight: "700",
                                         size: 10,
                                     },
-                                    align: "top",
-                                    anchor: "end",
-                                    formatter: (v) => nf(v, 1),
+                                    formatter: (v) => nf(v),
                                 },
                             },
                         ],
@@ -5986,12 +7673,12 @@
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        layout: { padding: { top: 24 } },
                         plugins: {
                             legend: { display: false },
                             tooltip: baseTooltip,
                             datalabels: {
                                 display: (ctx) =>
-                                    ctx.dataset.type === "line" &&
                                     ctx.dataset.data[ctx.dataIndex] != null,
                             },
                         },
@@ -5999,36 +7686,23 @@
                     },
                     plugins: [ChartDataLabels],
                 });
-
-                // Construcción de la tabla resumen filtrada
+                const t = d.table;
                 let html =
-                    "<thead><tr><th>Mes</th><th>Ventas</th><th>Presupuesto</th><th>Cumplimiento</th><th>Estado</th></tr></thead><tbody>";
-
-                let hasData = false;
-                filteredVentas.forEach((v, idx) => {
-                    if (v !== null) {
-                        hasData = true;
-                        const monthIndex = filterFrom + idx;
-                        const moName = MONTH_NAMES[monthIndex];
-                        const pp = filteredPres[idx];
-                        const pc = pp ? (v / pp) * 100 : 0;
-                        const ok = pc >= 100;
-                        html += `<tr>
-            <td style="text-align:left;padding-left:20px"><strong>${moName}</strong></td>
-            <td>${nf(v, 1)}</td>
-            <td>${nf(pp, 1)}</td>
-            <td class="${ok ? "compliance-high" : "compliance-low"}">${pc.toFixed(1)}%</td>
-            <td><span class="${ok ? "compliance-high" : "compliance-low"}"><i class="fa-solid ${ok ? "fa-circle-check" : "fa-circle-exclamation"}"></i> ${ok ? "Meta" : "Desv."}</span></td>
-          </tr>`;
-                    }
-                });
-
-                if (!hasData) {
-                    html += `<tr><td colspan="5" style="text-align: center; color: var(--color-logo-red); padding: 25px;">No hay datos mensuales registrados para el año ${filterYear} en el periodo seleccionado.</td></tr>`;
-                }
-
-                document.getElementById("dyn-table").innerHTML =
-                    html + "</tbody>";
+                    "<thead><tr><th>AÑO</th>" +
+                    t.headers
+                        .slice(1)
+                        .map((h) => `<th>${h}</th>`)
+                        .join("") +
+                    "</tr></thead><tbody>";
+                html +=
+                    '<tr><td class="row-label-total"><i class="fa-solid fa-coins"></i> TOTAL</td>' +
+                    t.total.map((v) => `<td>${v}</td>`).join("") +
+                    "</tr>";
+                html +=
+                    '<tr><td class="row-label-avg"><i class="fa-solid fa-chart-simple"></i> PROMEDIO</td>' +
+                    t.average.map((v) => `<td>${v}</td>`).join("") +
+                    "</tr></tbody>";
+                document.getElementById("dyn-table").innerHTML = html;
             }
 
             // ---- CANTIDAD DE VENTAS (diapositiva 4) ----
@@ -6353,7 +8027,7 @@
                 );
                 host.innerHTML = `
         <section class="charts-grid">${chartCard("Productividad por Antigüedad (por mes)", "fa-chart-column", "dyn-a")}</section>
-        ${tableCard("Detalle de Productividad por Antigüedad", "dyn-table")}`;
+        ${slide.id === "s5" ? "" : tableCard("Detalle de Productividad por Antigüedad", "dyn-table")}`;
                 drawChart("dyn-a", {
                     type: "bar",
                     data: {
@@ -6403,23 +8077,25 @@
                     },
                     plugins: [ChartDataLabels],
                 });
-                const tt = d.table;
-                const selectedMonths = tt.months.slice(from, to + 1);
-                let html =
-                    "<thead><tr><th>Antigüedad</th>" +
-                    selectedMonths.map((mo) => `<th>${mo}</th>`).join("") +
-                    "</tr></thead><tbody>";
-                Object.keys(tt.antiguedades).forEach((band) => {
-                    html +=
-                        `<tr><td style="text-align:left;padding-left:20px"><strong>${band}</strong></td>` +
-                        tt.antiguedades[band]
-                            .slice(from, to + 1)
-                            .map((v) => `<td>${v.toFixed(2)}</td>`)
-                            .join("") +
-                        "</tr>";
-                });
-                document.getElementById("dyn-table").innerHTML =
-                    html + "</tbody>";
+                if (slide.id !== "s5") {
+                    const tt = d.table;
+                    const selectedMonths = tt.months.slice(from, to + 1);
+                    let html =
+                        "<thead><tr><th>Antigüedad</th>" +
+                        selectedMonths.map((mo) => `<th>${mo}</th>`).join("") +
+                        "</tr></thead><tbody>";
+                    Object.keys(tt.antiguedades).forEach((band) => {
+                        html +=
+                            `<tr><td style="text-align:left;padding-left:20px"><strong>${band}</strong></td>` +
+                            tt.antiguedades[band]
+                                .slice(from, to + 1)
+                                .map((v) => `<td>${v.toFixed(2)}</td>`)
+                                .join("") +
+                            "</tr>";
+                    });
+                    document.getElementById("dyn-table").innerHTML =
+                        html + "</tbody>";
+                }
             }
 
             // ---- BARRAS APILADAS + LÍNEA (diapositiva 6: Dotación) ----
@@ -6490,7 +8166,7 @@
                 ]);
                 host.innerHTML = `
         <section class="charts-grid">${chartCard("Dotación por Antigüedad + Total", "fa-users", "dyn-a")}</section>
-        ${tableCard("Detalle de Dotación por Antigüedad", "dyn-table")}`;
+        ${slide.id === "s6" ? "" : tableCard("Detalle de Dotación por Antigüedad", "dyn-table")}`;
                 const ds = barSliced.map((s, i) => ({
                     type: "bar",
                     label: s.name,
@@ -6548,31 +8224,33 @@
                     },
                     plugins: [ChartDataLabels],
                 });
-                const sr = d.table.series;
-                const rowLabels = {
-                    less_1m: "< 1M",
-                    one_three_m: "[1-3] M",
-                    four_six_m: "[4-6] M",
-                    more_6m: "> 6M",
-                    total: "Total",
-                    rotation: "Rotación",
-                };
-                const tableMonths = d.table.months.slice(from, to + 1);
-                let html =
-                    "<thead><tr><th>Indicador</th>" +
-                    tableMonths.map((mo) => `<th>${mo}</th>`).join("") +
-                    "</tr></thead><tbody>";
-                Object.keys(sr).forEach((k) => {
-                    html +=
-                        `<tr><td style="text-align:left;padding-left:20px"><strong>${rowLabels[k] || k}</strong></td>` +
-                        sr[k]
-                            .slice(from, to + 1)
-                            .map((v) => `<td>${v}</td>`)
-                            .join("") +
-                        "</tr>";
-                });
-                document.getElementById("dyn-table").innerHTML =
-                    html + "</tbody>";
+                if (slide.id !== "s6") {
+                    const sr = d.table.series;
+                    const rowLabels = {
+                        less_1m: "< 1M",
+                        one_three_m: "[1-3] M",
+                        four_six_m: "[4-6] M",
+                        more_6m: "> 6M",
+                        total: "Total",
+                        rotation: "Rotación",
+                    };
+                    const tableMonths = d.table.months.slice(from, to + 1);
+                    let html =
+                        "<thead><tr><th>Indicador</th>" +
+                        tableMonths.map((mo) => `<th>${mo}</th>`).join("") +
+                        "</tr></thead><tbody>";
+                    Object.keys(sr).forEach((k) => {
+                        html +=
+                            `<tr><td style="text-align:left;padding-left:20px"><strong>${rowLabels[k] || k}</strong></td>` +
+                            sr[k]
+                                .slice(from, to + 1)
+                                .map((v) => `<td>${v}</td>`)
+                                .join("") +
+                            "</tr>";
+                    });
+                    document.getElementById("dyn-table").innerHTML =
+                        html + "</tbody>";
+                }
             }
 
             // ---- LIMA Y PROVINCIAS (diapositiva 7) ----
@@ -6813,9 +8491,8 @@
             "Anulaciones por Motivos Comerciales (% vs Objetivo 2%)",
             "fa-circle-check",
             "dyn-a",
-            '<div class="legend-pill"><span class="legend-swatch" style="background:#3A7CA5"></span>Volumen</div><div class="legend-pill"><span class="legend-swatch line" style="background:#E2674F"></span>% Anulación</div><div class="legend-pill"><span class="legend-swatch line" style="background:#0E8C9B"></span>Objetivo 2%</div>',
-        )}</section>
-        ${tableCard("Detalle por Trimestre", "dyn-table")}`;
+            '<div class="legend-pill"><span class="legend-swatch" style="background:#3A7CA5"></span>Volumen</div><div class="legend-pill"><span class="legend-swatch line" style="background:#E2674F"></span>% Anulación</div>',
+        )}</section>`;
                 drawChart("dyn-a", {
                     data: {
                         labels: categories,
@@ -6883,18 +8560,7 @@
                                     formatter: (v) => v + "%",
                                 },
                             },
-                            {
-                                type: "line",
-                                label: "Objetivo 2%",
-                                data: categories.map(() => 2),
-                                borderColor: "#0E8C9B",
-                                borderDash: [6, 6],
-                                borderWidth: 2,
-                                pointRadius: 0,
-                                yAxisID: "y1",
-                                order: 2,
-                                datalabels: { display: false },
-                            },
+
                         ],
                     },
                     options: {
@@ -6933,14 +8599,6 @@
                     },
                     plugins: [ChartDataLabels],
                 });
-                let html =
-                    "<thead><tr><th>Trimestre</th><th>% Anulación</th><th>Volumen</th><th>Ventas Brutas</th><th>Estado</th></tr></thead><tbody>";
-                categories.forEach((cat, k) => {
-                    const ok = rates[k] <= 2;
-                    html += `<tr><td style="text-align:left;padding-left:20px"><strong>${cat}</strong></td><td class="${ok ? "compliance-high" : "compliance-low"}">${rates[k]}%</td><td>${nf(volumes[k])}</td><td>${nf(grossSales[k])}</td><td><span class="${ok ? "compliance-high" : "compliance-low"}"><i class="fa-solid ${ok ? "fa-circle-check" : "fa-circle-exclamation"}"></i> ${ok ? "OK" : "Excede"}</span></td></tr>`;
-                });
-                document.getElementById("dyn-table").innerHTML =
-                    html + "</tbody>";
             }
 
             // ============ RENDER COMPLETO DEL SLIDE 1 (según filtros) ============
@@ -7885,304 +9543,6 @@
                     "Todas las alertas corporativas marcadas como leídas.",
                 );
             }
-
-            // ====== EXPORTAR A WORD ======
-            function exportReportWord(onlyActive) {
-                const activeSlideObj = SLIDES.find(s => s.id === activeSlide);
-                if (!activeSlideObj) {
-                    showToast("Error", "No se pudo identificar la vista activa.");
-                    return;
-                }
-
-                showToast("Exportando Word", "Compilando documento de Word...");
-
-                // HTML base del documento Word
-                let htmlContent = `
-                    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-                    <head>
-                        <title>Reporte Maqui</title>
-                        <!--[if gte mso 9]>
-                        <xml>
-                            <w:WordDocument>
-                                <w:View>Print</w:View>
-                                <w:Zoom>100</w:Zoom>
-                                <w:DoNotOptimizeForBrowser/>
-                            </w:WordDocument>
-                        </xml>
-                        <![endif]-->
-                        <style>
-                            body { font-family: Arial, sans-serif; font-size: 11pt; color: #025763; line-height: 1.5; }
-                            h1 { color: #f01515; font-size: 20pt; margin-top: 30px; margin-bottom: 5px; text-align: center; }
-                            h2 { color: #008296; font-size: 14pt; text-align: center; font-weight: normal; margin-top: 0; margin-bottom: 25px; }
-                            h3 { color: #025763; font-size: 13pt; margin-top: 20px; border-bottom: 1px solid #008296; padding-bottom: 5px; }
-                            p { margin-top: 5px; margin-bottom: 10px; }
-                            table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 15px; font-size: 9.5pt; }
-                            th { background-color: #008296; color: #ffffff; border: 1px solid #ccc; padding: 8px; font-weight: bold; text-align: center; }
-                            td { border: 1px solid #ccc; padding: 8px; text-align: center; }
-                            strong { color: #025763; }
-                            .img-container { text-align: center; margin-top: 15px; margin-bottom: 15px; }
-                            img { max-width: 100%; height: auto; border: 1px solid #ddd; }
-                            .page-break { page-break-before: always; }
-                        </style>
-                    </head>
-                    <body>
-                        <h1 style="color: #008296;">PORTAL CORPORATIVO DE BUSINESS INTELLIGENCE - MAQUI</h1>
-                        <h2 style="color: #025763;">Reporte consolidado - ${new Date().toLocaleDateString("es-PE")}</h2>
-                `;
-
-                const slidesToExport = onlyActive ? [activeSlideObj] : SLIDES;
-
-                // Crear contenedor temporal invisible para renderizar slides no cargados
-                const tempHost = document.createElement("div");
-                tempHost.style.display = "none";
-                tempHost.id = "temp-export-host";
-                document.body.appendChild(tempHost);
-
-                slidesToExport.forEach((slide, index) => {
-                    if (index > 0) {
-                        htmlContent += `<div class="page-break"></div>`;
-                    }
-
-                    htmlContent += `<h1 style="color: #f01515; font-size: 18pt;">${slide.label}</h1>`;
-                    if (slide.title) {
-                        htmlContent += `<h3>${slide.title}</h3>`;
-                    }
-                    if (slide.subtitle) {
-                        htmlContent += `<p><em>${slide.subtitle}</em></p>`;
-                    }
-
-                    if (slide.kind === "iframe") {
-                        htmlContent += `
-                            <p><strong>Tablero Interactivo (Power BI):</strong></p>
-                            <p><a href="${slide.iframeUrl}">${slide.iframeUrl}</a></p>
-                            <p><em>Para consultar este reporte, por favor acceda mediante el enlace anterior en su navegador.</em></p>
-                        `;
-                    } else if (slide.kind === "image") {
-                        if (slide.images && slide.images.length > 0) {
-                            slide.images.forEach(imgSrc => {
-                                const absoluteImgUrl = new URL(imgSrc, window.location.href).href;
-                                htmlContent += `
-                                    <div class="img-container">
-                                        <img src="${absoluteImgUrl}" alt="Reporte visual" />
-                                    </div>
-                                `;
-                            });
-                        }
-                    } else {
-                        // Slide dinámico
-                        let containerToRead = null;
-                        
-                        if (slide.id === activeSlide) {
-                            const activeViewId = activeSlide === "s1" ? "view-slide1" : "view-dynamic";
-                            containerToRead = document.getElementById(activeViewId);
-                        } else {
-                            tempHost.innerHTML = "";
-                            const renderer = {
-                                origin: renderOrigin,
-                                sales: renderSales,
-                                grouped: renderGrouped,
-                                stacked: renderStacked,
-                                limaprov: renderLimaProv,
-                                anulaciones: renderAnulaciones,
-                                seguimiento: renderSeguimiento,
-                                reportegerencial: renderReporteGerencial,
-                                cuotainscripcion: renderCuotaInscripcion,
-                                ventacomercial: renderVentaComercial,
-                                ventadiaria: renderVentaDiaria,
-                                productividadreporte: renderProductividadReporte,
-                            }[slide.kind];
-                            
-                            if (renderer) {
-                                try {
-                                    renderer(slide, tempHost);
-                                    containerToRead = tempHost;
-                                } catch (e) {
-                                    console.error("Error al renderizar slide temporal para exportación:", e);
-                                }
-                            }
-                        }
-
-                        if (containerToRead) {
-                            const canvases = containerToRead.querySelectorAll("canvas");
-                            canvases.forEach((canvas, idx) => {
-                                try {
-                                    const chartImgUrl = canvas.toDataURL("image/png");
-                                    htmlContent += `
-                                        <div class="img-container">
-                                            <img src="${chartImgUrl}" alt="Gráfico de Reporte ${idx + 1}" />
-                                        </div>
-                                    `;
-                                } catch (e) {
-                                    console.warn("No se pudo exportar el gráfico en canvas:", e);
-                                }
-                            });
-
-                            const tables = containerToRead.querySelectorAll("table");
-                            tables.forEach((table, idx) => {
-                                const tableTitleEl = table.closest("section, .table-card")?.querySelector("h3, .table-card-title");
-                                const tableTitle = tableTitleEl ? tableTitleEl.textContent.trim() : `Tabla de Datos ${idx + 1}`;
-                                
-                                htmlContent += `<h3>${tableTitle}</h3>`;
-                                
-                                const cloneTable = table.cloneNode(true);
-                                cloneTable.querySelectorAll("i").forEach(icon => icon.remove());
-                                cloneTable.style.width = "100%";
-                                cloneTable.style.border = "1px solid #ccc";
-                                
-                                htmlContent += cloneTable.outerHTML;
-                            });
-                        }
-                    }
-                });
-
-                // Eliminar el host temporal
-                document.body.removeChild(tempHost);
-
-                htmlContent += `
-                    </body>
-                    </html>
-                `;
-
-                const blob = new Blob([htmlContent], { type: "application/msword;charset=utf-8" });
-                const suffix = onlyActive ? activeSlideObj.label.toLowerCase().replace(/[^a-z0-9]/g, "_") : "completo";
-                const filename = `reporte_maqui_${suffix}_${new Date().toISOString().slice(0, 10)}.doc`;
-
-                const link = document.createElement("a");
-                if (link.download !== undefined) {
-                    const url = URL.createObjectURL(blob);
-                    link.setAttribute("href", url);
-                    link.setAttribute("download", filename);
-                    link.style.visibility = "hidden";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    showToast("Exportación Exitosa", `Se descargó el archivo: ${filename}`);
-                } else {
-                    showToast("Error de Exportación", "Tu navegador no soporta descargas automáticas.");
-                }
-            }
-
-            // ====== EXPORTAR A EXCEL ======
-            function exportReportExcel() {
-                const activeViewId = activeSlide === "s1" ? "view-slide1" : "view-dynamic";
-                const activeView = document.getElementById(activeViewId);
-                if (!activeView) {
-                    showToast("Error", "No se pudo identificar la vista activa.");
-                    return;
-                }
-
-                const tables = activeView.querySelectorAll("table");
-                if (tables.length === 0) {
-                    showToast(
-                        "Exportar Reporte",
-                        "Esta vista no contiene tablas de datos para exportar."
-                    );
-                    return;
-                }
-
-                showToast("Exportando Reporte", "Compilando datos del reporte...");
-
-                let csvContent = "";
-                tables.forEach((table, index) => {
-                    if (index > 0) csvContent += "\n\n";
-                    const tableTitleEl = table.closest("section, .table-card")?.querySelector("h3, .table-card-title");
-                    if (tableTitleEl) {
-                        csvContent += `"${tableTitleEl.textContent.trim().replace(/"/g, '""')}"\n`;
-                    }
-
-                    const rows = table.querySelectorAll("tr");
-                    rows.forEach((row) => {
-                        const cells = row.querySelectorAll("th, td");
-                        const rowData = Array.from(cells).map((cell) => {
-                            let text = cell.innerText.trim().replace(/"/g, '""');
-                            return `"${text}"`;
-                        });
-                        csvContent += rowData.join(";") + "\n";
-                    });
-                });
-
-                const bom = "\uFEFF";
-                const sepLine = "sep=;\n";
-                const blob = new Blob([bom + sepLine + csvContent], { type: "text/csv;charset=utf-8;" });
-                
-                const slideObj = SLIDES.find((s) => s.id === activeSlide);
-                const slideLabel = slideObj ? slideObj.label.toLowerCase().replace(/[^a-z0-9]/g, "_") : "reporte";
-                const filename = `reporte_${slideLabel}_${new Date().toISOString().slice(0, 10)}.csv`;
-
-                const link = document.createElement("a");
-                if (link.download !== undefined) {
-                    const url = URL.createObjectURL(blob);
-                    link.setAttribute("href", url);
-                    link.setAttribute("download", filename);
-                    link.style.visibility = "hidden";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    showToast("Exportación Exitosa", `Se descargó el archivo: ${filename}`);
-                }
-            }
-
-            // ====== EXPORTAR A PDF (IMPRIMIR) ======
-            function downloadReportPDF() {
-                showToast("Generando PDF", "Preparando la vista de impresión...");
-                setTimeout(() => {
-                    window.print();
-                }, 600);
-            }
-
-            // ====== EASTER EGG Y SHORTCUTS ======
-            let logoClicks = 0;
-            const logoImg = document.querySelector(".logo-img");
-            if (logoImg) {
-                logoImg.style.cursor = "pointer";
-                logoImg.addEventListener("click", () => {
-                    logoClicks++;
-                    if (logoClicks >= 5) {
-                        const container = document.getElementById("secret-export-container");
-                        if (container) {
-                            if (container.style.display === "none" || container.style.display === "") {
-                                container.style.display = "flex";
-                                showToast("Menú Secreto", "Panel de exportación activado.");
-                            } else {
-                                container.style.display = "none";
-                                showToast("Menú Secreto", "Panel de exportación desactivado.");
-                            }
-                        }
-                        logoClicks = 0;
-                    }
-                });
-            }
-
-            // Teclas de acceso directo: Ctrl + Alt + W (Exportar Vista), Ctrl + Alt + A (Exportar Todo)
-            document.addEventListener("keydown", (e) => {
-                if (e.ctrlKey && e.altKey) {
-                    if (e.key === "w" || e.key === "W" || e.key === "∑" || e.key === "w" || e.key === "W") {
-                        e.preventDefault();
-                        exportReportWord(true); // Exportar vista activa
-                    } else if (e.key === "a" || e.key === "A" || e.key === "å" || e.key === "a" || e.key === "A") {
-                        e.preventDefault();
-                        exportReportWord(false); // Exportar todas las vistas
-                    }
-                }
-            });
-            
-            // Permitir que la consola de desarrollo o scripts externos puedan llamarlas
-            window.exportReportWord = exportReportWord;
-            window.exportReportExcel = exportReportExcel;
-            window.downloadReportPDF = downloadReportPDF;
-            window.showSecretExport = () => {
-                const container = document.getElementById("secret-export-container");
-                if (container) container.style.display = "flex";
-            };
-            window.hideSecretExport = () => {
-                const container = document.getElementById("secret-export-container");
-                if (container) container.style.display = "none";
-            };
-            
-            // Añadir estilos CSS de impresión para ocultar la barra secreta de exportación
-            const printStyle = document.createElement("style");
-            printStyle.innerHTML = "@media print { #secret-export-container { display: none !important; } }";
-            document.head.appendChild(printStyle);
         </script>
     </body>
 </html>
