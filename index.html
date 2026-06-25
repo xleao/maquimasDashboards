@@ -2730,13 +2730,7 @@
                 'comparativodiario': { slides: ['s29'] },
                 'productividadreporte': { slides: ['s14'] },
                 'ventaprodrep': { slides: ['s15'] },
-                'vendedoressinventa': { slides: ['s24'] },
-                'adg': { slides: ['s19', 's20'] },
-                'edb': { slides: ['s21', 's22', 's23'] },
-                'rrhh': { slides: ['s25'] },
-                'contactcenter': { slides: ['s17', 's18'] },
-                'varios': { slides: ['s7', 's8', 's9', 's10', 's11', 's12', 's13', 's15'] },
-                'cobranza': { slides: ['s16'] }
+                'vendedoressinventa': { slides: ['s24'] }
             };
 
             let currentCategory = 'ventas';
@@ -2818,8 +2812,13 @@
             function showPlaceholderView(subCatKey) {
                 // Set title
                 let title = subCatKey.charAt(0).toUpperCase() + subCatKey.slice(1);
+                if (subCatKey === 'adg') title = 'Operaciones / ADG';
+                if (subCatKey === 'edb') title = 'Operaciones / EDB';
+                if (subCatKey === 'rrhh') title = 'Operaciones / RRHH';
+                if (subCatKey === 'contactcenter') title = 'Operaciones / Contact Center';
                 if (subCatKey === 'planeamiento') title = 'Finanzas / Planeamiento';
                 if (subCatKey === 'creditos') title = 'Finanzas / Créditos';
+                if (subCatKey === 'cobranza') title = 'Finanzas / Cobranza';
                 if (subCatKey === 'tesoreria') title = 'Finanzas / Tesorería';
                 if (subCatKey === 'usuarios') title = 'Seguridad / Usuarios';
                 if (subCatKey === 'roles') title = 'Seguridad / Roles';
