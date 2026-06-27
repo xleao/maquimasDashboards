@@ -217,12 +217,12 @@
       { id:'s18', label:'CC — Bitácoras Inbound',    icon:'fa-phone-volume',kind:'image', title:'Contact Center — Bitácoras Inbound', subtitle:'Tablero Power BI', images:['assets/s18_1.jpg'] },
       { id:'s19', label:'ADG — Asambleas',           icon:'fa-people-group',kind:'adgAsambleas', title:'ADG — Asambleas Inaugurales', subtitle:'Portal de Business Intelligence' },
       { id:'s20', label:'ADG — Reactivaciones',      icon:'fa-rotate-right',kind:'adgReactivaciones', title:'ADG — Reactivaciones', subtitle:'Portal de Business Intelligence' },
-      { id:'s21', label:'Vehículos — Facturación',   icon:'fa-car',         kind:'image', title:'Vehículos — Facturación General', subtitle:'Tablero Power BI', images:['assets/s21_1.jpg'] },
-      { id:'s22', label:'Vehículos — Entregas',      icon:'fa-truck',       kind:'image', title:'Vehículos — Entregas', subtitle:'Tablero Power BI', images:['assets/s22_1.jpg'] },
-      { id:'s23', label:'Vehículos — Cartera',       icon:'fa-file-invoice-dollar', kind:'image', title:'Vehículos — Indicador de Cartera', subtitle:'Tablero Power BI', images:['assets/s23_1.jpg'] },
-      { id:'s24', label:'Vendedores sin venta',      icon:'fa-user-slash',  kind:'image', title:'Vendedores sin Venta por Ciudad', subtitle:'Resumen por ciudad', images:['assets/s24_1.png'] },
-      { id:'s25', label:'Dotación por Zonas',        icon:'fa-map-location-dot', kind:'image', title:'Total Dotación por Zonas', subtitle:'Resumen por ciudad', images:['assets/s25_1.png'] },
-      { id:'s26', label:'Maquimas Colombia',         icon:'fa-flag',        kind:'image', title:'Total Maquimas Colombia', subtitle:'Ventas · Dotación · Productividad', images:['assets/s26_1.png'] }
+      { id:'s21', label:'Facturación General',       icon:'fa-car',         kind:'edbFacturacion', title:'EDB — Facturación General', subtitle:'Tablero Power BI' },
+      { id:'s22', label:'Vehículos — Entregas',      icon:'fa-truck',       kind:'edbEntregas', title:'EDB — Entregas de Vehículos', subtitle:'Tablero Power BI' },
+      { id:'s23', label:'Vehículos — Cartera',       icon:'fa-file-invoice-dollar', kind:'edbCartera', title:'Vehículos — Indicador de Cartera', subtitle:'Tablero Power BI' },
+      { id:'s24', label:'Vendedores sin Venta',      icon:'fa-user-slash',  kind:'rrhhVendedores', title:'Vendedores sin Venta por Ciudad', subtitle:'Portal Corporativo de Business Intelligence' },
+      { id:'s25', label:'Dotación por Zonas',        icon:'fa-map-location-dot', kind:'rrhhDotacion', title:'Total Dotación por Zonas', subtitle:'Portal Corporativo de Business Intelligence' },
+      { id:'s26', label:'Maquimas Colombia',         icon:'fa-flag',        kind:'rrhhColombia', title:'Total Maquimas Colombia', subtitle:'Portal Corporativo de Business Intelligence' }
     ];
 
     // Paleta armónica reutilizable
@@ -312,8 +312,16 @@
       'productividadreporte': { slides: ['s14'] },
       'vendedoressinventa': { slides: ['s24'] },
       'adg': { slides: ['s19', 's20'] },
+      'adg-asambleas': { slides: ['s19'] },
+      'adg-reactivaciones': { slides: ['s20'] },
       'edb': { slides: ['s21', 's22', 's23'] },
-      'rrhh': { slides: ['s25'] },
+      'edb-facturacion': { slides: ['s21'] },
+      'edb-entregas': { slides: ['s22'] },
+      'edb-cartera': { slides: ['s23'] },
+      'rrhh': { slides: ['s24', 's25', 's26'] },
+      'rrhh-vendedores': { slides: ['s24'] },
+      'rrhh-dotacion': { slides: ['s25'] },
+      'rrhh-colombia': { slides: ['s26'] },
       'contactcenter': { slides: ['s17', 's18'] },
       'varios': { slides: ['s7', 's8', 's9', 's10', 's11', 's12', 's13', 's15'] },
       'cobranza': { slides: ['s16'] }
@@ -605,292 +613,2790 @@
       document.getElementById('dashboard-title').textContent = slide.title || slide.label;
       document.getElementById('dashboard-subtitle').textContent = slide.subtitle || 'Portal Corporativo de Business Intelligence';
       const host = document.getElementById('view-dynamic');
-      document.getElementById('metrics-container').style.display = (slide.kind === 'image' || slide.kind === 'iframe') ? 'none' : 'grid';
+      document.getElementById('metrics-container').style.display = 
+        (slide.kind === 'image' || slide.kind === 'iframe' || slide.kind === 'adgAsambleas' || slide.kind === 'adgReactivaciones' || slide.kind === 'edbFacturacion' || slide.kind === 'edbEntregas' || slide.kind === 'edbCartera' || slide.kind === 'rrhhVendedores' || slide.kind === 'rrhhDotacion' || slide.kind === 'rrhhColombia') ? 'none' : 'grid';
       host.innerHTML = '';
-      ({
-        origin: renderOrigin, combo3: renderCombo3, grouped: renderGrouped,
-        stacked: renderStacked, limaprov: renderLimaProv, anulaciones: renderAnulaciones, image: renderImage,
-        iframe: renderIframe, adgAsambleas: renderAdgAsambleas, adgReactivaciones: renderAdgReactivaciones
-      }[slide.kind] || (() => {}))(slide, host);
+      (
+        ({
+          origin: renderOrigin,
+          combo3: renderCombo3,
+          grouped: renderGrouped,
+          stacked: renderStacked,
+          limaprov: renderLimaProv,
+          anulaciones: renderAnulaciones,
+          image: renderImage,
+          iframe: renderIframe,
+          adgAsambleas: renderAdgAsambleas,
+          adgReactivaciones: renderAdgReactivaciones,
+          edbFacturacion: renderEdbFacturacion,
+          edbEntregas: renderEdbEntregas,
+          edbCartera: renderEdbCartera,
+          rrhhVendedores: renderRrhhVendedores,
+          rrhhDotacion: renderRrhhDotacion,
+          rrhhColombia: renderRrhhColombia
+        })[slide.kind] || (() => {})
+      )(slide, host);
     }
 
     // ---- ADG ASAMBLEAS (slide 19) ----
     function renderAdgAsambleas(slide, host) {
-      renderMetricCards([
-        { title: "Cant. Grupos Formación", value: "6", icon: "fa-solid fa-people-group", trendText: "Periodo 2026", trendUp: true, accentColor: "#0E8C9B" },
-        { title: "Grupos Listos para Asamblea", value: "1", icon: "fa-solid fa-list-check", trendText: "Listo para convocar", trendUp: true, accentColor: "#3A7CA5" },
-        { title: "Asambleas Inaugurales", value: "41", icon: "fa-solid fa-circle-check", trendText: "Realizadas", trendUp: true, accentColor: "#E0A458" },
-        { title: "Periodo", value: "2026", icon: "fa-solid fa-calendar", trendText: "Filtro activo", trendUp: true, accentColor: "#E2674F" }
-      ]);
+        if (!window.slide19Filters) {
+            window.slide19Filters = {
+                year: 2026
+            };
+        }
 
-      host.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 30px; width: 100%;">
-          <!-- Grupos en Formación -->
-          <section class="table-card" style="margin: 0;">
-            <div class="table-card-header">
-              <h3 class="table-card-title"><i class="fa-solid fa-users-gear"></i><span>Grupos en Formación</span></h3>
+        host.innerHTML = `
+            <style>
+                .adg-top-row {
+                    display: grid;
+                    grid-template-columns: 280px repeat(3, 1fr);
+                    gap: 20px;
+                    margin-bottom: 12px;
+                }
+                @media (max-width: 992px) {
+                    .adg-top-row {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                .adg-tables-grid {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    margin-top: 12px;
+                }
+            </style>
+
+            <div class="adg-top-row">
+                <!-- Periodo Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Periodo</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-adg-year">
+                            <option value="2026" ${window.slide19Filters.year === 2026 ? "selected" : ""}>2026</option>
+                            <option value="2025" ${window.slide19Filters.year === 2025 ? "selected" : ""}>2025</option>
+                            <option value="2024" ${window.slide19Filters.year === 2024 ? "selected" : ""}>2024</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- KPI 1 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="adg-kpi-formacion">-</span>
+                    <span class="adg-kpi-lbl">Cant. Grupos Formacion</span>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="adg-kpi-listos">-</span>
+                    <span class="adg-kpi-lbl">Cant. Grupos Listos para Asamblea</span>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="adg-kpi-realizadas">-</span>
+                    <span class="adg-kpi-lbl">Asambleas Inaugurales realizadas</span>
+                </div>
             </div>
-            <div class="table-outer-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Grupo</th>
-                    <th>Teórico del Grupo</th>
-                    <th>Contratos Inscritos</th>
-                    <th>Recaudación Actual</th>
-                    <th>Recaudación Mínima</th>
-                    <th>Importe para Convocar Asamblea</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr><td><strong>A224</strong></td><td>180</td><td>107</td><td>S/ 24,349.79</td><td>S/ 20,000.00</td><td class="compliance-high">S/ 0.00</td></tr>
-                  <tr><td><strong>C207</strong></td><td>450</td><td>36</td><td>S/ 11,500.04</td><td>S/ 60,000.00</td><td class="compliance-low">S/ 48,499.96</td></tr>
-                  <tr><td><strong>M3P5</strong></td><td>240</td><td>240</td><td>S/ 47,801.25</td><td>S/ 24,000.00</td><td class="compliance-high">S/ 0.00</td></tr>
-                  <tr><td><strong>M3P6</strong></td><td>240</td><td>119</td><td>S/ 24,847.50</td><td>S/ 24,000.00</td><td class="compliance-high">S/ 0.00</td></tr>
-                  <tr><td><strong>S1J2</strong></td><td>180</td><td>180</td><td>S/ 50,060.69</td><td>S/ 25,000.00</td><td class="compliance-high">S/ 0.00</td></tr>
-                </tbody>
-              </table>
+
+            <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+                <!-- Grupos en Formación -->
+                <section class="table-card" style="margin: 0;">
+                    <div class="table-card-header">
+                        <h3 class="table-card-title"><i class="fa-solid fa-users-gear"></i><span>Grupos en Formación</span></h3>
+                    </div>
+                    <div class="table-outer-container">
+                        <table class="bitacoras-table">
+                            <thead>
+                                <tr>
+                                    <th>Grupo</th>
+                                    <th>Teórico del Grupo</th>
+                                    <th>Contratos Inscritos</th>
+                                    <th>Recaudación Actual</th>
+                                    <th>Recaudación Mínima</th>
+                                    <th>Importe para Convocar Asamblea</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adg-table-formacion">
+                                <!-- Dynamic rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div class="adg-tables-grid">
+                    <!-- Grupos Programados para Asamblea -->
+                    <section class="table-card" style="margin: 0;">
+                        <div class="table-card-header">
+                            <h3 class="table-card-title"><i class="fa-solid fa-calendar-check"></i><span>Grupos Programados para Asamblea</span></h3>
+                        </div>
+                        <div class="table-outer-container" style="min-height: 250px;">
+                            <table class="bitacoras-table">
+                                <thead>
+                                    <tr>
+                                        <th>Grupos</th>
+                                        <th>Teórico del Grupo</th>
+                                        <th>Contratos Inscritos</th>
+                                        <th>Vacantes Libres</th>
+                                        <th>Fecha Primera Asamblea</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adg-table-programados">
+                                    <tr>
+                                        <td colspan="5" style="text-align: center; padding: 60px 20px; color: var(--color-turquoise-dark); opacity: 0.6;">
+                                            <i class="fa-solid fa-circle-info" style="font-size: 24px; display: block; margin-bottom: 12px; color: var(--color-turquoise-medium);"></i>
+                                            No hay grupos programados actualmente para asamblea.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Grupos Inaugurados -->
+                    <section class="table-card" style="margin: 0;">
+                        <div class="table-card-header">
+                            <h3 class="table-card-title"><i class="fa-solid fa-award"></i><span>Grupos Inaugurados</span></h3>
+                        </div>
+                        <div class="table-outer-container" style="max-height: 350px; overflow-y: auto;">
+                            <table class="bitacoras-table" style="min-width: 500px;">
+                                <thead style="position: sticky; top: 0; z-index: 10;">
+                                    <tr>
+                                        <th>Grupo</th>
+                                        <th>Fecha 1ra. Asamblea</th>
+                                        <th>Recaudación Inicial</th>
+                                        <th>Sorteos</th>
+                                        <th>Remates</th>
+                                        <th>Vacantes Ocupadas</th>
+                                        <th>Vacantes Libres</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adg-table-inaugurados">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
             </div>
-          </section>
+        `;
 
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
-            <!-- Grupos Programados para Asamblea -->
-            <section class="table-card" style="margin: 0;">
-              <div class="table-card-header">
-                <h3 class="table-card-title"><i class="fa-solid fa-calendar-check"></i><span>Grupos Programados para Asamblea</span></h3>
-              </div>
-              <div class="table-outer-container" style="min-height: 250px;">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Grupos</th>
-                      <th>Teórico del Grupo</th>
-                      <th>Contratos Inscritos</th>
-                      <th>Vacantes Libres</th>
-                      <th>Fecha Primera Asamblea</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td colspan="5" style="text-align: center; padding: 60px 20px; color: var(--color-turquoise-dark); opacity: 0.6;">
-                        <i class="fa-solid fa-circle-info" style="font-size: 24px; display: block; margin-bottom: 12px; color: var(--color-turquoise-medium);"></i>
-                        No hay grupos programados actualmente para asamblea.
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
+        // Event listener
+        const yearSelect = document.getElementById("f-adg-year");
+        yearSelect.addEventListener("change", (e) => {
+            window.slide19Filters.year = Number(e.target.value);
+            updateAdgAsambleasDashboard();
+        });
 
-            <!-- Grupos Inaugurados -->
-            <section class="table-card" style="margin: 0;">
-              <div class="table-card-header">
-                <h3 class="table-card-title"><i class="fa-solid fa-award"></i><span>Grupos Inaugurados</span></h3>
-              </div>
-              <div class="table-outer-container" style="max-height: 250px; overflow-y: auto;">
-                <table style="min-width: 600px;">
-                  <thead style="position: sticky; top: 0; z-index: 10;">
+        function updateAdgAsambleasDashboard() {
+            const year = window.slide19Filters.year;
+            const countryFactor = (selectedCountry === 'colombia') ? 0.65 : 1.0;
+            const currencyPrefix = (selectedCountry === 'colombia') ? "$" : "S/";
+
+            // Determinar base según año
+            let kpis = { formacion: 6, listos: 1, realizadas: 41 };
+            let scale = 1.0;
+            if (year === 2025) {
+                kpis = { formacion: 5, listos: 2, realizadas: 38 };
+                scale = 0.9;
+            } else if (year === 2024) {
+                kpis = { formacion: 7, listos: 0, realizadas: 31 };
+                scale = 0.8;
+            }
+
+            // Update KPIs
+            document.getElementById("adg-kpi-formacion").textContent = Math.round(kpis.formacion * countryFactor);
+            document.getElementById("adg-kpi-listos").textContent = Math.round(kpis.listos * countryFactor);
+            document.getElementById("adg-kpi-realizadas").textContent = Math.round(kpis.realizadas * countryFactor);
+
+            // Formacion table data
+            const baseFormacion = [
+                { grupo: "A224", teorico: 180, contratos: 107, recAct: 24349.79, recMin: 20000.00, impConv: 0.00 },
+                { grupo: "C207", teorico: 450, contratos: 36, recAct: 11500.04, recMin: 60000.00, impConv: 48499.96 },
+                { grupo: "M3P5", teorico: 240, contratos: 240, recAct: 47801.25, recMin: 24000.00, impConv: 0.00 },
+                { grupo: "M3P6", teorico: 240, contratos: 119, recAct: 24847.50, recMin: 24000.00, impConv: 0.00 },
+                { grupo: "S1J2", teorico: 180, contratos: 180, recAct: 50060.69, recMin: 25000.00, impConv: 0.00 }
+            ];
+
+            const formacionTbody = document.getElementById("adg-table-formacion");
+            formacionTbody.innerHTML = baseFormacion.map(item => {
+                const recAct = Math.round(item.recAct * scale * countryFactor * 100) / 100;
+                const recMin = Math.round(item.recMin * scale * countryFactor * 100) / 100;
+                const impConv = Math.round(item.impConv * scale * countryFactor * 100) / 100;
+                const contratos = Math.round(item.contratos * scale * countryFactor);
+                const complianceClass = impConv === 0 ? "compliance-high" : "compliance-low";
+
+                return `
                     <tr>
-                      <th>Grupo</th>
-                      <th>Fecha 1ra. Asamblea</th>
-                      <th>Recaudación Inicial</th>
-                      <th>Sorteos</th>
-                      <th>Remates</th>
-                      <th>Vacantes Ocupadas</th>
-                      <th>Vacantes Libres</th>
+                        <td><strong>${item.grupo}</strong></td>
+                        <td>${Math.round(item.teorico * countryFactor)}</td>
+                        <td>${contratos}</td>
+                        <td>${currencyPrefix} ${recAct.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td>${currencyPrefix} ${recMin.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td class="${complianceClass}">${currencyPrefix} ${impConv.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td><strong>A217</strong></td><td>07/01/2026</td><td>S/ 39,949.80</td><td>1</td><td>5</td><td>178</td><td>2</td></tr>
-                    <tr><td><strong>A218</strong></td><td>13/01/2026</td><td>S/ 44,366.31</td><td>1</td><td>4</td><td>177</td><td>3</td></tr>
-                    <tr><td><strong>A219</strong></td><td>13/02/2026</td><td>S/ 45,399.59</td><td>1</td><td>3</td><td>177</td><td>3</td></tr>
-                    <tr><td><strong>A220</strong></td><td>26/01/2026</td><td>S/ 0.00</td><td>1</td><td>1</td><td>0</td><td class="compliance-low">180</td></tr>
-                    <tr><td><strong>A220</strong></td><td>20/02/2026</td><td>S/ 43,916.35</td><td>1</td><td>4</td><td>176</td><td>4</td></tr>
-                    <tr><td><strong>A221</strong></td><td>26/02/2026</td><td>S/ 45,132.93</td><td>1</td><td>4</td><td>180</td><td class="compliance-high">0</td></tr>
-                    <tr><td><strong>A222</strong></td><td>13/03/2026</td><td>S/ 44,249.64</td><td>1</td><td>3</td><td>175</td><td>5</td></tr>
-                    <tr><td><strong>A223</strong></td><td>31/03/2026</td><td>S/ 43,749.63</td><td>1</td><td>3</td><td>179</td><td>1</td></tr>
-                    <tr><td><strong>A224</strong></td><td>21/04/2026</td><td>S/ 43,266.34</td><td>1</td><td>4</td><td>179</td><td>1</td></tr>
-                    <tr><td><strong>A225</strong></td><td>30/04/2026</td><td>S/ 43,149.67</td><td>1</td><td>3</td><td>180</td><td class="compliance-high">0</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          </div>
-        </div>
-      `;
+                `;
+            }).join('');
+
+            // Programados table data
+            const baseProgramados = [
+                { grupo: "A220", teorico: 180, contratos: 178, vacLib: 2, date: "15/07/2026" },
+                { grupo: "C208", teorico: 450, contratos: 448, vacLib: 2, date: "22/07/2026" },
+                { grupo: "S1J3", teorico: 240, contratos: 240, vacLib: 0, date: "28/07/2026" }
+            ];
+
+            const programadosTbody = document.getElementById("adg-table-programados");
+            if (programadosTbody) {
+                programadosTbody.innerHTML = baseProgramados.map(item => {
+                    const teorico = Math.round(item.teorico * countryFactor);
+                    const contratos = Math.round(item.contratos * scale * countryFactor);
+                    const vacLib = Math.round(item.vacLib * countryFactor);
+                    
+                    let finalDate = item.date;
+                    if (year === 2025) {
+                        finalDate = item.date.replace("2026", "2025");
+                    } else if (year === 2024) {
+                        finalDate = item.date.replace("2026", "2024");
+                    }
+
+                    return `
+                        <tr>
+                            <td><strong>${item.grupo}</strong></td>
+                            <td>${teorico}</td>
+                            <td>${contratos}</td>
+                            <td class="${vacLib === 0 ? 'compliance-high' : ''}">${vacLib}</td>
+                            <td>${finalDate}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Inaugurados table data
+            const baseInaugurados = [
+                { grupo: "A217", date: "07/01/2026", recInit: 39949.80, sorteos: 1, remates: 5, vacOcup: 178, vacLib: 2 },
+                { grupo: "A218", date: "13/01/2026", recInit: 44366.31, sorteos: 1, remates: 4, vacOcup: 177, vacLib: 3 },
+                { grupo: "A219", date: "13/02/2026", recInit: 45399.59, sorteos: 1, remates: 3, vacOcup: 177, vacLib: 3 },
+                { grupo: "A220", date: "26/01/2026", recInit: 0.00, sorteos: 1, remates: 1, vacOcup: 0, vacLib: 180 },
+                { grupo: "A220", date: "20/02/2026", recInit: 43916.35, sorteos: 1, remates: 4, vacOcup: 176, vacLib: 4 },
+                { grupo: "A221", date: "26/02/2026", recInit: 45132.93, sorteos: 1, remates: 4, vacOcup: 180, vacLib: 0 },
+                { grupo: "A222", date: "13/03/2026", recInit: 44249.64, sorteos: 1, remates: 3, vacOcup: 175, vacLib: 5 },
+                { grupo: "A223", date: "31/03/2026", recInit: 43749.63, sorteos: 1, remates: 3, vacOcup: 179, vacLib: 1 },
+                { grupo: "A224", date: "21/04/2026", recInit: 43266.34, sorteos: 1, remates: 4, vacOcup: 179, vacLib: 1 },
+                { grupo: "A225", date: "30/04/2026", recInit: 43149.67, sorteos: 1, remates: 3, vacOcup: 180, vacLib: 0 }
+            ];
+
+            const inauguradosTbody = document.getElementById("adg-table-inaugurados");
+            inauguradosTbody.innerHTML = baseInaugurados.map(item => {
+                const recInit = Math.round(item.recInit * scale * countryFactor * 100) / 100;
+                const vacOcup = Math.round(item.vacOcup * countryFactor);
+                const vacLib = Math.round(item.vacLib * countryFactor);
+                const complianceClass = vacLib === 0 ? "compliance-high" : (vacOcup === 0 ? "compliance-low" : "");
+
+                // Adjust year in date label
+                let finalDate = item.date;
+                if (year === 2025) {
+                    finalDate = item.date.replace("2026", "2025");
+                } else if (year === 2024) {
+                    finalDate = item.date.replace("2026", "2024");
+                }
+
+                return `
+                    <tr>
+                        <td><strong>${item.grupo}</strong></td>
+                        <td>${finalDate}</td>
+                        <td>${currencyPrefix} ${recInit.toLocaleString('es-PE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td>${item.sorteos}</td>
+                        <td>${item.remates}</td>
+                        <td>${vacOcup}</td>
+                        <td class="${complianceClass}">${vacLib}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        updateAdgAsambleasDashboard();
     }
 
     // ---- ADG REACTIVACIONES (slide 20) ----
     function renderAdgReactivaciones(slide, host) {
-      renderMetricCards([
-        { title: "Cant. Reactivaciones", value: "2,998", icon: "fa-solid fa-arrows-rotate", trendText: "Total acumulado", trendUp: true, accentColor: "#0E8C9B" },
-        { title: "Meta Reactivaciones", value: "3,252", icon: "fa-solid fa-bullseye", trendText: "Meta del año", trendUp: true, accentColor: "#E0A458" },
-        { title: "% Cumplimiento Reactivaciones", value: "92%", icon: "fa-solid fa-percentage", trendText: "Desviación: -8%", trendUp: false, accentColor: "#E2674F" },
-        { title: "Periodo / Zona", value: "2025 / Todas", icon: "fa-solid fa-globe", trendText: "Filtro regional", trendUp: true, accentColor: "#3A7CA5" }
-      ]);
+        if (!window.slide20Filters) {
+            window.slide20Filters = {
+                year: 2025,
+                zona: "Todas"
+            };
+        }
 
-      host.innerHTML = `
-        <div style="display: flex; flex-direction: column; gap: 30px; width: 100%;">
-          <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px;">
-            <!-- Detalle de Reactivaciones (Tabla) -->
-            <section class="table-card" style="margin: 0;">
-              <div class="table-card-header">
-                <h3 class="table-card-title"><i class="fa-solid fa-table"></i><span>Detalle de Reactivaciones (Arequipa)</span></h3>
-              </div>
-              <div class="table-outer-container" style="max-height: 320px; overflow-y: auto;">
-                <table>
-                  <thead style="position: sticky; top: 0; z-index: 10;">
+        host.innerHTML = `
+            <style>
+                .adg-top-row-react {
+                    display: grid;
+                    grid-template-columns: 200px 200px repeat(3, 1fr);
+                    gap: 20px;
+                    margin-bottom: 12px;
+                }
+                @media (max-width: 992px) {
+                    .adg-top-row-react {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                .adg-grid-react {
+                    display: grid;
+                    grid-template-columns: 1.3fr 0.7fr;
+                    gap: 25px;
+                    margin-bottom: 25px;
+                }
+                @media (max-width: 1100px) {
+                    .adg-grid-react {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+
+            <div class="adg-top-row-react">
+                <!-- Periodo Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Periodo</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-react-year">
+                            <option value="2026" ${window.slide20Filters.year === 2026 ? "selected" : ""}>2026</option>
+                            <option value="2025" ${window.slide20Filters.year === 2025 ? "selected" : ""}>2025</option>
+                            <option value="2024" ${window.slide20Filters.year === 2024 ? "selected" : ""}>2024</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Zona Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Zona</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-react-zona">
+                            <option value="Todas" ${window.slide20Filters.zona === "Todas" ? "selected" : ""}>Todas</option>
+                            <option value="LIMA" ${window.slide20Filters.zona === "LIMA" ? "selected" : ""}>LIMA</option>
+                            <option value="AREQUIPA" ${window.slide20Filters.zona === "AREQUIPA" ? "selected" : ""}>AREQUIPA</option>
+                            <option value="TRUJILLO" ${window.slide20Filters.zona === "TRUJILLO" ? "selected" : ""}>TRUJILLO</option>
+                            <option value="CHICLAYO" ${window.slide20Filters.zona === "CHICLAYO" ? "selected" : ""}>CHICLAYO</option>
+                            <option value="PIURA" ${window.slide20Filters.zona === "PIURA" ? "selected" : ""}>PIURA</option>
+                            <option value="HUANCAYO" ${window.slide20Filters.zona === "HUANCAYO" ? "selected" : ""}>HUANCAYO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- KPI 1 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="adg-kpi-reactivaciones">-</span>
+                    <span class="adg-kpi-lbl">Cant. Reactivaciones</span>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="adg-kpi-meta-react">-</span>
+                    <span class="adg-kpi-lbl">Meta Reactivaciones</span>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="adg-kpi-cumplimiento-react">-</span>
+                    <span class="adg-kpi-lbl">% Cumplimiento Reactivaciones</span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+                <div class="adg-grid-react">
+                    <!-- Detalle de Reactivaciones (Tabla) -->
+                    <section class="table-card" style="margin: 0;">
+                        <div class="table-card-header">
+                            <h3 class="table-card-title"><i class="fa-solid fa-table"></i><span id="adg-table-title">Detalle de Reactivaciones</span></h3>
+                        </div>
+                        <div class="table-outer-container" style="max-height: 320px; overflow-y: auto;">
+                            <table class="bitacoras-table">
+                                <thead style="position: sticky; top: 0; z-index: 10;">
+                                    <tr>
+                                        <th>Año</th>
+                                        <th>Mes</th>
+                                        <th>Zona Oficial</th>
+                                        <th style="text-align: right;">Cant. Reactivaciones</th>
+                                        <th style="text-align: right;">Meta Reactivaciones</th>
+                                        <th style="text-align: right;">% Cumplimiento</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adg-react-tbody">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Distribución por Zonas -->
+                    <div class="chart-card" style="margin: 0; display: flex; flex-direction: column; gap: 15px;">
+                        <div class="chart-card-header">
+                            <h3 class="chart-card-title"><i class="fa-solid fa-map-location-dot"></i><span>Distribución por Zonas</span></h3>
+                        </div>
+                        <div class="chart-canvas-wrapper" style="height: 250px;"><canvas id="adg-zone-chart"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- Comparativo Mensual -->
+                <div class="chart-card" style="width: 100%; margin: 0; display: flex; flex-direction: column; gap: 15px;">
+                    <div class="chart-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 class="chart-card-title"><i class="fa-solid fa-chart-line"></i><span>Comparativo Mensual: Reactivaciones vs Meta & % Cumplimiento</span></h3>
+                    </div>
+                    <div class="chart-canvas-wrapper" style="height: 320px;"><canvas id="adg-monthly-chart"></canvas></div>
+                </div>
+            </div>
+        `;
+
+        // Event listeners
+        const yearSelect = document.getElementById("f-react-year");
+        const zonaSelect = document.getElementById("f-react-zona");
+
+        yearSelect.addEventListener("change", (e) => {
+            window.slide20Filters.year = Number(e.target.value);
+            updateAdgReactivacionesDashboard();
+        });
+
+        zonaSelect.addEventListener("change", (e) => {
+            window.slide20Filters.zona = e.target.value;
+            updateAdgReactivacionesDashboard();
+        });
+
+        function updateAdgReactivacionesDashboard() {
+            const year = window.slide20Filters.year;
+            const selectedZona = window.slide20Filters.zona;
+            const countryFactor = (selectedCountry === 'colombia') ? 0.65 : 1.0;
+
+            // Cargar datos baseline de 2025
+            const baseData = {
+                "Todas": {
+                    reactivaciones: [292, 251, 245, 240, 249, 232, 235, 261, 273, 280, 255, 185],
+                    meta: [268, 257, 267, 264, 275, 257, 255, 290, 298, 298, 275, 248],
+                    zones: [
+                        { name: "LIMA", pct: 70 },
+                        { name: "AREQUIPA", pct: 14 },
+                        { name: "TRUJILLO", pct: 5 },
+                        { name: "CHICLAYO", pct: 4 },
+                        { name: "PIURA", pct: 4 },
+                        { name: "HUANCAYO", pct: 4 }
+                    ]
+                },
+                "LIMA": {
+                    reactivaciones: [204, 176, 171, 168, 174, 162, 164, 183, 191, 196, 178, 129],
+                    meta: [188, 180, 187, 185, 192, 180, 178, 203, 209, 209, 192, 174],
+                    zones: [{ name: "LIMA", pct: 100 }]
+                },
+                "AREQUIPA": {
+                    reactivaciones: [42, 25, 40, 40, 38, 36, 21, 28, 37, 46, 34, 20],
+                    meta: [25, 25, 25, 25, 25, 25, 25, 30, 25, 25, 25, 25],
+                    zones: [{ name: "AREQUIPA", pct: 100 }]
+                },
+                "TRUJILLO": {
+                    reactivaciones: [15, 13, 12, 12, 12, 12, 12, 13, 14, 14, 13, 8],
+                    meta: [13, 13, 13, 13, 14, 13, 13, 14, 15, 15, 14, 12],
+                    zones: [{ name: "TRUJILLO", pct: 100 }]
+                },
+                "CHICLAYO": {
+                    reactivaciones: [12, 10, 10, 10, 10, 9, 9, 10, 11, 11, 10, 7],
+                    meta: [11, 10, 11, 11, 11, 10, 10, 12, 12, 12, 11, 10],
+                    zones: [{ name: "CHICLAYO", pct: 100 }]
+                },
+                "PIURA": {
+                    reactivaciones: [12, 10, 10, 10, 10, 9, 9, 10, 11, 11, 10, 7],
+                    meta: [11, 10, 11, 11, 11, 10, 10, 12, 12, 12, 11, 10],
+                    zones: [{ name: "PIURA", pct: 100 }]
+                },
+                "HUANCAYO": {
+                    reactivaciones: [12, 10, 10, 10, 10, 9, 9, 10, 11, 11, 10, 7],
+                    meta: [11, 10, 11, 11, 11, 10, 10, 12, 12, 12, 11, 10],
+                    zones: [{ name: "HUANCAYO", pct: 100 }]
+                }
+            }[selectedZona] || {
+                reactivaciones: new Array(12).fill(0),
+                meta: new Array(12).fill(0),
+                zones: []
+            };
+
+            // Determinar escala por año
+            let yearScale = 1.0;
+            if (year === 2026) yearScale = 1.08;
+            else if (year === 2024) yearScale = 0.93;
+
+            const scaleFactor = yearScale * countryFactor;
+
+            // List of months for tables
+            const monthList = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+            // Scale datasets
+            const scaledReactivaciones = baseData.reactivaciones.map(v => Math.round(v * scaleFactor));
+            const scaledMeta = baseData.meta.map(v => Math.round(v * scaleFactor));
+
+            // Calculate totals
+            const totalReactivaciones = scaledReactivaciones.reduce((sum, v) => sum + v, 0);
+            const totalMeta = scaledMeta.reduce((sum, v) => sum + v, 0);
+            const totalCompliance = totalMeta > 0 ? Math.round((totalReactivaciones / totalMeta) * 100) : 0;
+
+            // Update KPIs
+            document.getElementById("adg-kpi-reactivaciones").textContent = totalReactivaciones.toLocaleString('es-PE');
+            document.getElementById("adg-kpi-meta-react").textContent = totalMeta.toLocaleString('es-PE');
+            document.getElementById("adg-kpi-cumplimiento-react").textContent = totalCompliance + " %";
+
+            // Update Table Title
+            document.getElementById("adg-table-title").textContent = `Detalle de Reactivaciones (${selectedZona === "Todas" ? "Todas las Zonas" : selectedZona})`;
+
+            // Render Table Rows
+            const tbody = document.getElementById("adg-react-tbody");
+            let tableHtml = "";
+            for (let i = 0; i < 12; i++) {
+                const act = scaledReactivaciones[i];
+                const met = scaledMeta[i];
+                const cmp = met > 0 ? Math.round((act / met) * 100) : 0;
+                const complianceClass = cmp >= 100 ? "compliance-high" : "compliance-low";
+
+                tableHtml += `
                     <tr>
-                      <th>Año</th>
-                      <th>Mes</th>
-                      <th>Zona Oficial</th>
-                      <th>Cant. Reactivaciones</th>
-                      <th>Meta Reactivaciones</th>
-                      <th>% Cumplimiento</th>
+                        <td>${year}</td>
+                        <td>${monthList[i]}</td>
+                        <td>${selectedZona}</td>
+                        <td style="text-align: right; font-weight: 600;">${act.toLocaleString('es-PE')}</td>
+                        <td style="text-align: right; font-weight: 600;">${met.toLocaleString('es-PE')}</td>
+                        <td class="${complianceClass}" style="text-align: right; font-weight: 700;">${cmp} %</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    <tr><td>2025</td><td>Enero</td><td>AREQUIPA</td><td>42</td><td>25</td><td class="compliance-high">168%</td></tr>
-                    <tr><td>2025</td><td>Febrero</td><td>AREQUIPA</td><td>25</td><td>25</td><td class="compliance-high">100%</td></tr>
-                    <tr><td>2025</td><td>Marzo</td><td>AREQUIPA</td><td>40</td><td>25</td><td class="compliance-high">160%</td></tr>
-                    <tr><td>2025</td><td>Abril</td><td>AREQUIPA</td><td>40</td><td>25</td><td class="compliance-high">160%</td></tr>
-                    <tr><td>2025</td><td>Mayo</td><td>AREQUIPA</td><td>38</td><td>25</td><td class="compliance-high">152%</td></tr>
-                    <tr><td>2025</td><td>Junio</td><td>AREQUIPA</td><td>36</td><td>25</td><td class="compliance-high">144%</td></tr>
-                    <tr><td>2025</td><td>Julio</td><td>AREQUIPA</td><td>21</td><td>25</td><td class="compliance-low">84%</td></tr>
-                    <tr><td>2025</td><td>Agosto</td><td>AREQUIPA</td><td>28</td><td>30</td><td class="compliance-low">93%</td></tr>
-                    <tr><td>2025</td><td>Septiembre</td><td>AREQUIPA</td><td>37</td><td>25</td><td class="compliance-high">148%</td></tr>
-                    <tr><td>2025</td><td>Octubre</td><td>AREQUIPA</td><td>46</td><td>25</td><td class="compliance-high">184%</td></tr>
-                    <tr style="background-color: rgba(14, 140, 155, 0.1); font-weight: 700;">
-                      <td colspan="3"><strong>Total General</strong></td>
-                      <td>2,998</td>
-                      <td>3,252</td>
-                      <td class="compliance-high">92%</td>
+                `;
+            }
+            // Total General row
+            tableHtml += `
+                <tr class="total-row" style="background-color: rgba(0, 130, 150, 0.05); font-weight: 700;">
+                    <td colspan="3">Total General</td>
+                    <td style="text-align: right;">${totalReactivaciones.toLocaleString('es-PE')}</td>
+                    <td style="text-align: right;">${totalMeta.toLocaleString('es-PE')}</td>
+                    <td style="text-align: right;" class="${totalCompliance >= 100 ? 'compliance-high' : 'compliance-low'}">${totalCompliance} %</td>
+                </tr>
+            `;
+            tbody.innerHTML = tableHtml;
+
+            // Render Zone Distribution Chart (Top Right)
+            const zoneLabels = baseData.zones.map(z => z.name);
+            const zonePcts = baseData.zones.map(z => z.pct);
+
+            drawChart("adg-zone-chart", {
+                type: "bar",
+                data: {
+                    labels: zoneLabels,
+                    datasets: [{
+                        data: zonePcts,
+                        backgroundColor: "#f25c66", // Coral Red color from screenshot
+                        borderRadius: 4,
+                        maxBarThickness: 16
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { top: 10, bottom: 5 } },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: baseTooltip,
+                        datalabels: {
+                            anchor: "end",
+                            align: "top",
+                            color: "#334155",
+                            font: { family: "Inter", weight: "700", size: 10 },
+                            formatter: v => v + "%"
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600", size: 9 }, color: "#334155" } },
+                        y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%", font: { size: 9 } }, grid: { color: "rgba(0,0,0,0.03)" } }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            // Render Monthly Chart (Bottom Chart)
+            const monthlyCmp = scaledReactivaciones.map((act, idx) => {
+                const met = scaledMeta[idx];
+                return met > 0 ? Math.round((act / met) * 100) : 0;
+            });
+
+            const shortMonths = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+
+            drawChart("adg-monthly-chart", {
+                data: {
+                    labels: shortMonths,
+                    datasets: [
+                        {
+                            type: "bar",
+                            label: "Cant. Reactivaciones",
+                            data: scaledReactivaciones,
+                            backgroundColor: "#f25c66", // Coral Red
+                            borderRadius: 4,
+                            barThickness: 14,
+                            yAxisID: "y",
+                            datalabels: {
+                                anchor: "end",
+                                align: function(context) {
+                                    const idx = context.dataIndex;
+                                    const chart = context.chart;
+                                    if (!chart.scales || !chart.scales.y || !chart.scales.y1) return 'start';
+                                    const redVal = chart.data.datasets[0].data[idx];
+                                    const yellowVal = chart.data.datasets[2].data[idx];
+                                    const yPixel = chart.scales.y.getPixelForValue(redVal);
+                                    const y1Pixel = chart.scales.y1.getPixelForValue(yellowVal);
+                                    return (y1Pixel < yPixel) ? 'start' : 'end';
+                                },
+                                offset: 4,
+                                color: "#ffffff",
+                                backgroundColor: "#f25c66",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 9 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 }
+                            }
+                        },
+                        {
+                            type: "bar",
+                            label: "Meta Reactivaciones",
+                            data: scaledMeta,
+                            backgroundColor: "#0B5FB0", // Royal Blue
+                            borderRadius: 4,
+                            barThickness: 14,
+                            yAxisID: "y",
+                            datalabels: {
+                                anchor: "start",
+                                align: "end",
+                                color: "#ffffff",
+                                backgroundColor: "#0B5FB0",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 9 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 }
+                            }
+                        },
+                        {
+                            type: "line",
+                            label: "% Cumplimiento Reactivaciones",
+                            data: monthlyCmp,
+                            borderColor: "#ffd15c", // Orange/Yellow Line
+                            borderWidth: 2,
+                            borderDash: [4, 4],
+                            pointBackgroundColor: "#ffd15c",
+                            pointRadius: 4,
+                            fill: false,
+                            yAxisID: "y1",
+                            datalabels: {
+                                anchor: "center",
+                                align: function(context) {
+                                    const idx = context.dataIndex;
+                                    const chart = context.chart;
+                                    if (!chart.scales || !chart.scales.y || !chart.scales.y1) return 'top';
+                                    const redVal = chart.data.datasets[0].data[idx];
+                                    const yellowVal = chart.data.datasets[2].data[idx];
+                                    const yPixel = chart.scales.y.getPixelForValue(redVal);
+                                    const y1Pixel = chart.scales.y1.getPixelForValue(yellowVal);
+                                    return (y1Pixel < yPixel) ? 'top' : 'bottom';
+                                } ,
+                                offset: 8,
+                                color: "#000000",
+                                backgroundColor: "#ffd15c",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 9 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 },
+                                formatter: v => v + " %"
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                            labels: {
+                                font: { family: "Inter", weight: "600", size: 10 },
+                                color: "#334155"
+                            }
+                        },
+                        tooltip: baseTooltip,
+                        datalabels: {
+                            display: true // Show all labels!
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#334155" } },
+                        y: { position: "left", beginAtZero: true, grid: { color: "rgba(0,0,0,0.03)" }, ticks: { color: "#64748b" } },
+                        y1: { position: "right", beginAtZero: true, max: 120, grid: { display: false }, ticks: { color: "#64748b", callback: v => v + "%" } }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        updateAdgReactivacionesDashboard();
+    }
+
+    // ---- EDB FACTURACION (slide 21) ----
+    function renderEdbFacturacion(slide, host) {
+        if (!window.edbFacturacionFilters) {
+            window.edbFacturacionFilters = {
+                year: 2026,
+                marca: "Todas",
+                zona: "Todas",
+                proveedor: "Todos"
+            };
+        }
+
+        host.innerHTML = `
+            <style>
+                .edb-top-row {
+                    display: grid;
+                    grid-template-columns: repeat(7, 1fr);
+                    gap: 16px;
+                    margin-bottom: 12px;
+                }
+                @media (max-width: 1200px) {
+                    .edb-top-row {
+                        grid-template-columns: repeat(4, 1fr);
+                    }
+                }
+                @media (max-width: 768px) {
+                    .edb-top-row {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                .edb-body-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1.6fr;
+                    gap: 20px;
+                }
+                @media (max-width: 992px) {
+                    .edb-body-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                .edb-bottom-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1.6fr;
+                    gap: 20px;
+                    margin-top: 16px;
+                }
+                @media (max-width: 992px) {
+                    .edb-bottom-grid {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+
+            <div class="edb-top-row">
+                <!-- Periodo Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Periodo</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-edb-year">
+                            <option value="2026" ${window.edbFacturacionFilters.year === 2026 ? "selected" : ""}>2026</option>
+                            <option value="2025" ${window.edbFacturacionFilters.year === 2025 ? "selected" : ""}>2025</option>
+                            <option value="2024" ${window.edbFacturacionFilters.year === 2024 ? "selected" : ""}>2024</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Marca Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Marca</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-edb-marca">
+                            <option value="Todas">Todas</option>
+                            <option value="CHANGAN">CHANGAN</option>
+                            <option value="KIA">KIA</option>
+                            <option value="TOYOTA">TOYOTA</option>
+                            <option value="JETOUR">JETOUR</option>
+                            <option value="JAC">JAC</option>
+                            <option value="HYUNDAI">HYUNDAI</option>
+                            <option value="CHERY">CHERY</option>
+                            <option value="DFSK">DFSK</option>
+                            <option value="GEELY">GEELY</option>
+                            <option value="CHEVROLET">CHEVROLET</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Zona Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Zona</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-edb-zona">
+                            <option value="Todas">Todas</option>
+                            <option value="LIMA">LIMA</option>
+                            <option value="AREQUIPA">AREQUIPA</option>
+                            <option value="TRUJILLO">TRUJILLO</option>
+                            <option value="CHICLAYO">CHICLAYO</option>
+                            <option value="PIURA">PIURA</option>
+                            <option value="HUANCAYO">HUANCAYO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Proveedor Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Proveedor</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-edb-proveedor">
+                            <option value="Todos">Todos</option>
+                            <option value="Derco">Derco</option>
+                            <option value="Inchcape">Inchcape</option>
+                            <option value="SK Motors">SK Motors</option>
+                            <option value="Astara">Astara</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- KPI 1 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="edb-kpi-facturacion">-</span>
+                    <span class="adg-kpi-lbl">Cant. Facturación VEH</span>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="edb-kpi-meta">-</span>
+                    <span class="adg-kpi-lbl">Meta Facturación VEH</span>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="edb-kpi-cumplimiento">-</span>
+                    <span class="adg-kpi-lbl">% Cumplimiento Facturación</span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px; width: 100%;">
+                <!-- Monthly Table -->
+                <section class="table-card" style="margin: 0;">
+                    <div class="table-card-header">
+                        <h3 class="table-card-title"><i class="fa-solid fa-table"></i><span>Detalle Mensual de Facturación</span></h3>
+                    </div>
+                    <div class="table-outer-container" style="max-height: 380px; overflow-y: auto;">
+                        <table class="bitacoras-table">
+                            <thead style="position: sticky; top: 0; z-index: 10;">
+                                <tr>
+                                    <th>Año</th>
+                                    <th>Mes</th>
+                                    <th style="text-align: right;">Cant. Facturación VEH</th>
+                                    <th style="text-align: right;">Meta Facturación VEH</th>
+                                    <th style="text-align: right;">% Cumplimiento</th>
+                                </tr>
+                            </thead>
+                            <tbody id="edb-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Monthly Chart -->
+                <section class="chart-card" style="margin: 0;">
+                    <div class="chart-card-header">
+                        <h3 class="chart-card-title"><i class="fa-solid fa-chart-column"></i><span>Comparativo Mensual: Facturación vs Meta & % Cumplimiento</span></h3>
+                    </div>
+                    <div class="chart-canvas-wrapper" style="height: 360px;"><canvas id="edb-monthly-chart"></canvas></div>
+                </section>
+
+                <div class="edb-bottom-grid">
+                    <!-- Zone Distribution -->
+                    <section class="chart-card" style="margin: 0;">
+                        <div class="chart-card-header">
+                            <h3 class="chart-card-title"><i class="fa-solid fa-map-location-dot"></i><span>Distribución por Zona</span></h3>
+                        </div>
+                        <div class="chart-canvas-wrapper" style="height: 280px;"><canvas id="edb-zone-chart"></canvas></div>
+                    </section>
+
+                    <!-- Brand Distribution -->
+                    <section class="chart-card" style="margin: 0;">
+                        <div class="chart-card-header">
+                            <h3 class="chart-card-title"><i class="fa-solid fa-car"></i><span>Facturación por Marca</span></h3>
+                        </div>
+                        <div class="chart-canvas-wrapper" style="height: 280px;"><canvas id="edb-brand-chart"></canvas></div>
+                    </section>
+                </div>
+            </div>
+        `;
+
+        // Event listeners
+        document.getElementById("f-edb-year").addEventListener("change", (e) => {
+            window.edbFacturacionFilters.year = Number(e.target.value);
+            updateEdbFacturacionDashboard();
+        });
+        document.getElementById("f-edb-marca").addEventListener("change", (e) => {
+            window.edbFacturacionFilters.marca = e.target.value;
+            updateEdbFacturacionDashboard();
+        });
+        document.getElementById("f-edb-zona").addEventListener("change", (e) => {
+            window.edbFacturacionFilters.zona = e.target.value;
+            updateEdbFacturacionDashboard();
+        });
+        document.getElementById("f-edb-proveedor").addEventListener("change", (e) => {
+            window.edbFacturacionFilters.proveedor = e.target.value;
+            updateEdbFacturacionDashboard();
+        });
+
+        function updateEdbFacturacionDashboard() {
+            const year = window.edbFacturacionFilters.year;
+            const marca = window.edbFacturacionFilters.marca;
+            const zona = window.edbFacturacionFilters.zona;
+            const countryFactor = (selectedCountry === 'colombia') ? 0.65 : 1.0;
+
+            // Base monthly data (2025 baseline, "Todas" marca, "Todas" zona)
+            const baseFacturacion = [229, 220, 208, 245, 232, 238, 247, 252, 275, 278, 264, 271];
+            const baseMeta         = [237, 237, 237, 237, 237, 237, 237, 237, 237, 237, 237, 237];
+
+            // Brand filter multiplier
+            const marcaFactors = {
+                "Todas": 1.0, "CHANGAN": 0.15, "KIA": 0.12, "TOYOTA": 0.12,
+                "JETOUR": 0.09, "JAC": 0.08, "HYUNDAI": 0.07, "CHERY": 0.07,
+                "DFSK": 0.04, "GEELY": 0.03, "CHEVROLET": 0.03
+            };
+            const marcaFactor = marcaFactors[marca] || 1.0;
+
+            // Zone filter multiplier
+            const zonaFactors = {
+                "Todas": 1.0, "LIMA": 0.71, "AREQUIPA": 0.11, "TRUJILLO": 0.07,
+                "PIURA": 0.05, "CHICLAYO": 0.04, "HUANCAYO": 0.02
+            };
+            const zonaFactor = zonaFactors[zona] || 1.0;
+
+            // Year scale
+            let yearScale = 1.0;
+            if (year === 2026) yearScale = 1.08;
+            else if (year === 2024) yearScale = 0.91;
+
+            const totalScale = yearScale * countryFactor * marcaFactor * zonaFactor;
+
+            const scaledFacturacion = baseFacturacion.map(v => Math.round(v * totalScale));
+            const scaledMeta = baseMeta.map(v => Math.round(v * totalScale));
+
+            const totalFacturacion = scaledFacturacion.reduce((a, b) => a + b, 0);
+            const totalMeta = scaledMeta.reduce((a, b) => a + b, 0);
+            const totalCumplimiento = totalMeta > 0 ? Math.round((totalFacturacion / totalMeta) * 100) : 0;
+
+            // Update KPIs
+            document.getElementById("edb-kpi-facturacion").textContent = totalFacturacion.toLocaleString('es-PE');
+            document.getElementById("edb-kpi-meta").textContent = totalMeta.toLocaleString('es-PE');
+            document.getElementById("edb-kpi-cumplimiento").textContent = totalCumplimiento + " %";
+
+            // Monthly table
+            const monthList = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
+            const tbody = document.getElementById("edb-table-body");
+            let tableHtml = "";
+            for (let i = 0; i < 12; i++) {
+                const ent = scaledFacturacion[i];
+                const met = scaledMeta[i];
+                const cmp = met > 0 ? Math.round((ent / met) * 100) : 0;
+                const cls = cmp >= 100 ? "compliance-high" : "compliance-low";
+                tableHtml += `
+                    <tr>
+                        <td>${year}</td>
+                        <td>${monthList[i]}</td>
+                        <td style="text-align: right; font-weight: 600;">${ent.toLocaleString('es-PE')}</td>
+                        <td style="text-align: right; font-weight: 600;">${met.toLocaleString('es-PE')}</td>
+                        <td class="${cls}" style="text-align: right; font-weight: 700;">${cmp} %</td>
                     </tr>
-                  </tbody>
-                </table>
-              </div>
-            </section>
+                `;
+            }
+            tableHtml += `
+                <tr class="total-row" style="background-color: rgba(0, 130, 150, 0.05); font-weight: 700;">
+                    <td colspan="2">Total</td>
+                    <td style="text-align: right;">${totalFacturacion.toLocaleString('es-PE')}</td>
+                    <td style="text-align: right;">${totalMeta.toLocaleString('es-PE')}</td>
+                    <td style="text-align: right;" class="${totalCumplimiento >= 100 ? 'compliance-high' : 'compliance-low'}">${totalCumplimiento} %</td>
+                </tr>
+            `;
+            tbody.innerHTML = tableHtml;
 
-            <!-- Distribución por Zonas (Gráfico de Barras) -->
-            <div class="chart-card" style="margin: 0;">
-              <div class="chart-card-header">
-                <h3 class="chart-card-title"><i class="fa-solid fa-map-location-dot"></i><span>Distribución por Zonas</span></h3>
-              </div>
-              <div class="chart-canvas-wrapper"><canvas id="adg-zone-chart"></canvas></div>
+            // Monthly Compliance %
+            const monthlyCmp = scaledFacturacion.map((ent, idx) => {
+                const met = scaledMeta[idx];
+                return met > 0 ? Math.round((ent / met) * 100) : 0;
+            });
+
+            // Monthly Chart
+            drawChart("edb-monthly-chart", {
+                data: {
+                    labels: monthList,
+                    datasets: [
+                        {
+                            type: "bar",
+                            label: "Cant. Facturación VEH",
+                            data: scaledFacturacion,
+                            backgroundColor: "#f25c66",
+                            borderRadius: 4,
+                            barThickness: 14,
+                            yAxisID: "y",
+                            datalabels: {
+                                anchor: "end",
+                                align: function(context) {
+                                    const idx = context.dataIndex;
+                                    const chart = context.chart;
+                                    if (!chart.scales || !chart.scales.y || !chart.scales.y1) return 'start';
+                                    const redVal = chart.data.datasets[0].data[idx];
+                                    const yellowVal = chart.data.datasets[2].data[idx];
+                                    const yPixel = chart.scales.y.getPixelForValue(redVal);
+                                    const y1Pixel = chart.scales.y1.getPixelForValue(yellowVal);
+                                    return (y1Pixel < yPixel) ? 'start' : 'end';
+                                },
+                                offset: 4,
+                                color: "#ffffff",
+                                backgroundColor: "#f25c66",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 9 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 }
+                            }
+                        },
+                        {
+                            type: "bar",
+                            label: "Meta Facturación VEH",
+                            data: scaledMeta,
+                            backgroundColor: "#0B5FB0",
+                            borderRadius: 4,
+                            barThickness: 14,
+                            yAxisID: "y",
+                            datalabels: {
+                                anchor: "start",
+                                align: "end",
+                                color: "#ffffff",
+                                backgroundColor: "#0B5FB0",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 9 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 }
+                            }
+                        },
+                        {
+                            type: "line",
+                            label: "% Cumplimiento Facturación VEH",
+                            data: monthlyCmp,
+                            borderColor: "#ffd15c",
+                            borderWidth: 2,
+                            borderDash: [4, 4],
+                            pointBackgroundColor: "#ffd15c",
+                            pointRadius: 4,
+                            fill: false,
+                            yAxisID: "y1",
+                            datalabels: {
+                                anchor: "center",
+                                align: function(context) {
+                                    const idx = context.dataIndex;
+                                    const chart = context.chart;
+                                    if (!chart.scales || !chart.scales.y || !chart.scales.y1) return 'top';
+                                    const redVal = chart.data.datasets[0].data[idx];
+                                    const yellowVal = chart.data.datasets[2].data[idx];
+                                    const yPixel = chart.scales.y.getPixelForValue(redVal);
+                                    const y1Pixel = chart.scales.y1.getPixelForValue(yellowVal);
+                                    return (y1Pixel < yPixel) ? 'top' : 'bottom';
+                                },
+                                offset: 8,
+                                color: "#000000",
+                                backgroundColor: "#ffd15c",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 9 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 },
+                                formatter: v => v + " %"
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                            labels: { font: { family: "Inter", weight: "600", size: 10 }, color: "#334155" }
+                        },
+                        tooltip: baseTooltip,
+                        datalabels: { display: true }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#334155" } },
+                        y: {
+                            position: "left",
+                            beginAtZero: true,
+                            suggestedMax: Math.ceil(Math.max(...scaledFacturacion, ...scaledMeta) * 1.25),
+                            grid: { color: "rgba(0,0,0,0.03)" },
+                            ticks: { color: "#64748b" }
+                        },
+                        y1: { position: "right", beginAtZero: true, max: 150, grid: { display: false }, ticks: { color: "#64748b", callback: v => v + "%" } }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            // Zone Distribution Chart
+            const zoneData = [
+                { name: "LIMA", pct: 71 },
+                { name: "AREQUIPA", pct: 11 },
+                { name: "TRUJILLO", pct: 7 },
+                { name: "PIURA", pct: 5 },
+                { name: "CHICLAYO", pct: 4 },
+                { name: "HUANCAYO", pct: 2 }
+            ];
+
+            drawChart("edb-zone-chart", {
+                type: "bar",
+                data: {
+                    labels: zoneData.map(z => z.name),
+                    datasets: [{
+                        data: zoneData.map(z => z.pct),
+                        backgroundColor: ["#6a1b9a", "#8e24aa", "#ab47bc", "#ce93d8", "#e1bee7", "#f3e5f9"],
+                        borderRadius: 4,
+                        maxBarThickness: 20
+                    }]
+                },
+                options: {
+                    indexAxis: "y",
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { right: 30 } },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: baseTooltip,
+                        datalabels: {
+                            anchor: "end",
+                            align: "right",
+                            color: "#334155",
+                            font: { family: "Inter", weight: "700", size: 11 },
+                            formatter: v => v + "%"
+                        }
+                    },
+                    scales: {
+                        x: { display: false, max: 100 },
+                        y: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600", size: 11 }, color: "#334155" } }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            // Brand Distribution Chart
+            const brandBase = [
+                { name: "CHANGAN", val: 444 },
+                { name: "KIA", val: 351 },
+                { name: "TOYOTA", val: 348 },
+                { name: "JETOUR", val: 266 },
+                { name: "JAC", val: 237 },
+                { name: "HYUNDAI", val: 199 },
+                { name: "CHERY", val: 198 },
+                { name: "DFSK", val: 124 },
+                { name: "GEELY", val: 99 },
+                { name: "CHEVROLET", val: 96 }
+            ];
+            const brandScaled = brandBase.map(b => ({
+                name: b.name,
+                val: Math.round(b.val * yearScale * countryFactor * zonaFactor)
+            }));
+
+            drawChart("edb-brand-chart", {
+                type: "bar",
+                data: {
+                    labels: brandScaled.map(b => b.name),
+                    datasets: [{
+                        data: brandScaled.map(b => b.val),
+                        backgroundColor: "#3A7CA5",
+                        borderRadius: 4,
+                        maxBarThickness: 36
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: { padding: { top: 25 } },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: baseTooltip,
+                        datalabels: {
+                            anchor: "end",
+                            align: "top",
+                            color: "#334155",
+                            font: { family: "Inter", weight: "700", size: 11 },
+                            formatter: v => v.toLocaleString('es-PE')
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600", size: 9 }, color: "#334155", maxRotation: 45, minRotation: 45 } },
+                        y: { beginAtZero: true, grid: { color: "rgba(0,0,0,0.03)" }, ticks: { color: "#64748b" } }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        updateEdbFacturacionDashboard();
+    }
+
+    // ---- EDB ENTREGAS (slide 22) ----
+    function renderEdbEntregas(slide, host) {
+        if (!window.edbEntregasFilters) {
+            window.edbEntregasFilters = {
+                periodo: "Todos",
+                producto: "Todas",
+                zona: "Todas",
+                fuerza: "Todas"
+            };
+        }
+
+        host.innerHTML = `
+            <style>
+                .edb-top-row {
+                    display: grid;
+                    grid-template-columns: repeat(7, 1fr);
+                    gap: 16px;
+                    margin-bottom: 12px;
+                }
+                @media (max-width: 1200px) {
+                    .edb-top-row {
+                        grid-template-columns: repeat(4, 1fr);
+                    }
+                }
+                @media (max-width: 768px) {
+                    .edb-top-row {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                .edb-body-grid-entregas {
+                    display: grid;
+                    grid-template-columns: 1fr 1.8fr;
+                    gap: 20px;
+                }
+                @media (max-width: 992px) {
+                    .edb-body-grid-entregas {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                .edb-bottom-grid-entregas {
+                    display: grid;
+                    grid-template-columns: 1fr 1.8fr;
+                    gap: 20px;
+                    margin-top: 16px;
+                }
+                @media (max-width: 992px) {
+                    .edb-bottom-grid-entregas {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+
+            <div class="edb-top-row">
+                <!-- Periodo Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Periodo</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-entregas-periodo">
+                            <option value="Todos">Selección múltiple</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Producto Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Producto</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-entregas-producto">
+                            <option value="Todas">Todas</option>
+                            <option value="Autoahorro">Autoahorro</option>
+                            <option value="Motoahorro">Motoahorro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Zona Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Zona</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-entregas-zona">
+                            <option value="Todas">Todas</option>
+                            <option value="LIMA">LIMA</option>
+                            <option value="AREQUIPA">AREQUIPA</option>
+                            <option value="TRUJILLO">TRUJILLO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Fuerza de Entrega Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Fuerza de Entrega</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-entregas-fuerza">
+                            <option value="Todas">Todas</option>
+                            <option value="Fuerza A">Fuerza A</option>
+                            <option value="Fuerza B">Fuerza B</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- KPI 1 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="entregas-kpi-cant">1,540</span>
+                    <span class="adg-kpi-lbl">Cant. Vehículos Entregados</span>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="entregas-kpi-meta">265</span>
+                    <span class="adg-kpi-lbl">Meta Entregas VEH</span>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="entregas-kpi-cumplimiento">581 %</span>
+                    <span class="adg-kpi-lbl">% Cumplimiento Entregas VEH</span>
+                </div>
             </div>
-          </div>
 
-          <!-- Comparativo Mensual (Gráfico de Barras + Línea) -->
-          <div class="chart-card" style="width: 100%; margin: 0;">
-            <div class="chart-card-header">
-              <h3 class="chart-card-title"><i class="fa-solid fa-chart-line"></i><span>Comparativo Mensual: Reactivaciones vs Meta & % Cumplimiento (2025)</span></h3>
-              <div class="chart-legend">
-                <div class="legend-pill"><span class="legend-swatch" style="background:#E2674F"></span>Reactivaciones</div>
-                <div class="legend-pill"><span class="legend-swatch" style="background:#3A7CA5"></span>Meta</div>
-                <div class="legend-pill"><span class="legend-swatch line" style="background:#E0A458"></span>% Cumplimiento</div>
-              </div>
+            <div style="display: flex; flex-direction: column; gap: 16px; width: 100%;">
+                <!-- Monthly Table -->
+                <section class="table-card" style="margin: 0;">
+                    <div class="table-card-header">
+                        <h3 class="table-card-title"><i class="fa-solid fa-table"></i><span>Detalle de Entregas</span></h3>
+                    </div>
+                    <div class="table-outer-container" style="max-height: 380px; overflow-y: auto;">
+                        <table class="bitacoras-table">
+                            <thead style="position: sticky; top: 0; z-index: 10;">
+                                <tr>
+                                    <th>Año</th>
+                                    <th>Mes</th>
+                                    <th style="text-align: right;">Cant. Vehículos Entregados</th>
+                                    <th style="text-align: right;">Meta Entregas VEH</th>
+                                    <th style="text-align: right;">% Cumplimiento</th>
+                                </tr>
+                            </thead>
+                            <tbody id="entregas-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Monthly Chart -->
+                <section class="chart-card" style="margin: 0;">
+                    <div class="chart-card-header">
+                        <h3 class="chart-card-title"><i class="fa-solid fa-chart-column"></i><span>Evolutivo de Entregas y Meta</span></h3>
+                    </div>
+                    <div class="chart-canvas-wrapper" style="height: 360px;"><canvas id="entregas-monthly-chart"></canvas></div>
+                </section>
+
+                <div class="edb-bottom-grid-entregas">
+                    <!-- Facturación Propia vs Externa Pie Chart -->
+                    <section class="chart-card" style="margin: 0;">
+                        <div class="chart-card-header">
+                            <h3 class="chart-card-title"><i class="fa-solid fa-chart-pie"></i><span>Facturación Propia vs Externa</span></h3>
+                        </div>
+                        <div class="chart-canvas-wrapper" style="height: 280px; display: flex; justify-content: center; align-items: center;"><canvas id="entregas-pie-chart"></canvas></div>
+                    </section>
+
+                    <!-- Entregas por Categoría Bar Chart -->
+                    <section class="chart-card" style="margin: 0;">
+                        <div class="chart-card-header">
+                            <h3 class="chart-card-title"><i class="fa-solid fa-chart-bar"></i><span>% TG Cant. Vehículos Entregados (Categoría)</span></h3>
+                        </div>
+                        <div class="chart-canvas-wrapper" style="height: 280px;"><canvas id="entregas-cat-chart"></canvas></div>
+                    </section>
+                </div>
             </div>
-            <div class="chart-canvas-wrapper" style="height: 320px;"><canvas id="adg-monthly-chart"></canvas></div>
-          </div>
-        </div>
-      `;
+        `;
 
-      // Draw Zone Chart
-      drawChart("adg-zone-chart", {
-        type: "bar",
-        data: {
-          labels: ["LIMA", "AREQUIPA", "TRUJILLO", "CHICLAYO", "PIURA", "HUANCAYO"],
-          datasets: [{
-            data: [70, 14, 5, 4, 4, 4],
-            backgroundColor: ["#0E8C9B", "#3A7CA5", "#E0A458", "#E2674F", "#2A9D8F", "#6C8EBF"],
-            borderRadius: 6,
-            maxBarThickness: 26
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          indexAxis: "y",
-          plugins: {
-            legend: { display: false },
-            tooltip: baseTooltip,
-            datalabels: {
-              anchor: "end",
-              align: "right",
-              color: "#0C6470",
-              font: { family: "Inter", weight: "700", size: 10 },
-              formatter: v => v + "%"
-            }
-          },
-          scales: {
-            x: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%" }, grid: { color: "rgba(0,0,0,0.04)" } },
-            y: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#0C6470" } }
-          }
-        },
-        plugins: [ChartDataLabels]
-      });
+        // Event listeners
+        document.getElementById("f-entregas-periodo").addEventListener("change", (e) => {
+            window.edbEntregasFilters.periodo = e.target.value;
+            updateEdbEntregasDashboard();
+        });
+        document.getElementById("f-entregas-producto").addEventListener("change", (e) => {
+            window.edbEntregasFilters.producto = e.target.value;
+            updateEdbEntregasDashboard();
+        });
+        document.getElementById("f-entregas-zona").addEventListener("change", (e) => {
+            window.edbEntregasFilters.zona = e.target.value;
+            updateEdbEntregasDashboard();
+        });
+        document.getElementById("f-entregas-fuerza").addEventListener("change", (e) => {
+            window.edbEntregasFilters.fuerza = e.target.value;
+            updateEdbEntregasDashboard();
+        });
 
-      // Draw Monthly Chart
-      drawChart("adg-monthly-chart", {
-        data: {
-          labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Set", "Oct", "Nov", "Dic"],
-          datasets: [
-            {
-              type: "bar",
-              label: "Reactivaciones",
-              data: [292, 251, 245, 240, 249, 232, 235, 261, 273, 280, 255, 185],
-              backgroundColor: "#E2674F",
-              borderRadius: 5,
-              maxBarThickness: 20,
-              yAxisID: "y"
-            },
-            {
-              type: "bar",
-              label: "Meta",
-              data: [268, 257, 267, 264, 275, 257, 255, 290, 298, 298, 275, 248],
-              backgroundColor: "#3A7CA5",
-              borderRadius: 5,
-              maxBarThickness: 20,
-              yAxisID: "y"
-            },
-            {
-              type: "line",
-              label: "% Cumplimiento",
-              data: [109, 98, 92, 91, 91, 90, 92, 90, 92, 94, 93, 75],
-              borderColor: "#E0A458",
-              backgroundColor: "#E0A458",
-              borderWidth: 3,
-              tension: 0.3,
-              pointRadius: 4,
-              yAxisID: "y1",
-              datalabels: {
-                align: "top",
-                color: "#B46500",
-                font: { family: "Inter", weight: "700", size: 10 },
-                formatter: v => v + "%"
-              }
+        function updateEdbEntregasDashboard() {
+            const countryFactor = (selectedCountry === 'colombia') ? 0.65 : 1.0;
+            const periodo = window.edbEntregasFilters.periodo;
+            const producto = window.edbEntregasFilters.producto;
+            const zona = window.edbEntregasFilters.zona;
+            const fuerza = window.edbEntregasFilters.fuerza;
+
+            // Multipliers
+            let prodFactor = 1.0;
+            if (producto === "Autoahorro") prodFactor = 0.60;
+            else if (producto === "Motoahorro") prodFactor = 0.40;
+
+            let zonaFactor = 1.0;
+            if (zona === "LIMA") zonaFactor = 0.70;
+            else if (zona === "AREQUIPA") zonaFactor = 0.20;
+            else if (zona === "TRUJILLO") zonaFactor = 0.10;
+
+            let fuerzaFactor = 1.0;
+            if (fuerza === "Fuerza A") fuerzaFactor = 0.55;
+            else if (fuerza === "Fuerza B") fuerzaFactor = 0.45;
+
+            const filterFactor = prodFactor * zonaFactor * fuerzaFactor * countryFactor;
+
+            // Base monthly data (Baseline from screenshot)
+            const allMonths = ["agosto 2025", "enero 2026", "febrero 2026", "marzo 2026", "abril 2026", "mayo 2026", "junio 2026"];
+            const allEntregas = [225, 256, 242, 285, 277, 247, 8];
+            const allMeta = [265, 0, 0, 0, 0, 0, 0];
+
+            const baseMonths = [];
+            const baseEntregas = [];
+            const baseMeta = [];
+
+            for (let i = 0; i < allMonths.length; i++) {
+                const mStr = allMonths[i];
+                const yr = mStr.split(" ")[1];
+                if (periodo === "Todos" || periodo === yr) {
+                    baseMonths.push(allMonths[i]);
+                    baseEntregas.push(allEntregas[i]);
+                    baseMeta.push(allMeta[i]);
+                }
             }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          layout: { padding: { top: 15 } },
-          plugins: {
-            legend: { display: false },
-            tooltip: baseTooltip,
-            datalabels: {
-              display: ctx => ctx.dataset.type === "line"
+
+            const scaledEntregas = baseEntregas.map(v => Math.round(v * filterFactor));
+            const scaledMeta = baseMeta.map(v => Math.round(v * filterFactor));
+
+            const totalEntregas = scaledEntregas.reduce((a, b) => a + b, 0);
+            const totalMeta = scaledMeta.reduce((a, b) => a + b, 0);
+            const totalCumplimiento = totalMeta > 0 ? Math.round((totalEntregas / totalMeta) * 100) : 0;
+
+            // Update KPIs
+            document.getElementById("entregas-kpi-cant").textContent = totalEntregas.toLocaleString('es-PE');
+            document.getElementById("entregas-kpi-meta").textContent = totalMeta.toLocaleString('es-PE');
+            document.getElementById("entregas-kpi-cumplimiento").textContent = totalCumplimiento + " %";
+
+            // Table rows
+            const tbody = document.getElementById("entregas-table-body");
+            let tableHtml = "";
+            for (let i = 0; i < baseMonths.length; i++) {
+                const mStr = baseMonths[i];
+                const yr = mStr.split(" ")[1];
+                const ms = mStr.split(" ")[0];
+                const ent = scaledEntregas[i];
+                const met = scaledMeta[i];
+                let cmpText = "Infinito";
+                let cls = "compliance-high";
+                if (met > 0) {
+                    const cmp = Math.round((ent / met) * 100);
+                    cmpText = cmp + " %";
+                    cls = cmp >= 100 ? "compliance-high" : "compliance-low";
+                }
+                tableHtml += `
+                    <tr>
+                        <td>${yr}</td>
+                        <td>${ms}</td>
+                        <td style="text-align: right; font-weight: 600;">${ent.toLocaleString('es-PE')}</td>
+                        <td style="text-align: right; font-weight: 600;">${met > 0 ? met.toLocaleString('es-PE') : ""}</td>
+                        <td class="${cls}" style="text-align: right; font-weight: 700;">${cmpText}</td>
+                    </tr>
+                `;
             }
-          },
-          scales: {
-            x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#0C6470" } },
-            y: { position: "left", beginAtZero: true, grid: { color: "rgba(0,0,0,0.06)" }, ticks: { color: "#6b7280" } },
-            y1: { position: "right", beginAtZero: true, max: 150, grid: { display: false }, ticks: { color: "#6b7280", callback: v => v + "%" } }
-          }
-        },
-        plugins: [ChartDataLabels]
-      });
+            tableHtml += `
+                <tr class="total-row" style="background-color: rgba(0, 130, 150, 0.05); font-weight: 700;">
+                    <td colspan="2">Total</td>
+                    <td style="text-align: right;">${totalEntregas.toLocaleString('es-PE')}</td>
+                    <td style="text-align: right;">${totalMeta.toLocaleString('es-PE')}</td>
+                    <td style="text-align: right;" class="${totalCumplimiento >= 100 ? 'compliance-high' : 'compliance-low'}">${totalCumplimiento} %</td>
+                </tr>
+            `;
+            tbody.innerHTML = tableHtml;
+
+            // Monthly Compliance dataset
+            const monthlyCmp = scaledEntregas.map((ent, idx) => {
+                const met = scaledMeta[idx];
+                return met > 0 ? Math.round((ent / met) * 100) : null;
+            });
+
+            // Monthly Combo Chart (Bar + Line)
+            drawChart("entregas-monthly-chart", {
+                data: {
+                    labels: baseMonths,
+                    datasets: [
+                        {
+                            type: "bar",
+                            label: "Cant. Vehículos Entregados",
+                            data: scaledEntregas,
+                            backgroundColor: "#f25c66",
+                            borderRadius: 4,
+                            barThickness: 16,
+                            yAxisID: "y",
+                            datalabels: {
+                                anchor: "end",
+                                align: function(context) {
+                                    const idx = context.dataIndex;
+                                    const chart = context.chart;
+                                    if (!chart.scales || !chart.scales.y || !chart.scales.y1) return 'start';
+                                    const redVal = chart.data.datasets[0].data[idx];
+                                    const yellowVal = chart.data.datasets[2].data[idx];
+                                    if (yellowVal === null) return 'end';
+                                    const yPixel = chart.scales.y.getPixelForValue(redVal);
+                                    const y1Pixel = chart.scales.y1.getPixelForValue(yellowVal);
+                                    return (y1Pixel < yPixel) ? 'start' : 'end';
+                                },
+                                offset: 4,
+                                color: "#ffffff",
+                                backgroundColor: "#f25c66",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 9 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 }
+                            }
+                        },
+                        {
+                            type: "bar",
+                            label: "Meta Entregas VEH",
+                            data: scaledMeta.map(v => v > 0 ? v : null),
+                            backgroundColor: "#0B5FB0",
+                            borderRadius: 4,
+                            barThickness: 16,
+                            yAxisID: "y",
+                            datalabels: {
+                                anchor: "start",
+                                align: "end",
+                                color: "#ffffff",
+                                backgroundColor: "#0B5FB0",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 9 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 }
+                            }
+                        },
+                        {
+                            type: "line",
+                            label: "% Cumplimiento Entregas VEH",
+                            data: monthlyCmp,
+                            borderColor: "#ffd15c",
+                            borderWidth: 2,
+                            pointBackgroundColor: "#ffd15c",
+                            pointRadius: 6,
+                            fill: false,
+                            yAxisID: "y1",
+                            datalabels: {
+                                anchor: "center",
+                                align: function(context) {
+                                    const idx = context.dataIndex;
+                                    const chart = context.chart;
+                                    if (!chart.scales || !chart.scales.y || !chart.scales.y1) return 'top';
+                                    const redVal = chart.data.datasets[0].data[idx];
+                                    const yellowVal = chart.data.datasets[2].data[idx];
+                                    if (yellowVal === null) return 'top';
+                                    const yPixel = chart.scales.y.getPixelForValue(redVal);
+                                    const y1Pixel = chart.scales.y1.getPixelForValue(yellowVal);
+                                    return (y1Pixel < yPixel) ? 'top' : 'bottom';
+                                },
+                                offset: 10,
+                                color: "#000000",
+                                backgroundColor: "#ffd15c",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 10 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 },
+                                formatter: v => v + " %"
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                            labels: { font: { family: "Inter", weight: "600", size: 10 }, color: "#334155" }
+                        },
+                        tooltip: baseTooltip,
+                        datalabels: { display: true }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#334155" } },
+                        y: {
+                            position: "left",
+                            beginAtZero: true,
+                            suggestedMax: Math.ceil(Math.max(...scaledEntregas) * 1.25),
+                            grid: { color: "rgba(0,0,0,0.03)" },
+                            ticks: { color: "#64748b" }
+                        },
+                        y1: { position: "right", beginAtZero: true, max: 160, grid: { display: false }, ticks: { color: "#64748b", callback: v => v + "%" } }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            // Facturación Pie Chart
+            const externaVal = Math.round(589 * filterFactor);
+            const propiaVal = Math.round(951 * filterFactor);
+            const totalVal = externaVal + propiaVal;
+            const extPct = totalVal > 0 ? ((externaVal / totalVal) * 100).toFixed(2) : "0.00";
+            const propPct = totalVal > 0 ? ((propiaVal / totalVal) * 100).toFixed(2) : "0.00";
+
+            drawChart("entregas-pie-chart", {
+                type: "pie",
+                data: {
+                    labels: ["FACTURACIÓN EXTERNA", "FACTURACIÓN PROPIA"],
+                    datasets: [{
+                        data: [externaVal, propiaVal],
+                        backgroundColor: ["#0B5FB0", "#f25c66"],
+                        borderWidth: 2,
+                        borderColor: "#ffffff"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                            labels: { font: { family: "Inter", weight: "700", size: 10 }, color: "#334155" }
+                        },
+                        tooltip: baseTooltip,
+                        datalabels: {
+                            display: true,
+                            color: "#ffffff",
+                            font: { family: "Inter", weight: "700", size: 10 },
+                            formatter: (value, context) => {
+                                const pct = context.dataIndex === 0 ? extPct : propPct;
+                                return `${value} (${pct}%)`;
+                            }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+
+            // Slightly shift category data depending on filters so they change
+            let catData = [51, 39, 9];
+            if (producto === "Autoahorro") catData = [62, 30, 8];
+            else if (producto === "Motoahorro") catData = [35, 52, 13];
+            if (zona === "LIMA") catData = catData.map((v, i) => Math.max(2, v + (i === 0 ? 5 : -2)));
+            else if (zona === "AREQUIPA") catData = catData.map((v, i) => Math.max(2, v + (i === 1 ? 6 : -3)));
+
+            // Category Bar Chart
+            drawChart("entregas-cat-chart", {
+                type: "bar",
+                data: {
+                    labels: ["S", "M", "A"],
+                    datasets: [{
+                        data: catData,
+                        backgroundColor: "#0B5FB0",
+                        borderRadius: 4,
+                        maxBarThickness: 50
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: baseTooltip,
+                        datalabels: {
+                            anchor: "end",
+                            align: "top",
+                            color: "#334155",
+                            font: { family: "Inter", weight: "700", size: 11 },
+                            formatter: v => v + "%"
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600", size: 11 }, color: "#334155" } },
+                        y: { beginAtZero: true, max: 100, ticks: { callback: v => v + "%", color: "#64748b" }, grid: { color: "rgba(0,0,0,0.03)" } }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        updateEdbEntregasDashboard();
+    }
+
+
+    // ---- EDB CARTERA (slide 23) ----
+    function renderEdbCartera(slide, host) {
+        if (!window.edbCarteraFilters) {
+            window.edbCarteraFilters = {
+                periodo: "Todos",
+                zona: "Todas"
+            };
+        }
+
+        host.innerHTML = `
+            <style>
+                .edb-top-row-cartera {
+                    display: grid;
+                    grid-template-columns: repeat(6, 1fr);
+                    gap: 16px;
+                    margin-bottom: 12px;
+                }
+                @media (max-width: 1200px) {
+                    .edb-top-row-cartera {
+                        grid-template-columns: repeat(3, 1fr);
+                    }
+                }
+                @media (max-width: 768px) {
+                    .edb-top-row-cartera {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            </style>
+
+            <div class="edb-top-row-cartera">
+                <!-- Periodo Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Periodo</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-cartera-periodo">
+                            <option value="Todos">Selección múltiple</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Zona Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Zona</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-cartera-zona">
+                            <option value="Todas">Todas</option>
+                            <option value="LIMA">LIMA</option>
+                            <option value="AREQUIPA">AREQUIPA</option>
+                            <option value="TRUJILLO">TRUJILLO</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- KPI 1 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="cartera-kpi-adjudicados">-</span>
+                    <span class="adg-kpi-lbl">Cant. Adjudicados VEH</span>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="cartera-kpi-sinvinculados">-</span>
+                    <span class="adg-kpi-lbl">Cant. Sin Vinculados</span>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="cartera-kpi-promedio">-</span>
+                    <span class="adg-kpi-lbl">Prom. Adjudicaciones VEH</span>
+                </div>
+
+                <!-- KPI 4 -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="cartera-kpi-indicador">-</span>
+                    <span class="adg-kpi-lbl">Indicador de Cartera</span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px; width: 100%;">
+                <!-- Table -->
+                <section class="table-card" style="margin: 0;">
+                    <div class="table-card-header">
+                        <h3 class="table-card-title"><i class="fa-solid fa-table"></i><span>Detalle de Cartera</span></h3>
+                    </div>
+                    <div class="table-outer-container" style="max-height: 380px; overflow-y: auto;">
+                        <table class="bitacoras-table">
+                            <thead style="position: sticky; top: 0; z-index: 10;">
+                                <tr>
+                                    <th>Año</th>
+                                    <th>Mes</th>
+                                    <th style="text-align: right;">Cant. Adjudicados VEH</th>
+                                    <th style="text-align: right;">Cant. Sin Vinculados</th>
+                                    <th style="text-align: right;">Prom. Adjudicaciones VEH</th>
+                                    <th style="text-align: right;">Indicador de Cartera</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cartera-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Chart -->
+                <section class="chart-card" style="margin: 0;">
+                    <div class="chart-card-header">
+                        <h3 class="chart-card-title"><i class="fa-solid fa-chart-line"></i><span>Evolutivo de Cartera</span></h3>
+                    </div>
+                    <div class="chart-canvas-wrapper" style="height: 360px;"><canvas id="cartera-monthly-chart"></canvas></div>
+                </section>
+            </div>
+        `;
+
+        document.getElementById("f-cartera-periodo").addEventListener("change", (e) => {
+            window.edbCarteraFilters.periodo = e.target.value;
+            updateEdbCarteraDashboard();
+        });
+        document.getElementById("f-cartera-zona").addEventListener("change", (e) => {
+            window.edbCarteraFilters.zona = e.target.value;
+            updateEdbCarteraDashboard();
+        });
+
+        function updateEdbCarteraDashboard() {
+            const countryFactor = (selectedCountry === 'colombia') ? 0.65 : 1.0;
+            const periodo = window.edbCarteraFilters.periodo;
+            const zona = window.edbCarteraFilters.zona;
+
+            let zonaFactor = 1.0;
+            if (zona === "LIMA") zonaFactor = 0.70;
+            else if (zona === "AREQUIPA") zonaFactor = 0.20;
+            else if (zona === "TRUJILLO") zonaFactor = 0.10;
+
+            const totalFactor = countryFactor * zonaFactor;
+
+            // Full datasets
+            const allMonths = [
+                "enero 2024", "febrero 2024", "marzo 2024", "abril 2024", "mayo 2024", "junio 2024", "julio 2024", "agosto 2024", "septiembre 2024", "octubre 2024", "noviembre 2024", "diciembre 2024",
+                "enero 2025", "febrero 2025", "marzo 2025", "abril 2025", "mayo 2025", "junio 2025", "julio 2025", "agosto 2025", "septiembre 2025", "octubre 2025"
+            ];
+            const allAdjudicados = [350, 370, 360, 340, 330, 310, 320, 315, 380, 446, 427, 355, 472, 468, 473, 454, 405, 454, 518, 459, 490, 558];
+            const allSinVinculados = [520, 550, 540, 530, 510, 490, 500, 495, 596, 677, 690, 644, 685, 755, 802, 794, 774, 788, 818, 842, 839, 915];
+            const allPromedio = [360, 380, 370, 355, 340, 325, 335, 330, 396, 407, 418, 409, 418, 432, 471, 465, 444, 438, 459, 477, 489, 502];
+            const allIndicador = [1.72, 1.86, 1.86, 1.79, 1.72, 1.59, 1.63, 1.61, 1.51, 1.66, 1.65, 1.57, 1.64, 1.75, 1.70, 1.71, 1.74, 1.80, 1.78, 1.77, 1.72, 1.82];
+
+            // Filter datasets
+            const baseMonths = [];
+            const baseAdjudicados = [];
+            const baseSinVinculados = [];
+            const basePromedio = [];
+            const baseIndicador = [];
+
+            for (let i = 0; i < allMonths.length; i++) {
+                const mStr = allMonths[i];
+                const yr = mStr.split(" ")[1];
+                if (periodo === "Todos" || periodo === yr) {
+                    baseMonths.push(allMonths[i]);
+                    baseAdjudicados.push(allAdjudicados[i]);
+                    baseSinVinculados.push(allSinVinculados[i]);
+                    basePromedio.push(allPromedio[i]);
+                    baseIndicador.push(allIndicador[i]);
+                }
+            }
+
+            // Scaled datasets
+            const scaledAdjudicados = baseAdjudicados.map(v => Math.round(v * totalFactor));
+            const scaledSinVinculados = baseSinVinculados.map(v => Math.round(v * totalFactor));
+            const scaledPromedio = basePromedio.map(v => Math.round(v * totalFactor));
+            const scaledIndicador = baseIndicador;
+
+            // Latest values for KPIs
+            const lastIdx = baseMonths.length - 1;
+            const kpiAdjudicados = lastIdx >= 0 ? scaledAdjudicados[lastIdx] : 0;
+            const kpiSinVinculados = lastIdx >= 0 ? scaledSinVinculados[lastIdx] : 0;
+            const kpiPromedio = lastIdx >= 0 ? scaledPromedio[lastIdx] : 0;
+            const kpiIndicador = lastIdx >= 0 ? scaledIndicador[lastIdx].toFixed(2).replace('.', ',') : "0,00";
+
+            // Update KPIs
+            document.getElementById("cartera-kpi-adjudicados").textContent = kpiAdjudicados.toLocaleString('es-PE');
+            document.getElementById("cartera-kpi-sinvinculados").textContent = kpiSinVinculados.toLocaleString('es-PE');
+            document.getElementById("cartera-kpi-promedio").textContent = kpiPromedio.toLocaleString('es-PE');
+            document.getElementById("cartera-kpi-indicador").textContent = kpiIndicador;
+
+            // Table rows
+            const tbody = document.getElementById("cartera-table-body");
+            let tableHtml = "";
+            for (let i = 0; i < baseMonths.length; i++) {
+                const mStr = baseMonths[i];
+                const yr = mStr.split(" ")[1];
+                const ms = mStr.split(" ")[0];
+                const adj = scaledAdjudicados[i];
+                const sin = scaledSinVinculados[i];
+                const prom = scaledPromedio[i];
+                const ind = scaledIndicador[i].toFixed(2).replace('.', ',');
+                tableHtml += `
+                    <tr>
+                        <td>${yr}</td>
+                        <td>${ms}</td>
+                        <td style="text-align: right; font-weight: 600;">${adj.toLocaleString('es-PE')}</td>
+                        <td style="text-align: right; font-weight: 600;">${sin.toLocaleString('es-PE')}</td>
+                        <td style="text-align: right; font-weight: 600;">${prom.toLocaleString('es-PE')}</td>
+                        <td style="text-align: right; font-weight: 700; color: #0b5fb0;">${ind}</td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = tableHtml;
+
+            // Draw Line Chart
+            drawChart("cartera-monthly-chart", {
+                type: "line",
+                data: {
+                    labels: baseMonths.map(m => {
+                        const parts = m.split(" ");
+                        return parts[0].substring(0, 3) + " " + parts[1];
+                    }),
+                    datasets: [
+                        {
+                            label: "Indicador de Cartera",
+                            data: scaledIndicador,
+                            borderColor: "#0B5FB0",
+                            borderWidth: 3,
+                            borderDash: [2, 2],
+                            pointBackgroundColor: "#0B5FB0",
+                            pointRadius: 5,
+                            fill: false,
+                            datalabels: {
+                                anchor: "center",
+                                align: "top",
+                                offset: 10,
+                                color: "#ffffff",
+                                backgroundColor: "#0B5FB0",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 10 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 },
+                                formatter: v => v.toFixed(2).replace('.', ',')
+                            }
+                        },
+                        {
+                            label: "Meta Indicador Cartera",
+                            data: Array(baseMonths.length).fill(1.48),
+                            borderColor: "#f25c66",
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            pointRadius: 0,
+                            fill: false,
+                            datalabels: {
+                                display: (context) => context.dataIndex === 0 || context.dataIndex === context.dataset.data.length - 1,
+                                anchor: "center",
+                                align: "top",
+                                color: "#ffffff",
+                                backgroundColor: "#f25c66",
+                                borderRadius: 3,
+                                font: { family: "Inter", weight: "700", size: 10 },
+                                padding: { top: 3, bottom: 3, left: 6, right: 6 },
+                                formatter: v => v.toFixed(2).replace('.', ',')
+                            }
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                            labels: { font: { family: "Inter", weight: "600", size: 10 }, color: "#334155" }
+                        },
+                        tooltip: baseTooltip,
+                        datalabels: { display: true }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#334155" } },
+                        y: {
+                            beginAtZero: false,
+                            suggestedMin: 1.0,
+                            suggestedMax: 2.2,
+                            grid: { color: "rgba(0,0,0,0.03)" },
+                            ticks: { color: "#64748b" }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        updateEdbCarteraDashboard();
+    }
+
+    // ==================== RRHH - VENDEDORES SIN VENTA ====================
+    function renderRrhhVendedores(slide, host) {
+        if (!window.rrhhFilters) {
+            window.rrhhFilters = {
+                ciudad: "Todas"
+            };
+        }
+
+        host.innerHTML = `
+            <style>
+                .rrhh-top-row {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 16px;
+                    margin-bottom: 12px;
+                }
+                @media (max-width: 992px) {
+                    .rrhh-top-row {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (max-width: 576px) {
+                    .rrhh-top-row {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                /* Scrollable table container with fixed first column */
+                .rrhh-table-wrapper {
+                    position: relative;
+                    width: 100%;
+                    overflow-x: auto;
+                    max-height: 400px;
+                    border-radius: 8px;
+                    background: #ffffff;
+                }
+                .rrhh-custom-table {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    font-size: 11px;
+                }
+                .rrhh-custom-table th, 
+                .rrhh-custom-table td {
+                    padding: 6px 8px;
+                    text-align: center;
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                    border-right: 1px solid rgba(0, 0, 0, 0.05);
+                    white-space: nowrap;
+                }
+                /* Table Colors matching the screenshot */
+                .rrhh-custom-table thead tr:first-child th {
+                    background-color: #ffffff;
+                    color: var(--color-turquoise-dark);
+                    font-weight: 700;
+                }
+                .rrhh-custom-table thead tr:last-child th,
+                .rrhh-custom-table thead th[colspan] {
+                    background-color: #0b5fb0;
+                    color: #ffffff;
+                    font-weight: 600;
+                }
+                .rrhh-custom-table th.ciudad-hdr,
+                .rrhh-custom-table td.ciudad-cell {
+                    position: sticky;
+                    left: 0;
+                    background-color: #0b5fb0 !important;
+                    color: #ffffff !important;
+                    font-weight: 700;
+                    z-index: 5;
+                    border-right: 2px solid rgba(0,0,0,0.1);
+                }
+                .rrhh-custom-table tr:hover td {
+                    background-color: rgba(0, 130, 150, 0.04);
+                }
+                .rrhh-custom-table tr.total-row td {
+                    background-color: #0b5fb0;
+                    color: #ffffff;
+                    font-weight: 700;
+                }
+                .rrhh-custom-table tr.highlighted-row td:not(.ciudad-cell) {
+                    background-color: rgba(255, 209, 92, 0.15);
+                    font-weight: 600;
+                }
+            </style>
+
+            <div class="rrhh-top-row">
+                <!-- Ciudad Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Ciudad</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-rrhh-vendedores-ciudad">
+                            <option value="Todas">Todas</option>
+                            <option value="BOGOTA">BOGOTÁ</option>
+                            <option value="BARRANQUILLA">BARRANQUILLA</option>
+                            <option value="MEDELLIN">MEDELLÍN</option>
+                            <option value="BUCARAMANGA">BUCARAMANGA</option>
+                            <option value="CALI">CALI</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- KPI 1: Cantidad Cero Ventas (Último Mes) -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="rrhh-kpi-cant">126</span>
+                    <span class="adg-kpi-lbl">Vendedores con Cero Ventas</span>
+                </div>
+
+                <!-- KPI 2: % Cero Ventas (Último Mes) -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="rrhh-kpi-pct">29 %</span>
+                    <span class="adg-kpi-lbl">% Vendedores Cero Ventas</span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px; width: 100%;">
+                <!-- Table Card -->
+                <section class="table-card" style="margin: 0; padding: 15px;">
+                    <div class="table-card-header" style="margin-bottom: 10px;">
+                        <h3 class="table-card-title"><i class="fa-solid fa-table"></i><span>Cantidad de Vendedores con Cero Ventas</span></h3>
+                    </div>
+                    <div class="rrhh-table-wrapper">
+                        <table class="rrhh-custom-table" id="rrhh-vendedores-table">
+                            <!-- Dynamic content -->
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Chart Card -->
+                <section class="chart-card" style="margin: 0; padding: 15px;">
+                    <div class="chart-card-header">
+                        <h3 class="chart-card-title"><i class="fa-solid fa-chart-column"></i><span id="rrhh-chart-title">Evolución de Vendedores con Cero Ventas</span></h3>
+                    </div>
+                    <div class="chart-canvas-wrapper" style="height: 300px;"><canvas id="rrhh-vendedores-chart"></canvas></div>
+                </section>
+            </div>
+        `;
+
+        document.getElementById("f-rrhh-vendedores-ciudad").value = window.rrhhFilters.ciudad;
+        document.getElementById("f-rrhh-vendedores-ciudad").addEventListener("change", (e) => {
+            window.rrhhFilters.ciudad = e.target.value;
+            updateRrhhVendedores();
+        });
+
+        function updateRrhhVendedores() {
+            const selCiudad = window.rrhhFilters.ciudad;
+            const months = ["may-25", "jun-25", "jul-25", "ago-25", "sep-25", "oct-25", "nov-25", "dic-25", "ene-26", "feb-26", "mar-26", "abr-26", "may-26"];
+            const cities = ["BOGOTA", "BARRANQUILLA", "MEDELLIN", "BUCARAMANGA", "CALI"];
+            
+            const vendedoresData = {
+                "BOGOTA": [26, 31, 16, 21, 23, 29, 38, 11, 21, 10, 20, 30, 26],
+                "BARRANQUILLA": [37, 29, 25, 29, 36, 32, 39, 40, 39, 22, 11, 30, 25],
+                "MEDELLIN": [8, 32, 25, 25, 27, 23, 36, 24, 33, 19, 24, 31, 37],
+                "BUCARAMANGA": [14, 16, 20, 24, 25, 23, 34, 27, 12, 18, 22, 36, 30],
+                "CALI": [null, null, null, 1, 0, 3, 7, 1, 3, 6, 3, 9, 8]
+            };
+
+            const dotacionData = {
+                "BOGOTA": [66, 69, 57, 68, 77, 81, 90, 77, 85, 67, 87, 93, 94],
+                "BARRANQUILLA": [104, 97, 87, 92, 103, 102, 92, 91, 91, 77, 69, 78, 80],
+                "MEDELLIN": [59, 76, 72, 78, 82, 86, 95, 86, 107, 102, 108, 115, 112],
+                "BUCARAMANGA": [54, 57, 70, 86, 83, 94, 97, 96, 97, 95, 103, 125, 117],
+                "CALI": [null, null, null, 2, 3, 6, 12, 15, 19, 29, 26, 36, 38]
+            };
+
+            // Compute Totals
+            const totalVendedores = [];
+            const totalDotacion = [];
+            const totalPct = [];
+            
+            for (let m = 0; m < months.length; m++) {
+                let sumVend = 0;
+                let sumDot = 0;
+                cities.forEach(c => {
+                    const valV = vendedoresData[c][m];
+                    const valD = dotacionData[c][m];
+                    if (valV !== null) sumVend += valV;
+                    if (valD !== null) sumDot += valD;
+                });
+                totalVendedores.push(sumVend);
+                totalDotacion.push(sumDot);
+                totalPct.push(sumDot > 0 ? Math.round((sumVend / sumDot) * 100) : 0);
+            }
+
+            // Update KPIs (use may-26 index = 12)
+            let lastV = 126;
+            let lastD = 441;
+            let lastP = 29;
+
+            if (selCiudad !== "Todas") {
+                const mIdx = months.length - 1;
+                lastV = vendedoresData[selCiudad][mIdx] || 0;
+                lastD = dotacionData[selCiudad][mIdx] || 0;
+                lastP = lastD > 0 ? Math.round((lastV / lastD) * 100) : 0;
+            }
+
+            document.getElementById("rrhh-kpi-cant").textContent = lastV.toLocaleString('es-PE');
+            document.getElementById("rrhh-kpi-pct").textContent = lastP + " %";
+
+            // Render Table
+            const table = document.getElementById("rrhh-vendedores-table");
+            let headerHtml = `
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="ciudad-hdr" style="vertical-align: middle;">CIUDAD</th>
+                        ${months.map(m => `<th colspan="2" style="border-bottom: 1px solid rgba(255,255,255,0.2);">${m}</th>`).join('')}
+                    </tr>
+                    <tr>
+                        ${months.map(() => `<th>Cant.</th><th>%</th>`).join('')}
+                    </tr>
+                </thead>
+            `;
+
+            let bodyHtml = "<tbody>";
+            cities.forEach(c => {
+                const isHighlighted = (c === selCiudad);
+                bodyHtml += `<tr class="${isHighlighted ? 'highlighted-row' : ''}">`;
+                bodyHtml += `<td class="ciudad-cell">${c}</td>`;
+                for (let m = 0; m < months.length; m++) {
+                    const v = vendedoresData[c][m];
+                    const d = dotacionData[c][m];
+                    const pct = (v !== null && d > 0) ? Math.round((v / d) * 100) : null;
+                    bodyHtml += `
+                        <td>${v !== null ? v : ''}</td>
+                        <td>${pct !== null ? pct + '%' : ''}</td>
+                    `;
+                }
+                bodyHtml += `</tr>`;
+            });
+
+            // Total row
+            bodyHtml += `<tr class="total-row">`;
+            bodyHtml += `<td class="ciudad-cell" style="background-color: #0b5fb0 !important;">TOTAL</td>`;
+            for (let m = 0; m < months.length; m++) {
+                bodyHtml += `
+                    <td>${totalVendedores[m]}</td>
+                    <td>${totalPct[m]}%</td>
+                `;
+            }
+            bodyHtml += `</tr></tbody>`;
+            table.innerHTML = headerHtml + bodyHtml;
+
+            // Render Chart
+            let chartDatasets = [];
+            let chartTitle = "";
+
+            if (selCiudad === "Todas") {
+                chartTitle = "Vendedores con Cero Ventas por Ciudad (Cantidad)";
+                // Stacked bars of all cities
+                const colors = ["#0B5FB0", "#3A7CA5", "#E0A458", "#E2674F", "#2A9D8F"];
+                chartDatasets = cities.map((c, idx) => ({
+                    label: c,
+                    data: vendedoresData[c],
+                    backgroundColor: colors[idx],
+                    stack: 'stack1',
+                    borderRadius: 2
+                }));
+            } else {
+                chartTitle = `Desempeño de Vendedores sin Venta: ${selCiudad}`;
+                chartDatasets = [
+                    {
+                        type: "bar",
+                        label: "Cant. Vendedores sin Venta",
+                        data: vendedoresData[selCiudad],
+                        backgroundColor: "#0B5FB0",
+                        yAxisID: "y",
+                        borderRadius: 4,
+                        barThickness: 20,
+                        datalabels: {
+                            anchor: "end",
+                            align: "top",
+                            color: "#334155",
+                            font: { family: "Inter", weight: "700", size: 9 }
+                        }
+                    },
+                    {
+                        type: "line",
+                        label: "% Cero Ventas",
+                        data: vendedoresData[selCiudad].map((v, mIdx) => {
+                            const d = dotacionData[selCiudad][mIdx];
+                            return (v !== null && d > 0) ? Math.round((v / d) * 100) : null;
+                        }),
+                        borderColor: "#f25c66",
+                        borderWidth: 2,
+                        pointBackgroundColor: "#f25c66",
+                        pointRadius: 4,
+                        fill: false,
+                        yAxisID: "y1",
+                        datalabels: {
+                            anchor: "center",
+                            align: "top",
+                            color: "#f25c66",
+                            font: { family: "Inter", weight: "700", size: 9 },
+                            formatter: v => v !== null ? v + "%" : ""
+                        }
+                    }
+                ];
+            }
+
+            document.getElementById("rrhh-chart-title").textContent = chartTitle;
+
+            drawChart("rrhh-vendedores-chart", {
+                type: selCiudad === "Todas" ? "bar" : "bar",
+                data: {
+                    labels: months,
+                    datasets: chartDatasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                            labels: { font: { family: "Inter", weight: "600", size: 10 }, color: "#334155" }
+                        },
+                        tooltip: baseTooltip,
+                        datalabels: {
+                            display: selCiudad !== "Todas",
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#334155" } },
+                        y: {
+                            position: "left",
+                            beginAtZero: true,
+                            grid: { color: "rgba(0,0,0,0.03)" },
+                            ticks: { color: "#64748b" }
+                        },
+                        y1: selCiudad === "Todas" ? { display: false } : {
+                            position: "right",
+                            beginAtZero: true,
+                            max: 100,
+                            grid: { display: false },
+                            ticks: { color: "#64748b", callback: v => v + "%" }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        updateRrhhVendedores();
+    }
+
+    // ==================== RRHH - TOTAL DOTACIÓN ====================
+    function renderRrhhDotacion(slide, host) {
+        if (!window.rrhhFilters) {
+            window.rrhhFilters = {
+                ciudad: "Todas"
+            };
+        }
+
+        host.innerHTML = `
+            <style>
+                .rrhh-top-row {
+                    display: grid;
+                    grid-template-columns: repeat(4, 1fr);
+                    gap: 16px;
+                    margin-bottom: 12px;
+                }
+                @media (max-width: 992px) {
+                    .rrhh-top-row {
+                        grid-template-columns: repeat(2, 1fr);
+                    }
+                }
+                @media (max-width: 576px) {
+                    .rrhh-top-row {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                .rrhh-table-wrapper {
+                    position: relative;
+                    width: 100%;
+                    overflow-x: auto;
+                    max-height: 400px;
+                    border-radius: 8px;
+                    background: #ffffff;
+                }
+                .rrhh-custom-table {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    font-size: 11px;
+                }
+                .rrhh-custom-table th, 
+                .rrhh-custom-table td {
+                    padding: 8px 10px;
+                    text-align: center;
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                    border-right: 1px solid rgba(0, 0, 0, 0.05);
+                    white-space: nowrap;
+                }
+                .rrhh-custom-table thead tr th {
+                    background-color: #0b5fb0;
+                    color: #ffffff;
+                    font-weight: 600;
+                }
+                .rrhh-custom-table th.ciudad-hdr,
+                .rrhh-custom-table td.ciudad-cell {
+                    position: sticky;
+                    left: 0;
+                    background-color: #0b5fb0 !important;
+                    color: #ffffff !important;
+                    font-weight: 700;
+                    z-index: 5;
+                    border-right: 2px solid rgba(0,0,0,0.1);
+                }
+                .rrhh-custom-table tr:hover td {
+                    background-color: rgba(0, 130, 150, 0.04);
+                }
+                .rrhh-custom-table tr.total-row td {
+                    background-color: #0b5fb0;
+                    color: #ffffff;
+                    font-weight: 700;
+                }
+                .rrhh-custom-table tr.highlighted-row td:not(.ciudad-cell) {
+                    background-color: rgba(255, 209, 92, 0.15);
+                    font-weight: 600;
+                }
+            </style>
+
+            <div class="rrhh-top-row">
+                <!-- Ciudad Filter -->
+                <div class="adg-filter-card">
+                    <span class="adg-filter-title">Ciudad</span>
+                    <div class="select-wrapper">
+                        <select class="select-neumorphic" id="f-rrhh-dotacion-ciudad">
+                            <option value="Todas">Todas</option>
+                            <option value="BOGOTA">BOGOTÁ</option>
+                            <option value="BARRANQUILLA">BARRANQUILLA</option>
+                            <option value="MEDELLIN">MEDELLÍN</option>
+                            <option value="BUCARAMANGA">BUCARAMANGA</option>
+                            <option value="CALI">CALI</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- KPI 1: Total Dotación (Último Mes) -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" id="rrhh-dot-kpi-total">441</span>
+                    <span class="adg-kpi-lbl">Total Dotación Colombia</span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px; width: 100%;">
+                <!-- Table Card -->
+                <section class="table-card" style="margin: 0; padding: 15px;">
+                    <div class="table-card-header" style="margin-bottom: 10px;">
+                        <h3 class="table-card-title"><i class="fa-solid fa-table"></i><span>Total Dotación por Zonas</span></h3>
+                    </div>
+                    <div class="rrhh-table-wrapper">
+                        <table class="rrhh-custom-table" id="rrhh-dotacion-table">
+                            <!-- Dynamic content -->
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Chart Card -->
+                <section class="chart-card" style="margin: 0; padding: 15px;">
+                    <div class="chart-card-header">
+                        <h3 class="chart-card-title"><i class="fa-solid fa-chart-line"></i><span id="rrhh-dot-chart-title">Evolución de Dotación por Zonas</span></h3>
+                    </div>
+                    <div class="chart-canvas-wrapper" style="height: 300px;"><canvas id="rrhh-dotacion-chart"></canvas></div>
+                </section>
+            </div>
+        `;
+
+        document.getElementById("f-rrhh-dotacion-ciudad").value = window.rrhhFilters.ciudad;
+        document.getElementById("f-rrhh-dotacion-ciudad").addEventListener("change", (e) => {
+            window.rrhhFilters.ciudad = e.target.value;
+            updateRrhhDotacion();
+        });
+
+        function updateRrhhDotacion() {
+            const selCiudad = window.rrhhFilters.ciudad;
+            const months = ["may-25", "jun-25", "jul-25", "ago-25", "sep-25", "oct-25", "nov-25", "dic-25", "ene-26", "feb-26", "mar-26", "abr-26", "may-26"];
+            const cities = ["BOGOTA", "BARRANQUILLA", "MEDELLIN", "BUCARAMANGA", "CALI"];
+
+            const dotacionData = {
+                "BOGOTA": [66, 69, 57, 68, 77, 81, 90, 77, 85, 67, 87, 93, 94],
+                "BARRANQUILLA": [104, 97, 87, 92, 103, 102, 92, 91, 91, 77, 69, 78, 80],
+                "MEDELLIN": [59, 76, 72, 78, 82, 86, 95, 86, 107, 102, 108, 115, 112],
+                "BUCARAMANGA": [54, 57, 70, 86, 83, 94, 97, 96, 97, 95, 103, 125, 117],
+                "CALI": [null, null, null, 2, 3, 6, 12, 15, 19, 29, 26, 36, 38]
+            };
+
+            const totalDotacion = [283, 299, 286, 326, 348, 369, 386, 365, 399, 370, 393, 447, 441];
+
+            // Update KPI
+            let lastD = 441;
+            if (selCiudad !== "Todas") {
+                lastD = dotacionData[selCiudad][months.length - 1] || 0;
+            }
+            document.getElementById("rrhh-dot-kpi-total").textContent = lastD.toLocaleString('es-PE');
+
+            // Render Table
+            const table = document.getElementById("rrhh-dotacion-table");
+            let headerHtml = `
+                <thead>
+                    <tr>
+                        <th class="ciudad-hdr">CIUDAD</th>
+                        ${months.map(m => `<th>${m}</th>`).join('')}
+                    </tr>
+                </thead>
+            `;
+
+            let bodyHtml = "<tbody>";
+            cities.forEach(c => {
+                const isHighlighted = (c === selCiudad);
+                bodyHtml += `<tr class="${isHighlighted ? 'highlighted-row' : ''}">`;
+                bodyHtml += `<td class="ciudad-cell">${c}</td>`;
+                for (let m = 0; m < months.length; m++) {
+                    const val = dotacionData[c][m];
+                    bodyHtml += `<td>${val !== null ? val : ''}</td>`;
+                }
+                bodyHtml += `</tr>`;
+            });
+
+            // Total row
+            bodyHtml += `<tr class="total-row">`;
+            bodyHtml += `<td class="ciudad-cell" style="background-color: #0b5fb0 !important;">TOTAL</td>`;
+            totalDotacion.forEach(t => {
+                bodyHtml += `<td>${t}</td>`;
+            });
+            bodyHtml += `</tr></tbody>`;
+            table.innerHTML = headerHtml + bodyHtml;
+
+            // Render Chart
+            let chartDatasets = [];
+            let chartTitle = "";
+
+            if (selCiudad === "Todas") {
+                chartTitle = "Distribución de Dotación por Zonas";
+                const colors = ["#0E8C9B", "#3A7CA5", "#E0A458", "#E2674F", "#2A9D8F"];
+                chartDatasets = cities.map((c, idx) => ({
+                    type: "bar",
+                    label: c,
+                    data: dotacionData[c],
+                    backgroundColor: colors[idx],
+                    stack: 'stack1',
+                    borderRadius: 2
+                }));
+            } else {
+                chartTitle = `Evolutivo de Dotación: ${selCiudad}`;
+                chartDatasets = [{
+                    type: "line",
+                    label: "Total Dotación",
+                    data: dotacionData[selCiudad],
+                    borderColor: "#0B5FB0",
+                    borderWidth: 3,
+                    pointBackgroundColor: "#0B5FB0",
+                    pointRadius: 5,
+                    fill: false,
+                    datalabels: {
+                        display: true,
+                        anchor: "center",
+                        align: "top",
+                        color: "#0B5FB0",
+                        font: { family: "Inter", weight: "700", size: 10 }
+                    }
+                }];
+            }
+
+            document.getElementById("rrhh-dot-chart-title").textContent = chartTitle;
+
+            drawChart("rrhh-dotacion-chart", {
+                type: selCiudad === "Todas" ? "bar" : "line",
+                data: {
+                    labels: months,
+                    datasets: chartDatasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: "top",
+                            labels: { font: { family: "Inter", weight: "600", size: 10 }, color: "#334155" }
+                        },
+                        tooltip: baseTooltip,
+                        datalabels: {
+                            display: selCiudad !== "Todas",
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#334155" } },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: "rgba(0,0,0,0.03)" },
+                            ticks: { color: "#64748b" }
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            });
+        }
+
+        updateRrhhDotacion();
+    }
+
+    // ==================== RRHH - TOTAL MAQUIMAS COLOMBIA ====================
+    function renderRrhhColombia(slide, host) {
+        host.innerHTML = `
+            <style>
+                .rrhh-top-row {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 16px;
+                    margin-bottom: 12px;
+                }
+                @media (max-width: 768px) {
+                    .rrhh-top-row {
+                        grid-template-columns: 1fr;
+                    }
+                }
+                .rrhh-table-wrapper {
+                    position: relative;
+                    width: 100%;
+                    overflow-x: auto;
+                    border-radius: 8px;
+                    background: #ffffff;
+                }
+                .rrhh-custom-table {
+                    width: 100%;
+                    border-collapse: separate;
+                    border-spacing: 0;
+                    font-size: 11px;
+                }
+                .rrhh-custom-table th, 
+                .rrhh-custom-table td {
+                    padding: 8px 10px;
+                    text-align: center;
+                    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+                    border-right: 1px solid rgba(0, 0, 0, 0.05);
+                    white-space: nowrap;
+                }
+                .rrhh-custom-table thead tr th {
+                    background-color: #0b5fb0;
+                    color: #ffffff;
+                    font-weight: 600;
+                }
+                .rrhh-custom-table td.label-cell {
+                    position: sticky;
+                    left: 0;
+                    font-weight: 700;
+                    z-index: 5;
+                    border-right: 2px solid rgba(0,0,0,0.1);
+                }
+                .rrhh-custom-table tr.total-row td {
+                    font-weight: 700;
+                }
+            </style>
+
+            <div class="rrhh-top-row">
+                <!-- KPI 1: Ventas -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" style="color: #0B5FB0;">897</span>
+                    <span class="adg-kpi-lbl">Ventas (Último Mes)</span>
+                </div>
+
+                <!-- KPI 2: Dotación -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" style="color: #3A7CA5;">441</span>
+                    <span class="adg-kpi-lbl">Dotación (Último Mes)</span>
+                </div>
+
+                <!-- KPI 3: Productividad -->
+                <div class="adg-kpi-card">
+                    <span class="adg-kpi-val" style="color: #f25c66;">2,00</span>
+                    <span class="adg-kpi-lbl">Productividad (Último Mes)</span>
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 16px; width: 100%;">
+                <!-- Table Card -->
+                <section class="table-card" style="margin: 0; padding: 15px;">
+                    <div class="table-card-header" style="margin-bottom: 10px;">
+                        <h3 class="table-card-title"><i class="fa-solid fa-table"></i><span>Resumen Total Maquimas Colombia</span></h3>
+                    </div>
+                    <div class="rrhh-table-wrapper">
+                        <table class="rrhh-custom-table" id="rrhh-colombia-table">
+                            <!-- Content -->
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Chart Card -->
+                <section class="chart-card" style="margin: 0; padding: 15px;">
+                    <div class="chart-card-header">
+                        <h3 class="chart-card-title"><i class="fa-solid fa-chart-line"></i><span>Ventas vs Productividad Maquimas Colombia</span></h3>
+                    </div>
+                    <div class="chart-canvas-wrapper" style="height: 300px;"><canvas id="rrhh-colombia-chart"></canvas></div>
+                </section>
+            </div>
+        `;
+
+        const months = ["may-25", "jun-25", "jul-25", "ago-25", "sep-25", "oct-25", "nov-25", "dic-25", "ene-26", "feb-26", "mar-26", "abr-26", "may-26"];
+        const ventas = [564, 479, 661, 694, 628, 835, 580, 664, 1046, 921, 992, 1010, 897];
+        const dotacion = [283, 299, 286, 326, 348, 369, 386, 365, 399, 370, 392, 447, 441];
+        const productividad = [1.99, 1.6, 2.31, 2.13, 1.8, 2.26, 1.5, 1.8, 2.6, 2.5, 2.5, 2.3, 2.0];
+
+        // Render Table
+        const table = document.getElementById("rrhh-colombia-table");
+        let tableHtml = `
+            <thead>
+                <tr>
+                    <th class="label-cell" style="background-color: #0b5fb0 !important; color: #ffffff;">MÉTRICA</th>
+                    ${months.map(m => `<th>${m}</th>`).join('')}
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="total-row" style="background-color: rgba(11, 95, 176, 0.05);">
+                    <td class="label-cell" style="background-color: #ffffff; color: #0b5fb0;">VENTAS TOTAL</td>
+                    ${ventas.map(v => `<td>${v.toLocaleString('es-PE')}</td>`).join('')}
+                </tr>
+                <tr class="total-row" style="background-color: rgba(58, 124, 165, 0.05);">
+                    <td class="label-cell" style="background-color: #ffffff; color: #3a7ca5;">DOTACIÓN TOTAL</td>
+                    ${dotacion.map(d => `<td>${d.toLocaleString('es-PE')}</td>`).join('')}
+                </tr>
+                <tr class="total-row" style="background-color: rgba(242, 92, 102, 0.05);">
+                    <td class="label-cell" style="background-color: #ffffff; color: #f25c66;">PRODUCTIVIDAD TOTAL</td>
+                    ${productividad.map(p => `<td>${p.toFixed(2).replace('.', ',')}</td>`).join('')}
+                </tr>
+            </tbody>
+        `;
+        table.innerHTML = tableHtml;
+
+        // Render Chart
+        drawChart("rrhh-colombia-chart", {
+            type: "bar",
+            data: {
+                labels: months,
+                datasets: [
+                    {
+                        type: "bar",
+                        label: "Ventas",
+                        data: ventas,
+                        backgroundColor: "#0B5FB0",
+                        yAxisID: "y",
+                        borderRadius: 4,
+                        barThickness: 16,
+                        datalabels: {
+                            anchor: "end",
+                            align: "top",
+                            color: "#334155",
+                            font: { family: "Inter", weight: "700", size: 8 }
+                        }
+                    },
+                    {
+                        type: "line",
+                        label: "Productividad",
+                        data: productividad,
+                        borderColor: "#f25c66",
+                        borderWidth: 2,
+                        pointBackgroundColor: "#f25c66",
+                        pointRadius: 4,
+                        fill: false,
+                        yAxisID: "y1",
+                        datalabels: {
+                            anchor: "center",
+                            align: "top",
+                            color: "#f25c66",
+                            font: { family: "Inter", weight: "700", size: 9 },
+                            formatter: v => v.toFixed(2).replace('.', ',')
+                        }
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: "top",
+                        labels: { font: { family: "Inter", weight: "600", size: 10 }, color: "#334155" }
+                    },
+                    tooltip: baseTooltip,
+                    datalabels: {
+                        display: true,
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { font: { family: "Inter", weight: "600" }, color: "#334155" } },
+                    y: {
+                        position: "left",
+                        beginAtZero: true,
+                        grid: { color: "rgba(0,0,0,0.03)" },
+                        ticks: { color: "#64748b" }
+                    },
+                    y1: {
+                        position: "right",
+                        beginAtZero: true,
+                        max: 4.0,
+                        grid: { display: false },
+                        ticks: { color: "#64748b" }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
     }
 
     // ---- IMAGEN (diapositivas 9-26) ----
